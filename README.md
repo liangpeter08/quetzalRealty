@@ -19,4 +19,5 @@ sample[https://projects.blacklineapp.com/verge-phase1-2/32/auth?apiKey=0016d53dc
 6. Airbnb Graph visualization
 7. Framer Motion
 8. Progressive Web App
+9. Auth0
 
