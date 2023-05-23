@@ -17,4 +17,6 @@ sample[https://projects.blacklineapp.com/verge-phase1-2/32/auth?apiKey=0016d53dc
 4. Python
 5. GCP
 6. Airbnb Graph visualization
+7. Framer Motion
+8. Progressive Web App
 
