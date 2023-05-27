@@ -1,8 +1,12 @@
 import { useState } from 'react';
 import { styled, Container, Box } from '@mui/material';
 
+import { CssBaseline, ThemeProvider } from '@mui/material';
 
+
+import { baselightTheme } from "../../theme/DefaultColors";
 import Header from '../header/Header'
+import Sidebar from '../sidebar/Sidebar';
 // import Sidebar from '../components/sidebar/Sidebar';
 
 
@@ -28,9 +32,14 @@ export const FullLayout = ({ children }: any) => {
   // const lgUp = useMediaQuery((theme) => theme.breakpoints.up("lg"));
 
   return (
+    <ThemeProvider theme={baselightTheme}>
+    <CssBaseline />
     <MainWrapper
       className='mainwrapper'
     >
+      <Sidebar isSidebarOpen={isSidebarOpen}
+        isMobileSidebarOpen={isMobileSidebarOpen}
+        onSidebarClose={() => setMobileSidebarOpen(false)} />
       <PageWrapper
         className="page-wrapper"
       >
@@ -46,5 +55,6 @@ export const FullLayout = ({ children }: any) => {
         </Container>
       </PageWrapper>
     </MainWrapper>
+    </ThemeProvider>
   );
 };
