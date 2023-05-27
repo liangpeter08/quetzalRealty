@@ -2,6 +2,6 @@
   "compilerOptions": {
     "baseUrl": "."
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "../studio/src/components/header"],
   "exclude": ["node_modules"]
 }
