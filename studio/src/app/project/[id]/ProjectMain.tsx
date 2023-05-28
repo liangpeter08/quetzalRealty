@@ -16,7 +16,7 @@ import Paper from '@mui/material/Paper';
 import { getProjects } from "./getApi";
 
 
-export default function ListUsers() {
+export default function Project() {
   const [count, setCount] = React.useState(0);
 
   const { data, isLoading, isFetching, error } = useQuery({
@@ -24,21 +24,21 @@ export default function ListUsers() {
     queryFn: () => getProjects(),
   });
   return (
-    <FullLayout showSidebar={false}>
+    <FullLayout>
     <PageContainer title="Projects" description="projects">
      <DashboardCard title="Projects">
        <TableContainer component={Paper}>
        <Table sx={{ minWidth: 200 }} aria-label="Project table">
          <TableHead>
          <TableRow>
-           <TableCell>Project Name</TableCell>
+           <TableCell>Project Name sadfasdfa</TableCell>
            <TableCell>Role</TableCell>
            </TableRow>
          </TableHead>
          <TableBody>
             {data.map((row : any, i : number) => <TableRow key={i}>
-                <TableCell><Link href={'/project/' + row?.attributes.project_name}>{row?.attributes.project_name}</Link></TableCell>
-                <TableCell>{JSON.stringify(row?.attributes)}</TableCell>
+                <TableCell><Link href={'/projects'}>{row?.attributes.project_name}</Link></TableCell>
+                <TableCell>{row?.attributes.project_name}</TableCell>
             </TableRow>)}
          </TableBody>
          </Table>

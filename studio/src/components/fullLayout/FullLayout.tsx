@@ -29,7 +29,7 @@ const PageWrapper = styled('div')(() => ({
 
 const queryClient = new QueryClient()
 
-export const FullLayout = ({ children }: any) => {
+export const FullLayout = ({ children, showSidebar = true }: any) => {
 
   const [isSidebarOpen, setSidebarOpen] = useState(true);
   const [isMobileSidebarOpen, setMobileSidebarOpen] = useState(false);
@@ -42,13 +42,16 @@ export const FullLayout = ({ children }: any) => {
     <MainWrapper
       className='mainwrapper'
     >
+      {
+        showSidebar &&
       <Sidebar isSidebarOpen={isSidebarOpen}
         isMobileSidebarOpen={isMobileSidebarOpen}
         onSidebarClose={() => setMobileSidebarOpen(false)} />
+      }
       <PageWrapper
         className="page-wrapper"
       >
-        <Header toggleSidebar={() => setSidebarOpen(!isSidebarOpen)} toggleMobileSidebar={() => setMobileSidebarOpen(true)} />
+        <Header showSidebar={showSidebar} toggleSidebar={() => setSidebarOpen(!isSidebarOpen)} toggleMobileSidebar={() => setMobileSidebarOpen(true)}  />
         <Container sx={{
           paddingTop: "20px",
           maxWidth: '1200px',

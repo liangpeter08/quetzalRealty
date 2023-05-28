@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, AppBar, Toolbar, styled, Stack, IconButton, Badge, Button } from '@mui/material';
-
+import Image from 'next/image';
 // components
 import Profile from './Profile';
 import { IconBellRinging, IconMenu } from '@tabler/icons-react';
@@ -43,7 +43,7 @@ const Header = (props: any) => {
         </IconButton>
 
 
-        <IconButton
+       {props.showSidebar ? <IconButton
           size="large"
           aria-label="show 11 new notifications"
           color="inherit"
@@ -57,7 +57,13 @@ const Header = (props: any) => {
             <IconBellRinging size="21" stroke="1.5" />
           </Badge>
 
-        </IconButton>
+        </IconButton> : 
+                    <Stack direction="row" spacing={2}>
+                    <Image width={50} height={50} src='/quetzal.svg' alt='logo' />
+                    <Box sx={{display: 'flex', alignItems: 'center'}}><h4>Quetzal Realty</h4></Box>
+                </Stack>
+
+        }
         <Box flexGrow={1} />
         <Stack spacing={1} direction="row" alignItems="center">
           <Profile />
