@@ -1,21 +1,12 @@
 import Button from '@mui/material/Button';
-import Avatar from '@mui/material/Avatar';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
-import PersonIcon from '@mui/icons-material/Person';
-import AddIcon from '@mui/icons-material/Add';
-import Typography from '@mui/material/Typography';
-import { blue } from '@mui/material/colors';
-import styled from '@emotion/styled';
 import { Box, FormControl, FormGroup, FormHelperText, IconButton, Input, InputLabel, Grid } from '@mui/material';
-import DeleteIcon from "@mui/icons-material/Delete";
 import React from 'react';
 import { uploadMedia } from '@/sharedApi/strapi/uploadMedia';
+import { FileUploader } from "react-drag-drop-files";
+
+const fileTypes = ["JPG", "PNG", "GIF"];
 
 export interface NewSuiteModalProps {
   open: boolean;
@@ -30,45 +21,57 @@ export default function NewSuiteModal(props: NewSuiteModalProps) {
     onClose(selectedValue);
   };
 
-  const handleUploadClick = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.currentTarget.files
-    const firstFile = files?.item(0)
-    if (!files || !firstFile) {
-      return;
-    }
-
-    const imageType = /image.*/
-
-    if (!firstFile.type.match(imageType)) {
-      return
-    }
-    await uploadMedia(firstFile)
+  const handleUploadClick = async (file: any) => {
+    await uploadMedia(file)
   }
 
   return (
     <Dialog onClose={handleClose} open={open}>
-      <DialogTitle>Setup New Suite Type</DialogTitle>
+      <DialogTitle>Add New Product</DialogTitle>
       <Box sx={{ width: 500, m: 4 }}>
-        <Grid container spacing={2}>
+        <Grid container spacing={4}>
           <Grid item xs={12}>
             <FormGroup>
               <FormControl>
-                <InputLabel htmlFor="name">Name</InputLabel>
+                <InputLabel htmlFor="name">Floorplan Name</InputLabel>
                 <Input id="name" aria-describedby="name-helper-text" />
               </FormControl>
             </FormGroup>
           </Grid>
+          <Grid item xs={6}>
+            <FormGroup>
+              <FormControl>
+                <InputLabel htmlFor="beds">Bedroom Count</InputLabel>
+                <Input id="beds" aria-describedby="beds-helper-text" />
+              </FormControl>
+            </FormGroup>
+          </Grid>
+          <Grid item xs={6}>
+            <FormGroup>
+              <FormControl>
+                <InputLabel htmlFor="baths">Bathroom Count</InputLabel>
+                <Input id="baths" aria-describedby="baths-helper-text" />
+              </FormControl>
+            </FormGroup>
+          </Grid>
+          <Grid item xs={6}>
+            <FormGroup>
+              <FormControl>
+                <InputLabel htmlFor="interior_area">Interior Area</InputLabel>
+                <Input id="interior_area" aria-describedby="interior-area-helper-text" />
+              </FormControl>
+            </FormGroup>
+          </Grid>
+          <Grid item xs={6}>
+            <FormGroup>
+              <FormControl>
+                <InputLabel htmlFor="exterior_area">Exterior Area</InputLabel>
+                <Input id="exterior_area" aria-describedby="exterior-area-helper-text" />
+              </FormControl>
+            </FormGroup>
+          </Grid>
           <Grid item xs={4}>
-            <Button variant="contained" component="label">
-              Upload
-              <input
-                hidden
-                accept="image/*"
-                id="contained-button-file"
-                type="file"
-                onChange={handleUploadClick}
-              />
-            </Button>
+            <FileUploader handleChange={handleUploadClick} name="file" types={fileTypes} />
           </Grid>
         </Grid>
       </Box>

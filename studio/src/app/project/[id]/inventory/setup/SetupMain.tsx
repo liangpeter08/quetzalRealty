@@ -35,13 +35,13 @@ export default function Project() {
             </Typography>
           </Grid>
           <Grid item xs={2}>
-            <Button variant="contained" onClick={newSuiteHandler}>Add Inventory</Button>
+            <Button variant="contained" onClick={newSuiteHandler}>Add Product</Button>
           </Grid>
         </Grid>
         {/* <DashboardCard title="Inventory"> */}
         <Paper elevation={12}>
           <Box sx={{ m: 4, p: 4 }}>
-            <Stack spacing={{ xs: 1, sm: 2 }} direction="row" useFlexGap flexWrap="wrap" justifyContent="center">
+            <Stack spacing={{ xs: 1, sm: 2 }} direction="row" useFlexGap flexWrap="wrap">
               {(data || []).map((model: ApiModelModel, i: number) => <SuiteCard key={i} model={model} />)}
             </Stack>
           </Box>
