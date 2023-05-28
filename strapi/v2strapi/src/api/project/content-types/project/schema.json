@@ -24,6 +24,12 @@
     "slug": {
       "type": "uid",
       "targetField": "project_name"
+    },
+    "models": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::model.model",
+      "mappedBy": "project"
     }
   }
 }

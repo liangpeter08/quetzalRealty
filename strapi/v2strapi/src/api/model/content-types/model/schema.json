@@ -1,0 +1,72 @@
+{
+  "kind": "collectionType",
+  "collectionName": "models",
+  "info": {
+    "singularName": "model",
+    "pluralName": "models",
+    "displayName": "Model",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "project": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::project.project",
+      "inversedBy": "models"
+    },
+    "beds": {
+      "type": "integer"
+    },
+    "baths": {
+      "type": "integer"
+    },
+    "interior_sf": {
+      "type": "integer"
+    },
+    "exterior_sf": {
+      "type": "integer"
+    },
+    "floorplan_name": {
+      "type": "string"
+    },
+    "marketing_floorplan": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "legal_floorplan": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "exposure": {
+      "type": "enumeration",
+      "enum": [
+        "North",
+        "East",
+        "West",
+        "South",
+        "Northwest",
+        "Northeast",
+        "Southwest",
+        "Southeast"
+      ]
+    }
+  }
+}
