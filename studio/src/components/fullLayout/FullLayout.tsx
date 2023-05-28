@@ -32,18 +32,19 @@ export const FullLayout = ({ children, showSidebar = true }: any) => {
     >
       {
         showSidebar &&
-      <Sidebar isSidebarOpen={isSidebarOpen}
-        isMobileSidebarOpen={isMobileSidebarOpen}
-        onSidebarClose={() => setMobileSidebarOpen(false)} />
+        <Sidebar isSidebarOpen={isSidebarOpen}
+          isMobileSidebarOpen={isMobileSidebarOpen}
+          onSidebarClose={() => setMobileSidebarOpen(false)} />
       }
       <PageWrapper
         className="page-wrapper"
       >
-        <Header showSidebar={showSidebar} toggleSidebar={() => setSidebarOpen(!isSidebarOpen)} toggleMobileSidebar={() => setMobileSidebarOpen(true)}  />
+        <Header showSidebar={showSidebar} toggleSidebar={() => setSidebarOpen(!isSidebarOpen)} toggleMobileSidebar={() => setMobileSidebarOpen(true)} />
         <Container sx={{
           paddingTop: "20px",
-          maxWidth: '1200px',
+          maxWidth: '2000px'
         }}
+          maxWidth={false}
         >
           <Box sx={{ minHeight: 'calc(100vh - 170px)' }}>
             {children}

@@ -4,6 +4,7 @@ import React from "react";
 import Providers from "@/utils/provider";
 import { ThemeProvider, CssBaseline } from "@mui/material";
 import { baselightTheme } from "../theme/DefaultColors";
+import { FullLayout } from '@/components/fullLayout/FullLayout';
 // export const metadata = {
 //   title: 'QuetzalRealty',
 //   description: '',
@@ -18,13 +19,15 @@ export default function RootLayout({
   return (
     <html lang="en">
 
-    <ThemeProvider theme={baselightTheme}>
-    <CssBaseline />
-      <body>      
-        <Providers>
-          {children}
-        </Providers>
-      </body>
+      <ThemeProvider theme={baselightTheme}>
+        <CssBaseline />
+        <body>
+          <Providers>
+            <FullLayout>
+              {children}
+            </FullLayout>
+          </Providers>
+        </body>
       </ThemeProvider>
     </html>
   )

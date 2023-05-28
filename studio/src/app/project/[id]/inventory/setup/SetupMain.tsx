@@ -8,7 +8,7 @@ import { FullLayout } from '@/components/fullLayout/FullLayout';
 import { getInventory } from "../../../../../sharedApi/strapi/getInventory";
 import Stack from "@mui/material/Stack";
 import SuiteCard from "./components/SuiteCard";
-import { Button, Typography, Grid } from "@mui/material";
+import { Button, Typography, Grid, Box, Paper } from "@mui/material";
 import NewSuiteModal from "./components/NewSuiteModal/NewSuiteModal";
 
 
@@ -24,26 +24,29 @@ export default function Project() {
   };
 
   return (
-    <FullLayout>
-      <NewSuiteModal open={newSuite} selectedValue="" onClose={() => newSuiteHandler()}/>
-    <PageContainer title="Projects" description="projects">
-      <Grid container spacing={2}>
-      <Grid item xs={9}>
-      <Typography gutterBottom variant="h2" component="div">
-                  Inventory
-      </Typography>
-      </Grid>
-      <Grid item xs={2}>
-      <Button variant="contained" onClick={newSuiteHandler}>Add Inventory</Button>
-      </Grid>
-      </Grid>
-     {/* <DashboardCard title="Inventory"> */}
-
-      <Stack spacing={{ xs: 1, sm: 2 }} direction="row" useFlexGap flexWrap="wrap">
-        {new Array(20).fill(0).map((_, i) => <SuiteCard key={i} />)}
-      </Stack>
-     {/* </DashboardCard> */}
-   </PageContainer>
-   </FullLayout> 
+    <>
+      <NewSuiteModal open={newSuite} selectedValue="" onClose={() => newSuiteHandler()} />
+      <PageContainer title="Projects" description="projects">
+        <Grid container spacing={2} justifyContent='center' alignContent='center'>
+          <Grid item xs={10}>
+            <Typography gutterBottom variant="h2" component="div">
+              Inventory
+            </Typography>
+          </Grid>
+          <Grid item xs={2}>
+            <Button variant="contained" onClick={newSuiteHandler}>Add Inventory</Button>
+          </Grid>
+        </Grid>
+        {/* <DashboardCard title="Inventory"> */}
+        <Paper elevation={12}>
+          <Box sx={{ m: 4, p: 4 }}>
+            <Stack spacing={{ xs: 1, sm: 2 }} direction="row" useFlexGap flexWrap="wrap" justifyContent="center">
+              {new Array(20).fill(0).map((_, i) => <SuiteCard key={i} />)}
+            </Stack>
+          </Box>
+        </Paper>
+        {/* </DashboardCard> */}
+      </PageContainer>
+    </>
   );
 }
