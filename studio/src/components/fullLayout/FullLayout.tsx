@@ -1,13 +1,6 @@
 import { useState } from 'react';
 import { styled, Container, Box } from '@mui/material';
 
-import { CssBaseline, ThemeProvider } from '@mui/material';
-import {
-  QueryClient,
-  QueryClientProvider,
-} from '@tanstack/react-query'
-
-import { baselightTheme } from "../../theme/DefaultColors";
 import Header from '../header/Header'
 import Sidebar from '../sidebar/Sidebar';
 
@@ -27,8 +20,6 @@ const PageWrapper = styled('div')(() => ({
   backgroundColor: 'transparent',
 }));
 
-const queryClient = new QueryClient()
-
 export const FullLayout = ({ children, showSidebar = true }: any) => {
 
   const [isSidebarOpen, setSidebarOpen] = useState(true);
@@ -36,9 +27,6 @@ export const FullLayout = ({ children, showSidebar = true }: any) => {
   // const lgUp = useMediaQuery((theme) => theme.breakpoints.up("lg"));
 
   return (
-    <QueryClientProvider client={queryClient}>
-    <ThemeProvider theme={baselightTheme}>
-    <CssBaseline />
     <MainWrapper
       className='mainwrapper'
     >
@@ -63,7 +51,5 @@ export const FullLayout = ({ children, showSidebar = true }: any) => {
         </Container>
       </PageWrapper>
     </MainWrapper>
-    </ThemeProvider>
-    </QueryClientProvider>
   );
 };

@@ -1,11 +1,13 @@
+"use client";
 import './globals.css'
 import React from "react";
 import Providers from "@/utils/provider";
-
-export const metadata = {
-  title: 'QuetzalRealty',
-  description: '',
-}
+import { ThemeProvider, CssBaseline } from "@mui/material";
+import { baselightTheme } from "../theme/DefaultColors";
+// export const metadata = {
+//   title: 'QuetzalRealty',
+//   description: '',
+// }
 
 export default function RootLayout({
   children,
@@ -16,12 +18,14 @@ export default function RootLayout({
   return (
     <html lang="en">
 
+    <ThemeProvider theme={baselightTheme}>
+    <CssBaseline />
       <body>      
         <Providers>
           {children}
         </Providers>
       </body>
-
+      </ThemeProvider>
     </html>
   )
 }

@@ -13,7 +13,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { getProjects } from "./getApi";
+import { getProjects } from "../../sharedApi/strapi/getProjects";
 
 
 export default function ListUsers() {

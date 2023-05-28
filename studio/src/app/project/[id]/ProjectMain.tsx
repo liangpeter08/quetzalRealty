@@ -13,7 +13,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { getProjects } from "./getApi";
+import { getProjects } from "../../../sharedApi/strapi/getProjects";
 
 
 export default function Project() {
@@ -34,7 +34,7 @@ export default function Project() {
            </TableRow>
          </TableHead>
          <TableBody>
-            {data.map((row : any, i : number) => <TableRow key={i}>
+            {(data || []).map((row : any, i : number) => <TableRow key={i}>
                 <TableCell><Link href={'/projects'}>{row?.attributes.project_name}</Link></TableCell>
                 <TableCell>{row?.attributes.project_name}</TableCell>
             </TableRow>)}

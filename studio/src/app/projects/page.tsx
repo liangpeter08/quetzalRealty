@@ -1,5 +1,5 @@
 import Projects from "./Projects";
-import { getProjects } from "./getApi";
+import { getProjects } from "../../sharedApi/strapi/getProjects";
 import Hydrate from "@/utils/hydrate.client";
 import { dehydrate } from "@tanstack/query-core";
 import getQueryClient from "@/utils/getQueryClient";

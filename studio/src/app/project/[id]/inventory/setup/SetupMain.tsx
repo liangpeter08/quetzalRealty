@@ -5,7 +5,7 @@ import React, { useState } from "react";
 import PageContainer from '@/components/container/PageContainer'
 import DashboardCard from '@/components/shared/DashboardCard'
 import { FullLayout } from '@/components/fullLayout/FullLayout';
-import { getInventory } from "./getInventory";
+import { getInventory } from "../../../../../sharedApi/strapi/getInventory";
 import Stack from "@mui/material/Stack";
 import SuiteCard from "./components/SuiteCard";
 import { Button, Typography, Grid } from "@mui/material";
