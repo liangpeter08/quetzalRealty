@@ -1,18 +1,12 @@
-'use client';
-import React from 'react'
-import PageContainer from '@/components/container/PageContainer'
-import DashboardCard from '@/components/shared/DashboardCard'
-import { Typography } from '@mui/material';
-import { FullLayout } from '@/components/fullLayout/FullLayout';
+import Projects from "./Projects";
+import { getProjects } from "./getApi";
+import Hydrate from "@/utils/hydrate.client";
+import { dehydrate } from "@tanstack/query-core";
+import getQueryClient from "@/utils/getQueryClient";
 
-export default function Page() {
-  return (
-    <FullLayout>
-    <PageContainer title="Sample Page" description="this is Sample page">
-      <DashboardCard title="Sample Page">
-        <Typography>This is a sample page</Typography>
-      </DashboardCard>
-    </PageContainer>
-    </FullLayout>
-  )
+export default async function InitialData() {
+  const queryClient = getQueryClient();
+  await queryClient.prefetchQuery(["initial-users"], getProjects);
+  const dehydratedState = dehydrate(queryClient);
+return <Hydrate state={dehydratedState}><Projects /></Hydrate>;
 }

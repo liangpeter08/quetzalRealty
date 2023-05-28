@@ -38,7 +38,6 @@ export const NavItem = ({ item, level, onClick } : any) => {
   }));
 
   return (
-    <List component="li" disablePadding key={item.id}>
       <ListItemStyled
         onClick={onClick}
       >
@@ -55,7 +54,6 @@ export const NavItem = ({ item, level, onClick } : any) => {
           <>{item.title}</>
         </ListItemText>
       </ListItemStyled>
-    </List>
   );
 };
 
