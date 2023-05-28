@@ -17,8 +17,6 @@ import { getProjects } from "./getApi";
 
 
 export default function Project() {
-  const [count, setCount] = React.useState(0);
-
   const { data, isLoading, isFetching, error } = useQuery({
     queryKey: ["initial-users"],
     queryFn: () => getProjects(),

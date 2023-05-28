@@ -1,7 +1,6 @@
 import axios from "axios";
 
-// doesn't do anything right now
-export async function getProjects() {
+export async function getInventory() {
     const {data} = await axios
     .get("http://quetzalrealty.duckdns.org:1337/api/members/1", {
       params: {

@@ -38,8 +38,8 @@ const Profile = () => {
         onClick={handleClick2}
       >
         <Avatar
-          src={'src/assets/images/profile/user-1.jpg'}
-          alt={'src/assets/images/profile/user-1.jpg'}
+          src={'/quetzal.svg'}
+          alt={'/quetzal.svg'}
           sx={{
             width: 35,
             height: 35,
