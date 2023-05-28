@@ -1,10 +1,14 @@
 import Button from '@mui/material/Button';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
-import { Box, FormControl, FormGroup, FormHelperText, IconButton, Input, InputLabel, Grid } from '@mui/material';
-import React from 'react';
+import { Box, FormControl, FormGroup, FormHelperText, IconButton, Input, InputLabel, Grid, CardMedia } from '@mui/material';
+import React, { useState } from 'react';
 import { uploadMedia } from '@/sharedApi/strapi/uploadMedia';
 import { FileUploader } from "react-drag-drop-files";
+import { PluginUploadFile } from '@/utils/schemas';
+import { BASE_URL } from '@/utils/constants';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { AddPhotoAlternate } from '@mui/icons-material';
 
 const fileTypes = ["JPG", "PNG", "GIF"];
 
@@ -16,14 +20,24 @@ export interface NewSuiteModalProps {
 
 export default function NewSuiteModal(props: NewSuiteModalProps) {
   const { onClose, selectedValue, open } = props;
+  const [marketingFloorplan, setMarketingFloorplan] = useState<PluginUploadFile['attributes']>();
+  const [legalFloorplan, setLegalFloorplan] = useState<PluginUploadFile['attributes']>();
+
 
   const handleClose = () => {
     onClose(selectedValue);
   };
 
-  const handleUploadClick = async (file: any) => {
-    await uploadMedia(file)
+  const handleMarketingUpload = async (file: any) => {
+    const newFile = await uploadMedia(file)
+    setMarketingFloorplan(newFile)
   }
+
+  const handleLegalUpload = async (file: any) => {
+    const newFile = await uploadMedia(file)
+    setMarketingFloorplan(newFile)
+  }
+
 
   return (
     <Dialog onClose={handleClose} open={open}>
@@ -70,8 +84,35 @@ export default function NewSuiteModal(props: NewSuiteModalProps) {
               </FormControl>
             </FormGroup>
           </Grid>
-          <Grid item xs={4}>
-            <FileUploader handleChange={handleUploadClick} name="file" types={fileTypes} />
+          <Grid item xs={6}>
+            {marketingFloorplan ?
+              <CardMedia
+                sx={{ objectFit: "contain", m: 2, height: 200, backgroundSize: 'contain' }}
+                image={BASE_URL + marketingFloorplan?.url}
+                title="Marketing Floorplan"
+              />
+              :
+              <FileUploader label="Upload Marketing Floorplan" handleChange={handleMarketingUpload} name="file" types={fileTypes}>
+                <Box sx={(theme) => ({ borderStyle: 'dotted ', borderWidth: '3px', borderColor: theme.palette.primary.main })}>
+                  <Button startIcon={<AddPhotoAlternate />} variant="text">Upload Marketing Floorplan</Button>
+                </Box>
+              </FileUploader>
+            }
+          </Grid>
+          <Grid item xs={6}>
+            {legalFloorplan ?
+              <CardMedia
+                sx={{ objectFit: "contain", m: 2, height: 200, backgroundSize: 'contain' }}
+                image={BASE_URL + legalFloorplan?.url}
+                title="Marketing Floorplan"
+              />
+              :
+              <FileUploader handleChange={handleLegalUpload} name="file" types={fileTypes}>
+                <Box sx={(theme) => ({ borderStyle: 'dotted ', borderWidth: '3px', borderColor: theme.palette.primary.main })}>
+                  <Button startIcon={<AddPhotoAlternate />} variant="text">Upload Legal Floorplan</Button>
+                </Box>
+              </FileUploader>
+            }
           </Grid>
         </Grid>
       </Box>
