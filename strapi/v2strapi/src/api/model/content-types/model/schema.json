@@ -55,18 +55,11 @@
         "audios"
       ]
     },
-    "exposure": {
-      "type": "enumeration",
-      "enum": [
-        "North",
-        "East",
-        "West",
-        "South",
-        "Northwest",
-        "Northeast",
-        "Southwest",
-        "Southeast"
-      ]
+    "suites": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::suite.suite",
+      "mappedBy": "model"
     }
   }
 }

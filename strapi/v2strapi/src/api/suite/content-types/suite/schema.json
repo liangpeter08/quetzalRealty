@@ -1,0 +1,40 @@
+{
+  "kind": "collectionType",
+  "collectionName": "suites",
+  "info": {
+    "singularName": "suite",
+    "pluralName": "suites",
+    "displayName": "Suite"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "exposure": {
+      "type": "enumeration",
+      "enum": [
+        "North",
+        "West",
+        "East",
+        "South",
+        "Northwest",
+        "Northeast",
+        "Southwest",
+        "Southeast"
+      ]
+    },
+    "model": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::model.model",
+      "inversedBy": "suites"
+    },
+    "legal_suite_number": {
+      "type": "string"
+    },
+    "marketing_suite_number": {
+      "type": "string"
+    }
+  }
+}
