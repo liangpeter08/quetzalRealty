@@ -41,7 +41,7 @@ export default function Project() {
         <Paper elevation={12}>
           <Box sx={{ m: 4, p: 4 }}>
             <Stack spacing={{ xs: 1, sm: 2 }} direction="row" useFlexGap flexWrap="wrap" justifyContent="center">
-              {new Array(20).fill(0).map((_, i) => <SuiteCard key={i} />)}
+              {data.map((model: any, i: number) => <SuiteCard key={i} model={model} />)}
             </Stack>
           </Box>
         </Paper>

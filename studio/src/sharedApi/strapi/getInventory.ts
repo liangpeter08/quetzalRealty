@@ -2,10 +2,10 @@ import strapiClient from "./strapiClient";
 
 export async function getInventory() {
     const {data} = await strapiClient
-    .get("/members/1", {
+    .get("/models", {
       params: {
         populate: '*'
       }
     })
-    return data?.data?.attributes?.projects?.data;
+    return data?.data;
   }
