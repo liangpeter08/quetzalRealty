@@ -24,7 +24,7 @@ export default function Project() {
   };
 
   return (
-    <>
+    <FullLayout>
       <NewSuiteModal open={newSuite} selectedValue="" onClose={() => newSuiteHandler()} />
       <PageContainer title="Projects" description="projects">
         <Grid container spacing={2} justifyContent='center' alignContent='center'>
@@ -47,6 +47,6 @@ export default function Project() {
         </Paper>
         {/* </DashboardCard> */}
       </PageContainer>
-    </>
+    </FullLayout>
   );
 }
