@@ -5,24 +5,30 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import { ApiModelModel } from "@/utils/schemas";
+import { GetStringAttributeValue, MediaAttribute, StringAttribute } from "@strapi/strapi";
+import { BASE_URL } from "@/utils/constants";
 
 interface SuiteCardProps {
-  model: any
+  model: ApiModelModel
 }
 
 export default function SuiteCard({ model }: SuiteCardProps) {
+  const { floorplan_name, marketing_floorplan, } = model.attributes
+  const marketingFloorplan = marketing_floorplan as any
   return (
     <Paper elevation={24}>
-      {JSON.stringify(model)}
       <Card sx={{ width: 500 }} raised={true}>
-        <CardMedia
-          sx={{ height: 140 }}
-          image="/quetzal.svg"
-          title="green iguana"
-        />
+        <Paper elevation={10} sx={{ height: 280, m: 3 }}>
+          <CardMedia
+            sx={{ objectFit: "contain", m: 2, height: '100%', backgroundSize: 'contain' }}
+            image={BASE_URL + marketingFloorplan.data?.attributes?.url}
+            title="Marketing Floorplan"
+          />
+        </Paper>
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
-            {model?.attributes?.floorplan_name}
+            {(floorplan_name as unknown) as string}
           </Typography>
           <Stack>
             <Typography variant="body2" color="text.secondary">

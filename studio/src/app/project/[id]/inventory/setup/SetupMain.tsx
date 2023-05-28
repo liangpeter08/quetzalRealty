@@ -10,6 +10,7 @@ import Stack from "@mui/material/Stack";
 import SuiteCard from "./components/SuiteCard";
 import { Button, Typography, Grid, Box, Paper } from "@mui/material";
 import NewSuiteModal from "./components/NewSuiteModal/NewSuiteModal";
+import { ApiModelModel } from "@/utils/schemas";
 
 
 export default function Project() {
@@ -41,7 +42,7 @@ export default function Project() {
         <Paper elevation={12}>
           <Box sx={{ m: 4, p: 4 }}>
             <Stack spacing={{ xs: 1, sm: 2 }} direction="row" useFlexGap flexWrap="wrap" justifyContent="center">
-              {data.map((model: any, i: number) => <SuiteCard key={i} model={model} />)}
+              {(data || []).map((model: ApiModelModel, i: number) => <SuiteCard key={i} model={model} />)}
             </Stack>
           </Box>
         </Paper>

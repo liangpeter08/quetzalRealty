@@ -1,0 +1,1 @@
+export const BASE_URL = "http://quetzalrealty.duckdns.org:1337"
