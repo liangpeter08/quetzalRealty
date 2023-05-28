@@ -9,11 +9,11 @@ import { ApiModelModel } from "@/utils/schemas";
 import { GetStringAttributeValue, MediaAttribute, StringAttribute } from "@strapi/strapi";
 import { BASE_URL } from "@/utils/constants";
 
-interface SuiteCardProps {
+interface ModelCardProps {
   model: ApiModelModel
 }
 
-export default function SuiteCard({ model }: SuiteCardProps) {
+export default function ModelCard({ model }: ModelCardProps) {
   const { floorplan_name, marketing_floorplan, } = model.attributes
   const marketingFloorplan = marketing_floorplan as any
   return (

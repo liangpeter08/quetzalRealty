@@ -743,17 +743,10 @@ export interface ApiModelModel extends CollectionTypeSchema {
     floorplan_name: StringAttribute;
     marketing_floorplan: MediaAttribute;
     legal_floorplan: MediaAttribute;
-    exposure: EnumerationAttribute<
-      [
-        'North',
-        'East',
-        'West',
-        'South',
-        'Northwest',
-        'Northeast',
-        'Southwest',
-        'Southeast'
-      ]
+    suites: RelationAttribute<
+      'api::model.model',
+      'oneToMany',
+      'api::suite.suite'
     >;
     createdAt: DateTimeAttribute;
     updatedAt: DateTimeAttribute;
@@ -814,6 +807,53 @@ export interface ApiProjectProject extends CollectionTypeSchema {
   };
 }
 
+export interface ApiSuiteSuite extends CollectionTypeSchema {
+  info: {
+    singularName: 'suite';
+    pluralName: 'suites';
+    displayName: 'Suite';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    exposure: EnumerationAttribute<
+      [
+        'North',
+        'West',
+        'East',
+        'South',
+        'Northwest',
+        'Northeast',
+        'Southwest',
+        'Southeast'
+      ]
+    >;
+    model: RelationAttribute<
+      'api::suite.suite',
+      'manyToOne',
+      'api::model.model'
+    >;
+    legal_suite_number: StringAttribute;
+    marketing_suite_number: StringAttribute;
+    createdAt: DateTimeAttribute;
+    updatedAt: DateTimeAttribute;
+    publishedAt: DateTimeAttribute;
+    createdBy: RelationAttribute<
+      'api::suite.suite',
+      'oneToOne',
+      'admin::user'
+    > &
+      PrivateAttribute;
+    updatedBy: RelationAttribute<
+      'api::suite.suite',
+      'oneToOne',
+      'admin::user'
+    > &
+      PrivateAttribute;
+  };
+}
+
 declare global {
   namespace Strapi {
     interface Schemas {
@@ -833,6 +873,7 @@ declare global {
       'api::member.member': ApiMemberMember;
       'api::model.model': ApiModelModel;
       'api::project.project': ApiProjectProject;
+      'api::suite.suite': ApiSuiteSuite;
     }
   }
 }

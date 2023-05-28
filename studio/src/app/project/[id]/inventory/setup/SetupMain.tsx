@@ -7,9 +7,9 @@ import DashboardCard from '@/components/shared/DashboardCard'
 import { FullLayout } from '@/components/fullLayout/FullLayout';
 import { getInventory } from "../../../../../sharedApi/strapi/getInventory";
 import Stack from "@mui/material/Stack";
-import SuiteCard from "./components/SuiteCard";
+import SuiteCard from "./components/ModelCard";
 import { Button, Typography, Grid, Box, Paper } from "@mui/material";
-import NewSuiteModal from "./components/NewSuiteModal/NewSuiteModal";
+import NewModelModal from "./components/newModelModal/NewModelModal";
 import { ApiModelModel } from "@/utils/schemas";
 
 
@@ -26,7 +26,7 @@ export default function Project() {
 
   return (
     <FullLayout>
-      <NewSuiteModal open={newSuite} selectedValue="" onClose={() => newSuiteHandler()} />
+      <NewModelModal open={newSuite} selectedValue="" onClose={() => newSuiteHandler()} />
       <PageContainer title="Projects" description="projects">
         <Grid container spacing={2} justifyContent='center' alignContent='center'>
           <Grid item xs={10}>
