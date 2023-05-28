@@ -15,7 +15,7 @@ import { ApiModelModel } from "@/utils/schemas";
 
 export default function Project() {
   const [newSuite, setNewSuite] = useState<boolean>(false);
-  const { data, isLoading, isFetching, error } = useQuery({
+  const { data, isLoading, isFetching, error, refetch } = useQuery({
     queryKey: ["inventory"],
     queryFn: () => getInventory(),
   });
@@ -26,7 +26,7 @@ export default function Project() {
 
   return (
     <FullLayout>
-      <NewModelModal open={newSuite} selectedValue="" onClose={() => newSuiteHandler()} />
+      <NewModelModal open={newSuite} selectedValue="" onClose={() => newSuiteHandler()} refetch={refetch} />
       <PageContainer title="Projects" description="projects">
         <Grid container spacing={2} justifyContent='center' alignContent='center'>
           <Grid item xs={10}>

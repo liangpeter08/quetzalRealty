@@ -9,23 +9,24 @@ import { PluginUploadFile } from '@/utils/schemas';
 import { BASE_URL } from '@/utils/constants';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { AddPhotoAlternate } from '@mui/icons-material';
+import { createModel } from '@/sharedApi/strapi/createModel';
 
 const fileTypes = ["JPG", "PNG", "GIF"];
 
 export interface NewSuiteModalProps {
   open: boolean;
   selectedValue: string;
-  onClose: (value: string) => void;
+  onClose: () => void;
+  refetch: () => any
 }
 
-export default function NewSuiteModal(props: NewSuiteModalProps) {
-  const { onClose, selectedValue, open } = props;
+export default function NewSuiteModal({ onClose, selectedValue, open, refetch }: NewSuiteModalProps) {
   const [marketingFloorplan, setMarketingFloorplan] = useState<PluginUploadFile['attributes']>();
   const [legalFloorplan, setLegalFloorplan] = useState<PluginUploadFile['attributes']>();
 
 
   const handleClose = () => {
-    onClose(selectedValue);
+    onClose();
   };
 
   const handleMarketingUpload = async (file: any) => {
@@ -35,9 +36,15 @@ export default function NewSuiteModal(props: NewSuiteModalProps) {
 
   const handleLegalUpload = async (file: any) => {
     const newFile = await uploadMedia(file)
-    setMarketingFloorplan(newFile)
+    setLegalFloorplan(newFile)
   }
 
+  const submitHandler = async () => {
+    await createModel({} as any);
+    await refetch()
+    onClose()
+
+  }
 
   return (
     <Dialog onClose={handleClose} open={open}>
@@ -115,6 +122,7 @@ export default function NewSuiteModal(props: NewSuiteModalProps) {
             }
           </Grid>
         </Grid>
+        <Button onClick={submitHandler}>Submit</Button>
       </Box>
     </Dialog >
   );
