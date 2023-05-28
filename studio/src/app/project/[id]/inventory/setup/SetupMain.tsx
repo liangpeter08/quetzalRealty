@@ -9,7 +9,7 @@ import { getInventory } from "../../../../../sharedApi/strapi/getInventory";
 import Stack from "@mui/material/Stack";
 import SuiteCard from "./components/SuiteCard";
 import { Button, Typography, Grid } from "@mui/material";
-import NewSuiteModal from "./components/NewSuiteModal";
+import NewSuiteModal from "./components/NewSuiteModal/NewSuiteModal";
 
 
 export default function Project() {
