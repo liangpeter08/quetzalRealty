@@ -1,7 +1,7 @@
 import Button from '@mui/material/Button';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
-import { Box, FormControl, FormGroup, FormHelperText, IconButton, Input, InputLabel, Grid, CardMedia } from '@mui/material';
+import { Box, FormControl, FormGroup, FormHelperText, IconButton, TextField, InputLabel, Grid, CardMedia, styled, Typography, InputAdornment } from '@mui/material';
 import React, { useState } from 'react';
 import { uploadMedia } from '@/sharedApi/strapi/uploadMedia';
 import { FileUploader } from "react-drag-drop-files";
@@ -19,6 +19,19 @@ export interface NewSuiteModalProps {
   onClose: () => void;
   refetch: () => any
 }
+
+const UploadBox = styled(Box)(({ theme }) => ({
+  borderStyle: 'dashed',
+  p: 3,
+  borderWidth: '3px',
+  borderColor: theme.palette.primary.main,
+  width: '100%',
+  height: 200,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  borderRadius: 20,
+}))
 
 export default function NewSuiteModal({ onClose, selectedValue, open, refetch }: NewSuiteModalProps) {
   const [marketingFloorplan, setMarketingFloorplan] = useState<PluginUploadFile['attributes']>();
@@ -48,81 +61,74 @@ export default function NewSuiteModal({ onClose, selectedValue, open, refetch }:
 
   return (
     <Dialog onClose={handleClose} open={open}>
-      <DialogTitle>Add New Product</DialogTitle>
-      <Box sx={{ width: 500, m: 4 }}>
-        <Grid container spacing={4}>
-          <Grid item xs={12}>
-            <FormGroup>
-              <FormControl>
-                <InputLabel htmlFor="name">Floorplan Name</InputLabel>
-                <Input id="name" aria-describedby="name-helper-text" />
-              </FormControl>
-            </FormGroup>
+      <Box sx={{ m: 4, marginLeft: 2, marginBottom: 0 }}>
+        <DialogTitle sx={{ m: 1 }}><Typography variant="h3"> Add New Product </Typography></DialogTitle>
+        <Box sx={{ width: 500, m: 4 }}>
+          <Grid container spacing={4}>
+            <Grid item xs={12}>
+              <FormGroup>
+                <TextField label='Floorplan Name' aria-describedby="name-helper-text" />
+              </FormGroup>
+            </Grid>
+            <Grid item xs={6}>
+              <FormGroup>
+                <TextField type="number" label='Bedroom Count' aria-describedby="beds-helper-text" />
+              </FormGroup>
+            </Grid>
+            <Grid item xs={6}>
+              <FormGroup>
+                <TextField type="number" label='Bathroom Count' aria-describedby="baths-helper-text" />
+              </FormGroup>
+            </Grid>
+            <Grid item xs={6}>
+              <FormGroup>
+                <TextField label="Interior Area" aria-describedby="interior-area-helper-text" InputProps={{
+                  endAdornment: <InputAdornment position="end">Sq ft.</InputAdornment>,
+                }} />
+              </FormGroup>
+            </Grid>
+            <Grid item xs={6}>
+              <FormGroup>
+                <TextField label='Exterior Area' aria-describedby="exterior-area-helper-text" InputProps={{
+                  endAdornment: <InputAdornment position="end">Sq ft.</InputAdornment>,
+                }} />
+              </FormGroup>
+            </Grid>
+            <Grid item xs={6}>
+              {marketingFloorplan ?
+                <CardMedia
+                  sx={{ objectFit: "cover", height: 200, backgroundSize: 'cover' }}
+                  image={BASE_URL + marketingFloorplan?.url}
+                  title="Marketing Floorplan"
+                />
+                :
+                <FileUploader label="Upload Marketing Floorplan" handleChange={handleMarketingUpload} name="file" types={fileTypes}>
+                  <UploadBox>
+                    <Button sx={{ width: '100%', height: '100%' }} startIcon={<AddPhotoAlternate />} variant="text">Upload Marketing Floorplan</Button>
+                  </UploadBox>
+                </FileUploader>
+              }
+            </Grid>
+            <Grid item xs={6}>
+              {legalFloorplan ?
+                <CardMedia
+                  sx={{ objectFit: "cover", height: 200, backgroundSize: 'cover' }}
+                  image={BASE_URL + legalFloorplan?.url}
+                  title="Marketing Floorplan"
+                />
+                :
+                <FileUploader handleChange={handleLegalUpload} name="file" types={fileTypes}>
+                  <UploadBox>
+                    <Button sx={{ width: '100%', height: '100%' }} startIcon={<AddPhotoAlternate />} variant="text">Upload Legal Floorplan</Button>
+                  </UploadBox>
+                </FileUploader>
+              }
+            </Grid>
           </Grid>
-          <Grid item xs={6}>
-            <FormGroup>
-              <FormControl>
-                <InputLabel htmlFor="beds">Bedroom Count</InputLabel>
-                <Input id="beds" aria-describedby="beds-helper-text" />
-              </FormControl>
-            </FormGroup>
-          </Grid>
-          <Grid item xs={6}>
-            <FormGroup>
-              <FormControl>
-                <InputLabel htmlFor="baths">Bathroom Count</InputLabel>
-                <Input id="baths" aria-describedby="baths-helper-text" />
-              </FormControl>
-            </FormGroup>
-          </Grid>
-          <Grid item xs={6}>
-            <FormGroup>
-              <FormControl>
-                <InputLabel htmlFor="interior_area">Interior Area</InputLabel>
-                <Input id="interior_area" aria-describedby="interior-area-helper-text" />
-              </FormControl>
-            </FormGroup>
-          </Grid>
-          <Grid item xs={6}>
-            <FormGroup>
-              <FormControl>
-                <InputLabel htmlFor="exterior_area">Exterior Area</InputLabel>
-                <Input id="exterior_area" aria-describedby="exterior-area-helper-text" />
-              </FormControl>
-            </FormGroup>
-          </Grid>
-          <Grid item xs={6}>
-            {marketingFloorplan ?
-              <CardMedia
-                sx={{ objectFit: "contain", m: 2, height: 200, backgroundSize: 'contain' }}
-                image={BASE_URL + marketingFloorplan?.url}
-                title="Marketing Floorplan"
-              />
-              :
-              <FileUploader label="Upload Marketing Floorplan" handleChange={handleMarketingUpload} name="file" types={fileTypes}>
-                <Box sx={(theme) => ({ borderStyle: 'dotted ', borderWidth: '3px', borderColor: theme.palette.primary.main })}>
-                  <Button startIcon={<AddPhotoAlternate />} variant="text">Upload Marketing Floorplan</Button>
-                </Box>
-              </FileUploader>
-            }
-          </Grid>
-          <Grid item xs={6}>
-            {legalFloorplan ?
-              <CardMedia
-                sx={{ objectFit: "contain", m: 2, height: 200, backgroundSize: 'contain' }}
-                image={BASE_URL + legalFloorplan?.url}
-                title="Marketing Floorplan"
-              />
-              :
-              <FileUploader handleChange={handleLegalUpload} name="file" types={fileTypes}>
-                <Box sx={(theme) => ({ borderStyle: 'dotted ', borderWidth: '3px', borderColor: theme.palette.primary.main })}>
-                  <Button startIcon={<AddPhotoAlternate />} variant="text">Upload Legal Floorplan</Button>
-                </Box>
-              </FileUploader>
-            }
-          </Grid>
-        </Grid>
-        <Button onClick={submitHandler}>Submit</Button>
+          <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: 3 }}>
+            <Button onClick={submitHandler} variant='contained'>Submit</Button>
+          </Box>
+        </Box>
       </Box>
     </Dialog >
   );

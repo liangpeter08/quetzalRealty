@@ -11,6 +11,7 @@
   "dependencies": {
     "@emotion/react": "^11.11.0",
     "@emotion/styled": "^11.11.0",
+    "@hookform/resolvers": "^3.1.0",
     "@mui/icons-material": "^5.11.16",
     "@mui/material": "^5.10.12",
     "@mui/x-data-grid": "^6.5.0",
@@ -32,13 +33,15 @@
     "react-dom": "18.2.0",
     "react-drag-drop-files": "^2.3.10",
     "react-helmet": "^6.1.0",
+    "react-hook-form": "^7.44.2",
     "react-query": "^3.39.3",
     "react-router-dom": "^6.11.2",
     "sqlite": "^4.2.1",
     "sqlite3": "^5.1.6",
     "tailwindcss": "3.3.2",
     "typescript": "5.0.4",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.0",
+    "zod": "^3.21.4"
   },
   "devDependencies": {
     "@strapi/strapi": "^4.10.6",
