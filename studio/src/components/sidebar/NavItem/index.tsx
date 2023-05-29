@@ -8,10 +8,18 @@ import {
   ListItemText,
   useTheme
 } from '@mui/material';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
-export const NavItem = ({ item, level, onClick } : any) => {
+const NoStyleLink = styled(Link)(({ theme }) => ({
+  textDecoration: 'none',
+  color: theme.palette.primary.main
+}))
+
+export const NavItem = ({ item, level }: any) => {
   const Icon = item.icon;
   const theme = useTheme();
+  const pathName = usePathname();
   const itemIcon = <Icon stroke={1.5} size="1.3rem" />;
 
   const ListItemStyled = styled(ListItem)(() => ({
@@ -37,9 +45,11 @@ export const NavItem = ({ item, level, onClick } : any) => {
     },
   }));
 
+
+
   return (
+    <NoStyleLink href={item.href} >
       <ListItemStyled
-        onClick={onClick}
       >
         {/* <ListItemIcon
           sx={{
@@ -54,6 +64,7 @@ export const NavItem = ({ item, level, onClick } : any) => {
           <>{item.title}</>
         </ListItemText>
       </ListItemStyled>
+    </NoStyleLink >
   );
 };
 

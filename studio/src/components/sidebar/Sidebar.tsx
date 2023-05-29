@@ -2,7 +2,24 @@ import { useMediaQuery, Box, Drawer, Stack } from '@mui/material';
 import Image from 'next/image';
 import SidebarItems from './SidebarItems';
 
-const Sidebar = (props : any) => {
+const SidebarContent = () => {
+  return <Box
+    sx={{
+      height: '100%',
+    }}
+  >
+    <Stack direction="row" spacing={2}>
+      <Image width={100} height={100} src='/quetzal.svg' alt='logo' />
+      <Box sx={{ display: 'flex', alignItems: 'center' }}><h3>Quetzal Realty</h3></Box>
+    </Stack>
+    <Box>
+      <SidebarItems />
+    </Box>
+
+  </Box>
+}
+
+const Sidebar = (props: any) => {
 
   const lgUp = useMediaQuery('(min-width: 768px)')
 
@@ -27,20 +44,7 @@ const Sidebar = (props : any) => {
             },
           }}
         >
-          <Box
-            sx={{
-              height: '100%',
-            }}
-          >
-            <Stack direction="row" spacing={2}>
-                <Image width={100} height={100} src='/quetzal.svg' alt='logo' />
-                <Box sx={{display: 'flex', alignItems: 'center'}}><h3>Quetzal Realty</h3></Box>
-            </Stack>
-            <Box>
-            <SidebarItems />
-            </Box>
-            
-          </Box>
+          <SidebarContent />
         </Drawer>
       </Box>
     );
@@ -59,6 +63,7 @@ const Sidebar = (props : any) => {
         },
       }}
     >
+      <SidebarContent />
     </Drawer>
   );
 };
