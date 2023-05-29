@@ -7,7 +7,7 @@ import { ExpandLess, ExpandMore } from '@mui/icons-material';
 const SubMenu = ({ item }: any) => {
   const [isOpen, setOpen] = useState<boolean>(false);
   return (<>
-    <ListItem sx={{ padding: '8px 10px' }} button key={item.id} onClick={() => setOpen((prev) => !prev)}>
+    <ListItem sx={{ padding: '8px 10px', borderRadius: '8px' }} button key={item.id} onClick={() => setOpen((prev) => !prev)}>
       <ListItemText primary={item.title} />
       {isOpen ? <ExpandLess /> : <ExpandMore />}
     </ListItem>
