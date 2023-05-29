@@ -6,7 +6,8 @@ import {
   List,
   styled,
   ListItemText,
-  useTheme
+  useTheme,
+  Theme
 } from '@mui/material';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -16,7 +17,13 @@ const NoStyleLink = styled(Link)(({ theme }) => ({
   color: theme.palette.primary.main
 }))
 
-export const NavItem = ({ item, level }: any) => {
+const selectedCss = (theme: Theme) => {
+  return {
+    backgroundColor: theme.palette.action.active
+  }
+}
+
+export const NavItem = ({ item, level, currPath }: any) => {
   const Icon = item.icon;
   const theme = useTheme();
   const pathName = usePathname();
@@ -45,10 +52,8 @@ export const NavItem = ({ item, level }: any) => {
     },
   }));
 
-
-
   return (
-    <NoStyleLink href={item.href} >
+    <NoStyleLink href={item.href} sx={(theme) => currPath.includes(item.href) ? selectedCss(theme) : {}}>
       <ListItemStyled
       >
         {/* <ListItemIcon

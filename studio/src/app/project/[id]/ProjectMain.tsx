@@ -23,26 +23,26 @@ export default function Project() {
   });
   return (
     <FullLayout>
-    <PageContainer title="Projects" description="projects">
-     <DashboardCard title="Projects">
-       <TableContainer component={Paper}>
-       <Table sx={{ minWidth: 200 }} aria-label="Project table">
-         <TableHead>
-         <TableRow>
-           <TableCell>Project Name sadfasdfa</TableCell>
-           <TableCell>Role</TableCell>
-           </TableRow>
-         </TableHead>
-         <TableBody>
-            {(data || []).map((row : any, i : number) => <TableRow key={i}>
-                <TableCell><Link href={'/projects'}>{row?.attributes.project_name}</Link></TableCell>
-                <TableCell>{row?.attributes.project_name}</TableCell>
-            </TableRow>)}
-         </TableBody>
-         </Table>
-       </TableContainer>
-     </DashboardCard>
-   </PageContainer>
-   </FullLayout> 
+      <PageContainer title="Projects" description="projects">
+        <DashboardCard title="Projects">
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 200 }} aria-label="Project table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Project Name sadfasdfa</TableCell>
+                  <TableCell>Role</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {(data || []).map((row: any, i: number) => <TableRow key={i}>
+                  <TableCell><Link href={'/projects'}>{row?.attributes.project_name}</Link></TableCell>
+                  <TableCell>{row?.attributes.project_name}</TableCell>
+                </TableRow>)}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </DashboardCard>
+      </PageContainer>
+    </FullLayout>
   );
 }

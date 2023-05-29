@@ -1,6 +1,7 @@
 import { useMediaQuery, Box, Drawer, Stack } from '@mui/material';
 import Image from 'next/image';
 import SidebarItems from './SidebarItems';
+import SidebarProvider from '@/context/SidebarContext';
 
 const SidebarContent = () => {
   return <Box
@@ -27,44 +28,48 @@ const Sidebar = (props: any) => {
 
   if (lgUp) {
     return (
-      <Box
-        sx={{
-          width: sidebarWidth,
-          flexShrink: 0,
-        }}
-      >
-        <Drawer
-          anchor="left"
-          open={props.isSidebarOpen ?? true}
-          variant="permanent"
-          PaperProps={{
-            sx: {
-              width: sidebarWidth,
-              boxSizing: 'border-box',
-            },
+      <SidebarProvider initialVal='main-page'>
+        <Box
+          sx={{
+            width: sidebarWidth,
+            flexShrink: 0,
           }}
         >
-          <SidebarContent />
-        </Drawer>
-      </Box>
+          <Drawer
+            anchor="left"
+            open={props.isSidebarOpen ?? true}
+            variant="permanent"
+            PaperProps={{
+              sx: {
+                width: sidebarWidth,
+                boxSizing: 'border-box',
+              },
+            }}
+          >
+            <SidebarContent />
+          </Drawer>
+        </Box>
+      </SidebarProvider>
     );
   }
 
   return (
-    <Drawer
-      anchor="left"
-      open={props.isMobileSidebarOpen ?? true}
-      onClose={props.onSidebarClose}
-      variant="temporary"
-      PaperProps={{
-        sx: {
-          width: sidebarWidth,
-          boxShadow: (theme) => theme.shadows[8],
-        },
-      }}
-    >
-      <SidebarContent />
-    </Drawer>
+    <SidebarProvider initialVal='main-page'>
+      <Drawer
+        anchor="left"
+        open={props.isMobileSidebarOpen ?? true}
+        onClose={props.onSidebarClose}
+        variant="temporary"
+        PaperProps={{
+          sx: {
+            width: sidebarWidth,
+            boxShadow: (theme) => theme.shadows[8],
+          },
+        }}
+      >
+        <SidebarContent />
+      </Drawer>
+    </SidebarProvider>
   );
 };
 

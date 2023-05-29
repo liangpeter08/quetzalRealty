@@ -61,13 +61,18 @@ const baselightTheme = createTheme({
       disabledBackground: 'rgba(73,82,88,0.12)',
       hoverOpacity: 0.02,
       hover: '#f6f9fc',
+      active: '#EBF3FE'
     },
     divider: '#e5eaef',
+    background: {
+      // default: '#f2f8fa',
+      // paper: '#EBF3FE'
+    }
   },
   typography,
   shadows
 },
-  
+
 );
 
 export { baselightTheme };
