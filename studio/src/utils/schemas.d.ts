@@ -748,6 +748,8 @@ export interface ApiModelModel extends CollectionTypeSchema {
       'oneToMany',
       'api::suite.suite'
     >;
+    type: StringAttribute;
+    additional_space: EnumerationAttribute<['Study', 'Flex', 'Den']>;
     createdAt: DateTimeAttribute;
     updatedAt: DateTimeAttribute;
     publishedAt: DateTimeAttribute;

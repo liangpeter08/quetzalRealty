@@ -1,7 +1,7 @@
 import Button from '@mui/material/Button';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
-import { Box, FormControl, FormGroup, FormHelperText, IconButton, TextField, InputLabel, Grid, CardMedia, styled, Typography, InputAdornment } from '@mui/material';
+import { Autocomplete, Box, FormControl, FormGroup, FormHelperText, IconButton, TextField, InputLabel, Grid, CardMedia, styled, Typography, InputAdornment } from '@mui/material';
 import React, { useState } from 'react';
 import { uploadMedia } from '@/sharedApi/strapi/uploadMedia';
 import { FileUploader } from "react-drag-drop-files";
@@ -9,11 +9,12 @@ import { PluginUploadFile } from '@/utils/schemas';
 import { BASE_URL } from '@/utils/constants';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { AddPhotoAlternate } from '@mui/icons-material';
-import { CreateModelProps, createModel } from '@/sharedApi/strapi/createModel';
+import { AdditionalSpace, CreateModelProps, createModel } from '@/sharedApi/strapi/createModel';
 import { useForm, Controller, useFieldArray } from "react-hook-form";
 
 
 const fileTypes = ["JPG", "PNG", "GIF"];
+const additionalSpaceOptions: (AdditionalSpace | null)[] = ['Study', 'Flex', 'Den'];
 
 export interface NewSuiteModalProps {
   open: boolean;
@@ -55,11 +56,13 @@ export default function NewSuiteModal({ onClose, selectedValue, open, refetch }:
   }
 
   const submitHandler = async (data: any) => {
-    const { beds, baths, interior_area, exterior_area, floorplan_name } = data
+    const { beds, baths, interior_area, exterior_area, floorplan_name, additional_space, type } = data
     const modifiedData: CreateModelProps = {
       project: { "disconnect": [], "connect": [{ "id": 1, "position": { "end": true } }] },
       beds: parseInt(beds, 10),
       baths: parseInt(baths, 10),
+      additional_space,
+      type: !!type ? type : `${beds} Bed + ${baths} Bath ${additional_space ? `+ ${additional_space}` : ''}`,
       interior_sf: parseInt(interior_area, 10),
       exterior_sf: parseInt(exterior_area, 10),
       floorplan_name,
@@ -96,6 +99,32 @@ export default function NewSuiteModal({ onClose, selectedValue, open, refetch }:
                 <FormGroup>
                   <Controller control={control} name="baths" defaultValue="" render={({ field }) => (
                     <TextField {...field} type="number" label='Bathroom Count' aria-describedby="baths-helper-text" />)} />
+                </FormGroup>
+              </Grid>
+              <Grid item xs={6}>
+                <FormGroup>
+                  <Controller control={control} name="additional_space" render={({ field: { ref, onChange, ...field } }) => (
+                    <Autocomplete
+                      options={additionalSpaceOptions}
+                      onChange={(_, data) => onChange(data)}
+                      defaultValue={null}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          {...field}
+                          inputRef={ref}
+                          label="Additional Space"
+                          aria-describedby='additional-space-helper-text'
+                        />
+                      )}
+                    />
+                  )} />
+                </FormGroup>
+              </Grid>
+              <Grid item xs={6}>
+                <FormGroup>
+                  <Controller control={control} name="type" defaultValue="" render={({ field }) => (
+                    <TextField {...field} label='Type (Optional)' aria-describedby="type-helper-text" />)} />
                 </FormGroup>
               </Grid>
               <Grid item xs={6}>

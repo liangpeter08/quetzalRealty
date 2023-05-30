@@ -1,4 +1,4 @@
-import { useMediaQuery, Box, Drawer, Stack } from '@mui/material';
+import { useMediaQuery, Box, Drawer, Stack, Typography } from '@mui/material';
 import Image from 'next/image';
 import SidebarItems from './SidebarItems';
 import SidebarProvider from '@/context/SidebarContext';
@@ -11,7 +11,7 @@ const SidebarContent = () => {
   >
     <Stack direction="row" spacing={2}>
       <Image width={100} height={100} src='/quetzal.svg' alt='logo' />
-      <Box sx={{ display: 'flex', alignItems: 'center' }}><h3>Quetzal Realty</h3></Box>
+      <Box sx={{ display: 'flex', alignItems: 'center' }}><Typography variant='h3'>Quetzal Realty</Typography></Box>
     </Stack>
     <Box>
       <SidebarItems />

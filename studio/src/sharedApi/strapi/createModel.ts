@@ -3,6 +3,8 @@ import strapiClient from "./strapiClient";
 import { ApiModelModel } from "@/utils/schemas";
 
 
+export type AdditionalSpace = 'Study' | 'Flex' | 'Den'
+
 export interface CreateModelProps {
     project: any
     beds: number
@@ -10,6 +12,8 @@ export interface CreateModelProps {
     interior_sf: number
     exterior_sf: number;
     floorplan_name: string;
+    type: string;
+    additional_space?: AdditionalSpace;
     marketing_floorplan?: number;
     legal_floorplan?: number;
     suites?: any
