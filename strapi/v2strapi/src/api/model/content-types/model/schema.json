@@ -60,6 +60,17 @@
       "relation": "oneToMany",
       "target": "api::suite.suite",
       "mappedBy": "model"
+    },
+    "type": {
+      "type": "string"
+    },
+    "additional_space": {
+      "type": "enumeration",
+      "enum": [
+        "Study",
+        "Flex",
+        "Den"
+      ]
     }
   }
 }
