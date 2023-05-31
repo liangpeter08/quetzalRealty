@@ -4,7 +4,7 @@ export default function Home() {
   return (
     <FullLayout>
       <main className="flex min-h-screen flex-col items-center justify-between p-24">
-        asdfasdfsdfasdfa
+        <a href="/api/auth/login">Login</a>
       </main>
     </FullLayout>
   )
