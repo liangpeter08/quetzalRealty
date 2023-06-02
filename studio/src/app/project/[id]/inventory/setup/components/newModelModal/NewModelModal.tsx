@@ -10,7 +10,8 @@ import { BASE_URL } from '@/utils/constants';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { AddPhotoAlternate } from '@mui/icons-material';
 import { AdditionalSpace, CreateModelProps, createModel } from '@/sharedApi/strapi/createModel';
-import { useForm, Controller, useFieldArray } from "react-hook-form";
+import { useForm, Controller, useFieldArray, FieldError } from "react-hook-form";
+import { error } from 'console';
 
 
 const fileTypes = ["JPG", "PNG", "GIF"];
@@ -40,6 +41,28 @@ export default function NewSuiteModal({ onClose, selectedValue, open, refetch }:
   const [marketingFloorplan, setMarketingFloorplan] = useState<any>();
   const [legalFloorplan, setLegalFloorplan] = useState<any>();
   const { control, handleSubmit } = useForm({ reValidateMode: "onBlur" });
+
+  const missingField: { floorplan_name: any, beds: any, baths: any, interior_area: any, exterior_area: any } = {
+    floorplan_name: {
+      required: "Floorplan Name Is Required"
+    },
+    beds: {
+      required: "Number of Bedrooms is Required",
+      min: "Cannot Be Negative"
+    },
+    baths: {
+      required: "Number of Bedrooms is Required",
+      min: "Cannot Be Less Than 1"
+    },
+    interior_area: {
+      required: "Interior Area is Required",
+      min: "Cannot Be Negative"
+    },
+    exterior_area: {
+      required: "Exterior Area is Required",
+      min: "Cannot Be Negative"
+    },
+  };
 
   const handleClose = () => {
     onClose();
@@ -85,20 +108,27 @@ export default function NewSuiteModal({ onClose, selectedValue, open, refetch }:
             <Grid container spacing={4}>
               <Grid item xs={12}>
                 <FormGroup>
-                  <Controller control={control} name="floorplan_name" defaultValue="" render={({ field }) => (
-                    <TextField {...field} label='Floorplan Name' aria-describedby="floorplan-name-helper-text" />)} />
+                  <Controller control={control} rules={{ required: true }} name="floorplan_name" defaultValue="" render={({ field, fieldState: { error } }) => (
+                    <TextField {...field} label='Floorplan Name' aria-describedby="floorplan-name-helper-text" error={error !== undefined}
+                      helperText={!!error && missingField.floorplan_name[error.type]} />)} />
                 </FormGroup>
               </Grid>
               <Grid item xs={6}>
                 <FormGroup>
-                  <Controller control={control} name="beds" defaultValue="" render={({ field }) => (
-                    <TextField {...field} type="number" label='Bedroom Count' aria-describedby="beds-helper-text" />)} />
+                  <Controller control={control} rules={{ required: true, min: 0 }} name="beds" defaultValue="" render={({ field, fieldState: { error } }) => (
+                    <TextField {...field} type="number" label='Bedroom Count' aria-describedby="beds-helper-text"
+                      InputProps={{ inputProps: { min: 0 } }}
+                      error={error !== undefined}
+                      helperText={!!error && missingField.beds[error.type]} />)} />
                 </FormGroup>
               </Grid>
               <Grid item xs={6}>
                 <FormGroup>
-                  <Controller control={control} name="baths" defaultValue="" render={({ field }) => (
-                    <TextField {...field} type="number" label='Bathroom Count' aria-describedby="baths-helper-text" />)} />
+                  <Controller control={control} rules={{ required: true, min: 1 }} name="baths" defaultValue="" render={({ field, fieldState: { error } }) => (
+                    <TextField {...field} type="number" label='Bathroom Count' aria-describedby="baths-helper-text"
+                      InputProps={{ inputProps: { min: 1 } }}
+                      error={error !== undefined}
+                      helperText={!!error && missingField.baths[error.type]} />)} />
                 </FormGroup>
               </Grid>
               <Grid item xs={6}>
@@ -129,18 +159,25 @@ export default function NewSuiteModal({ onClose, selectedValue, open, refetch }:
               </Grid>
               <Grid item xs={6}>
                 <FormGroup>
-                  <Controller control={control} name="interior_area" defaultValue="" render={({ field }) => (
-                    <TextField {...field} label="Interior Area" aria-describedby="interior-area-helper-text" InputProps={{
-                      endAdornment: <InputAdornment position="end">Sq ft.</InputAdornment>,
-                    }} />)} />
+                  <Controller control={control} rules={{ required: true, min: 0 }} name="interior_area" defaultValue="" render={({ field, fieldState: { error } }) => (
+                    <TextField {...field} label="Interior Area" aria-describedby="interior-area-helper-text"
+                      error={error !== undefined}
+                      helperText={!!error && missingField.interior_area[error.type]}
+                      InputProps={{
+                        endAdornment: <InputAdornment position="end">SF.</InputAdornment>,
+                      }} />)} />
                 </FormGroup>
               </Grid>
               <Grid item xs={6}>
                 <FormGroup>
-                  <Controller control={control} name="exterior_area" defaultValue="" render={({ field }) => (
-                    <TextField {...field} label='Exterior Area' aria-describedby="exterior-area-helper-text" InputProps={{
-                      endAdornment: <InputAdornment position="end">Sq ft.</InputAdornment>,
-                    }} />)} />
+                  <Controller control={control} rules={{ required: true, min: 0 }} name="exterior_area" defaultValue="" render={({ field, fieldState: { error } }) => (
+                    <TextField {...field} label='Exterior Area' aria-describedby="exterior-area-helper-text"
+                      error={error !== undefined}
+                      helperText={!!error && missingField.exterior_area[error.type]}
+                      InputProps={{
+                        endAdornment: <InputAdornment position="end">SF.</InputAdornment>,
+                      }}
+                    />)} />
                 </FormGroup>
               </Grid>
               <Grid item xs={6}>
