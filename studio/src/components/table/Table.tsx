@@ -7,20 +7,28 @@ interface BasicTableProps {
   config: any
 }
 
-type Order = 'asc' | 'desc';
+export type SortDirection = 'asc' | 'desc' | false;
 
 const BasicTable = ({ config }: BasicTableProps) => {
   const table = useReactTable(config)
-  const [order, setOrder] = useState<Order>();
+  const [order, setOrder] = useState<SortDirection>(false);
   const [orderBy, setOrderBy] = useState<string>();
 
   const handleSorting = (event: React.MouseEvent, header: any) => {
     const sortFn = header.column.getToggleSortingHandler();
-    console.log(order, orderBy, header)
     if (header.id === orderBy) {
-      setOrder((prev) => prev === 'asc' ? 'desc' : 'asc')
+      setOrder((prev) => {
+        switch (prev) {
+          case 'asc':
+            return 'desc'
+          case 'desc':
+            return false
+          default:
+            return 'asc'
+        }
+      })
     } else {
-      setOrder('desc')
+      setOrder('asc')
       setOrderBy(header.id)
     }
     sortFn?.(event)
@@ -36,9 +44,10 @@ const BasicTable = ({ config }: BasicTableProps) => {
               sortDirection={orderBy === header.id ? order : false}
             >
               <TableSortLabel
-                active={orderBy === header.id}
-                direction={orderBy === header.id ? order : 'asc'}
+                active={orderBy === header.id && !!order}
+                direction={(orderBy === header.id && order) ? order : undefined}
                 onClick={(event) => handleSorting(event, header)}
+                hideSortIcon={true}
               >
                 {header.isPlaceholder
                   ? null
