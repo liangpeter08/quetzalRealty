@@ -2,7 +2,7 @@ import Button from '@mui/material/Button';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import { Autocomplete, Box, FormControl, FormGroup, FormHelperText, IconButton, TextField, InputLabel, Grid, CardMedia, styled, Typography, InputAdornment } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { uploadMedia } from '@/sharedApi/strapi/uploadMedia';
 import { FileUploader } from "react-drag-drop-files";
 import { PluginUploadFile } from '@/utils/schemas';
@@ -37,32 +37,56 @@ const UploadBox = styled(Box)(({ theme }) => ({
   borderRadius: 20,
 }))
 
-export default function NewSuiteModal({ onClose, selectedValue, open, refetch }: NewSuiteModalProps) {
+
+type CreateFieldRestrict = {
+  [k in keyof CreateModelProps]?: any
+}
+
+
+function getUnitType({ beds, baths, type, additional_space }: CreateModelProps) {
+  if (type) {
+    return type;
+  }
+  let str = `${beds} Bed`
+  if (additional_space) {
+    str += ' + ' + additional_space
+  }
+  str += ` + ${baths} Bath`
+  return str;
+}
+
+const missingField: CreateFieldRestrict = {
+  floorplan_name: {
+    required: "Floorplan Name Is Required"
+  },
+  beds: {
+    required: "Number of Bedrooms is Required",
+    min: "Cannot Be Negative"
+  },
+  baths: {
+    required: "Number of Bedrooms is Required",
+    min: "Cannot Be Less Than 1"
+  },
+  interior_sf: {
+    required: "Interior Area is Required",
+    min: "Cannot Be Negative"
+  },
+  exterior_sf: {
+    required: "Exterior Area is Required",
+    min: "Cannot Be Negative"
+  },
+};
+
+export default function NewModelModal({ onClose, selectedValue, open, refetch }: NewSuiteModalProps) {
   const [marketingFloorplan, setMarketingFloorplan] = useState<any>();
   const [legalFloorplan, setLegalFloorplan] = useState<any>();
-  const { control, handleSubmit } = useForm({ reValidateMode: "onBlur" });
+  const { control, handleSubmit, reset, formState: { isSubmitSuccessful } } = useForm({ reValidateMode: "onBlur" });
 
-  const missingField: { floorplan_name: any, beds: any, baths: any, interior_area: any, exterior_area: any } = {
-    floorplan_name: {
-      required: "Floorplan Name Is Required"
-    },
-    beds: {
-      required: "Number of Bedrooms is Required",
-      min: "Cannot Be Negative"
-    },
-    baths: {
-      required: "Number of Bedrooms is Required",
-      min: "Cannot Be Less Than 1"
-    },
-    interior_area: {
-      required: "Interior Area is Required",
-      min: "Cannot Be Negative"
-    },
-    exterior_area: {
-      required: "Exterior Area is Required",
-      min: "Cannot Be Negative"
-    },
-  };
+  useEffect(() => {
+    reset()
+    setMarketingFloorplan(undefined)
+    setLegalFloorplan(undefined)
+  }, [isSubmitSuccessful, reset])
 
   const handleClose = () => {
     onClose();
@@ -79,15 +103,15 @@ export default function NewSuiteModal({ onClose, selectedValue, open, refetch }:
   }
 
   const submitHandler = async (data: any) => {
-    const { beds, baths, interior_area, exterior_area, floorplan_name, additional_space, type } = data
+    const { beds, baths, interior_sf, exterior_sf, floorplan_name, additional_space } = data
     const modifiedData: CreateModelProps = {
       project: { "disconnect": [], "connect": [{ "id": 1, "position": { "end": true } }] },
       beds: parseInt(beds, 10),
       baths: parseInt(baths, 10),
       additional_space,
-      type: !!type ? type : `${beds} Bed + ${baths} Bath ${additional_space ? `+ ${additional_space}` : ''}`,
-      interior_sf: parseInt(interior_area, 10),
-      exterior_sf: parseInt(exterior_area, 10),
+      type: getUnitType(data),
+      interior_sf: parseInt(interior_sf, 10),
+      exterior_sf: parseInt(exterior_sf, 10),
       floorplan_name,
       marketing_floorplan: marketingFloorplan?.id,
       legal_floorplan: legalFloorplan?.id,
@@ -96,7 +120,6 @@ export default function NewSuiteModal({ onClose, selectedValue, open, refetch }:
     await createModel(modifiedData);
     await refetch()
     onClose()
-
   }
 
   return (
@@ -159,23 +182,23 @@ export default function NewSuiteModal({ onClose, selectedValue, open, refetch }:
               </Grid>
               <Grid item xs={6}>
                 <FormGroup>
-                  <Controller control={control} rules={{ required: true, min: 0 }} name="interior_area" defaultValue="" render={({ field, fieldState: { error } }) => (
+                  <Controller control={control} rules={{ required: true, min: 0 }} name="interior_sf" defaultValue="" render={({ field, fieldState: { error } }) => (
                     <TextField {...field} label="Interior Area" aria-describedby="interior-area-helper-text"
                       error={error !== undefined}
-                      helperText={!!error && missingField.interior_area[error.type]}
+                      helperText={!!error && missingField.interior_sf[error.type]}
                       InputProps={{
-                        endAdornment: <InputAdornment position="end">SF.</InputAdornment>,
+                        endAdornment: <InputAdornment position="end">SF</InputAdornment>
                       }} />)} />
                 </FormGroup>
               </Grid>
               <Grid item xs={6}>
                 <FormGroup>
-                  <Controller control={control} rules={{ required: true, min: 0 }} name="exterior_area" defaultValue="" render={({ field, fieldState: { error } }) => (
+                  <Controller control={control} rules={{ required: true, min: 0 }} name="exterior_sf" defaultValue="" render={({ field, fieldState: { error } }) => (
                     <TextField {...field} label='Exterior Area' aria-describedby="exterior-area-helper-text"
                       error={error !== undefined}
-                      helperText={!!error && missingField.exterior_area[error.type]}
+                      helperText={!!error && missingField.exterior_sf[error.type]}
                       InputProps={{
-                        endAdornment: <InputAdornment position="end">SF.</InputAdornment>,
+                        endAdornment: <InputAdornment position="end">SF</InputAdornment>
                       }}
                     />)} />
                 </FormGroup>

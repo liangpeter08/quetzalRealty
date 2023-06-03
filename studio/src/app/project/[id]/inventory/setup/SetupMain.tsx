@@ -38,7 +38,6 @@ export default function Project() {
             <Button variant="contained" onClick={newSuiteHandler}>Add Product</Button>
           </Grid>
         </Grid>
-        {/* <DashboardCard title="Inventory"> */}
         <Paper elevation={12}>
           <Box sx={{ m: 4, p: 4 }}>
             <Stack spacing={{ xs: 1, sm: 2 }} direction="row" useFlexGap flexWrap="wrap">
@@ -46,7 +45,6 @@ export default function Project() {
             </Stack>
           </Box>
         </Paper>
-        {/* </DashboardCard> */}
       </PageContainer>
     </FullLayout>
   );
