@@ -69,9 +69,9 @@ const columns = [
     sortingFn: 'text'
   }),
   columnHelper.accessor(row => row.attributes.beds, {
-    id: 'lastName',
+    id: 'beds',
     cell: info => <i>{info.getValue().toString()}</i>,
-    header: () => <span>Last Name</span>,
+    header: () => <span>Beds</span>,
     sortingFn: 'text'
   })
 ]
