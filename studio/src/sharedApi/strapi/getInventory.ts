@@ -10,7 +10,9 @@ export interface StrapiMetadata {
   }
 }
 
-export async function getInventory(): Promise<{ data: ApiModelModel[], meta: StrapiMetadata }> {
+export type ModelType = { id: string, attributes: ApiModelModel['attributes'] }
+
+export async function getInventory(): Promise<{ data: ModelType[], meta: StrapiMetadata }> {
   const { data } = await strapiClient
     .get("/models", {
       params: {

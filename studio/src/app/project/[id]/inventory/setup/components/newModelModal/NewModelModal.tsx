@@ -12,6 +12,8 @@ import { AddPhotoAlternate } from '@mui/icons-material';
 import { AdditionalSpace, CreateModelProps, createModel } from '@/sharedApi/strapi/createModel';
 import { useForm, Controller, useFieldArray, FieldError } from "react-hook-form";
 import { error } from 'console';
+import { updateModel } from '@/sharedApi/strapi/updateModel';
+import { ModelType } from '@/sharedApi/strapi/getInventory';
 
 
 const fileTypes = ["JPG", "PNG", "GIF"];
@@ -19,9 +21,12 @@ const additionalSpaceOptions: (AdditionalSpace | null)[] = ['Study', 'Flex', 'De
 
 export interface NewSuiteModalProps {
   open: boolean;
-  selectedValue: string;
   onClose: () => void;
   refetch: () => any
+  title?: string
+  submitText?: string
+  formValues?: ModelType
+  isUpdate?: boolean
 }
 
 const UploadBox = styled(Box)(({ theme }) => ({
@@ -77,10 +82,19 @@ const missingField: CreateFieldRestrict = {
   },
 };
 
-export default function NewModelModal({ onClose, selectedValue, open, refetch }: NewSuiteModalProps) {
+export default function NewModelModal(props: NewSuiteModalProps) {
+  const {
+    onClose,
+    open,
+    refetch,
+    title = 'Add New Product',
+    submitText = 'Submit',
+    formValues,
+    isUpdate
+  } = props
   const [marketingFloorplan, setMarketingFloorplan] = useState<any>();
   const [legalFloorplan, setLegalFloorplan] = useState<any>();
-  const { control, handleSubmit, reset, formState: { isSubmitSuccessful } } = useForm({ reValidateMode: "onBlur" });
+  const { control, handleSubmit, reset, formState: { isSubmitSuccessful } } = useForm({ reValidateMode: "onBlur", defaultValues: formValues?.['attributes'] });
 
   useEffect(() => {
     reset()
@@ -116,8 +130,17 @@ export default function NewModelModal({ onClose, selectedValue, open, refetch }:
       marketing_floorplan: marketingFloorplan?.id,
       legal_floorplan: legalFloorplan?.id,
     }
+    if (isUpdate) {
+      if (!formValues?.id) {
+        console.log('no Id')
+        onClose()
+        return
+      }
+      await updateModel(modifiedData, formValues.id);
+    } else {
+      await createModel(modifiedData);
+    }
 
-    await createModel(modifiedData);
     await refetch()
     onClose()
   }
@@ -125,20 +148,20 @@ export default function NewModelModal({ onClose, selectedValue, open, refetch }:
   return (
     <Dialog onClose={handleClose} open={open}>
       <Box sx={{ m: 4, marginLeft: 2, marginBottom: 0 }}>
-        <DialogTitle sx={{ m: 1 }}><Typography variant="h3"> Add New Product </Typography></DialogTitle>
+        <DialogTitle sx={{ m: 1 }}><Typography sx={{ fontSize: 20, fontWeight: 600 }} variant="body1">{title}</Typography></DialogTitle>
         <form onSubmit={handleSubmit(submitHandler)}>
           <Box sx={{ width: 500, m: 4 }}>
             <Grid container spacing={4}>
               <Grid item xs={12}>
                 <FormGroup>
-                  <Controller control={control} rules={{ required: true }} name="floorplan_name" defaultValue="" render={({ field, fieldState: { error } }) => (
+                  <Controller control={control} rules={{ required: true }} name="floorplan_name" render={({ field, fieldState: { error } }) => (
                     <TextField {...field} label='Floorplan Name' aria-describedby="floorplan-name-helper-text" error={error !== undefined}
                       helperText={!!error && missingField.floorplan_name[error.type]} />)} />
                 </FormGroup>
               </Grid>
               <Grid item xs={6}>
                 <FormGroup>
-                  <Controller control={control} rules={{ required: true, min: 0 }} name="beds" defaultValue="" render={({ field, fieldState: { error } }) => (
+                  <Controller control={control} rules={{ required: true, min: 0 }} name="beds" render={({ field, fieldState: { error } }) => (
                     <TextField {...field} type="number" label='Bedroom Count' aria-describedby="beds-helper-text"
                       InputProps={{ inputProps: { min: 0 } }}
                       error={error !== undefined}
@@ -147,7 +170,7 @@ export default function NewModelModal({ onClose, selectedValue, open, refetch }:
               </Grid>
               <Grid item xs={6}>
                 <FormGroup>
-                  <Controller control={control} rules={{ required: true, min: 1 }} name="baths" defaultValue="" render={({ field, fieldState: { error } }) => (
+                  <Controller control={control} rules={{ required: true, min: 1 }} name="baths" render={({ field, fieldState: { error } }) => (
                     <TextField {...field} type="number" label='Bathroom Count' aria-describedby="baths-helper-text"
                       InputProps={{ inputProps: { min: 1 } }}
                       error={error !== undefined}
@@ -176,13 +199,13 @@ export default function NewModelModal({ onClose, selectedValue, open, refetch }:
               </Grid>
               <Grid item xs={6}>
                 <FormGroup>
-                  <Controller control={control} name="type" defaultValue="" render={({ field }) => (
+                  <Controller control={control} name="type" render={({ field }) => (
                     <TextField {...field} label='Type (Optional)' aria-describedby="type-helper-text" />)} />
                 </FormGroup>
               </Grid>
               <Grid item xs={6}>
                 <FormGroup>
-                  <Controller control={control} rules={{ required: true, min: 0 }} name="interior_sf" defaultValue="" render={({ field, fieldState: { error } }) => (
+                  <Controller control={control} rules={{ required: true, min: 0 }} name="interior_sf" render={({ field, fieldState: { error } }) => (
                     <TextField {...field} label="Interior Area" aria-describedby="interior-area-helper-text"
                       error={error !== undefined}
                       helperText={!!error && missingField.interior_sf[error.type]}
@@ -193,7 +216,7 @@ export default function NewModelModal({ onClose, selectedValue, open, refetch }:
               </Grid>
               <Grid item xs={6}>
                 <FormGroup>
-                  <Controller control={control} rules={{ required: true, min: 0 }} name="exterior_sf" defaultValue="" render={({ field, fieldState: { error } }) => (
+                  <Controller control={control} rules={{ required: true, min: 0 }} name="exterior_sf" render={({ field, fieldState: { error } }) => (
                     <TextField {...field} label='Exterior Area' aria-describedby="exterior-area-helper-text"
                       error={error !== undefined}
                       helperText={!!error && missingField.exterior_sf[error.type]}
@@ -235,7 +258,7 @@ export default function NewModelModal({ onClose, selectedValue, open, refetch }:
               </Grid>
             </Grid>
             <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: 3 }}>
-              <Button type="submit" variant='contained'>Submit</Button>
+              <Button type="submit" variant='contained'>{submitText}</Button>
             </Box>
           </Box>
         </form>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { IconButton, Box, Grid, Card, Paper, Stack } from "@mui/material";
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import CardActions from '@mui/material/CardActions';
@@ -11,16 +11,22 @@ import { GetStringAttributeValue, MediaAttribute, StringAttribute } from "@strap
 import { BASE_URL } from "@/utils/constants";
 import { format } from "path";
 import { Label } from "@mui/icons-material";
+import NewModelModal from "./newModelModal/NewModelModal";
+import { ModelType } from "@/sharedApi/strapi/getInventory";
 
 interface ModelCardProps {
-  model: ApiModelModel
+  model: ModelType
+  refetch: () => any
 }
 
-export default function ModelCard({ model }: ModelCardProps) {
+export default function ModelCard({ model, refetch }: ModelCardProps) {
   const { floorplan_name, marketing_floorplan, interior_sf, exterior_sf, type, beds, baths } = model.attributes
   const marketingFloorplan = marketing_floorplan as any
+  const [isEditing, setIsEditing] = useState<boolean>(false)
+
   return (
     <Paper elevation={24}>
+      <NewModelModal open={isEditing} title="sdfsd" submitText="sdfsdfsd" formValues={model} onClose={() => setIsEditing(false)} refetch={refetch} />
       <Card sx={{ width: 500 }} raised={true}>
         <Paper elevation={10} sx={{ height: 280, m: 3 }}>
           <CardMedia
@@ -37,7 +43,7 @@ export default function ModelCard({ model }: ModelCardProps) {
                   {(floorplan_name as unknown) as string}
                 </Typography>
                 <IconButton>
-                  <ModeEditIcon />
+                  <ModeEditIcon onClick={() => setIsEditing(true)} />
                 </IconButton>
               </Stack>
             </Grid>

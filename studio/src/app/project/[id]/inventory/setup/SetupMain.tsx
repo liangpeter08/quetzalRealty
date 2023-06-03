@@ -5,12 +5,14 @@ import React, { useState } from "react";
 import PageContainer from '@/components/container/PageContainer'
 import DashboardCard from '@/components/shared/DashboardCard'
 import { FullLayout } from '@/components/fullLayout/FullLayout';
-import { getInventory } from "../../../../../sharedApi/strapi/getInventory";
+import { ModelType, getInventory } from "../../../../../sharedApi/strapi/getInventory";
 import Stack from "@mui/material/Stack";
 import SuiteCard from "./components/ModelCard";
 import { Button, Typography, Grid, Box, Paper } from "@mui/material";
 import NewModelModal from "./components/newModelModal/NewModelModal";
 import { ApiModelModel } from "@/utils/schemas";
+
+
 
 
 export default function Project() {
@@ -20,13 +22,9 @@ export default function Project() {
     queryFn: () => getInventory(),
   });
 
-  const newSuiteHandler = () => {
-    setNewSuite((prev) => !prev);
-  };
-
   return (
     <FullLayout>
-      <NewModelModal open={newSuite} selectedValue="" onClose={() => newSuiteHandler()} refetch={refetch} />
+      <NewModelModal open={newSuite} onClose={() => setNewSuite(false)} refetch={refetch} />
       <PageContainer title="Projects" description="projects">
         <Grid container spacing={2} justifyContent='center' alignContent='center'>
           <Grid item xs={10}>
@@ -35,13 +33,13 @@ export default function Project() {
             </Typography>
           </Grid>
           <Grid item xs={2}>
-            <Button variant="contained" onClick={newSuiteHandler}>Add Product</Button>
+            <Button variant="contained" onClick={() => setNewSuite(true)}>Add Product</Button>
           </Grid>
         </Grid>
         <Paper elevation={12}>
           <Box sx={{ m: 4, p: 4 }}>
             <Stack spacing={{ xs: 1, sm: 2 }} direction="row" useFlexGap flexWrap="wrap">
-              {(data?.data || []).map((model: ApiModelModel, i: number) => <SuiteCard key={i} model={model} />)}
+              {(data?.data || []).map((model: ModelType, i: number) => <SuiteCard key={i} model={model} refetch={refetch} />)}
             </Stack>
           </Box>
         </Paper>
