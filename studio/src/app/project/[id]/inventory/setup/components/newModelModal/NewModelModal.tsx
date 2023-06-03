@@ -4,17 +4,15 @@ import Dialog from '@mui/material/Dialog';
 import { Autocomplete, Box, FormControl, FormGroup, FormHelperText, IconButton, TextField, InputLabel, Grid, CardMedia, styled, Typography, InputAdornment } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { uploadMedia } from '@/sharedApi/strapi/uploadMedia';
+import { deleteMedia } from '@/sharedApi/strapi/deleteMedia';
 import { FileUploader } from "react-drag-drop-files";
-import { PluginUploadFile } from '@/utils/schemas';
 import { BASE_URL } from '@/utils/constants';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { AddPhotoAlternate } from '@mui/icons-material';
 import { AdditionalSpace, CreateModelProps, createModel } from '@/sharedApi/strapi/createModel';
 import { useForm, Controller, useFieldArray, FieldError } from "react-hook-form";
-import { error } from 'console';
 import { updateModel } from '@/sharedApi/strapi/updateModel';
 import { ModelType } from '@/sharedApi/strapi/getInventory';
-
 
 const fileTypes = ["JPG", "PNG", "GIF"];
 const additionalSpaceOptions: (AdditionalSpace | null)[] = ['Study', 'Flex', 'Den'];
@@ -39,7 +37,7 @@ const UploadBox = styled(Box)(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  borderRadius: 20,
+  borderRadius: 10,
 }))
 
 
@@ -92,14 +90,26 @@ export default function NewModelModal(props: NewSuiteModalProps) {
     formValues,
     isUpdate
   } = props
-  const [marketingFloorplan, setMarketingFloorplan] = useState<any>();
+
+  const [marketingFloorplan, setMarketingFloorplan] = useState<any>(
+
+  );
   const [legalFloorplan, setLegalFloorplan] = useState<any>();
   const { control, handleSubmit, reset, formState: { isSubmitSuccessful } } = useForm({ reValidateMode: "onBlur", defaultValues: formValues?.['attributes'] });
 
   useEffect(() => {
     reset()
-    setMarketingFloorplan(undefined)
-    setLegalFloorplan(undefined)
+    const marketingFloorplanValue: any = formValues?.attributes.marketing_floorplan;
+    const legalFloorplanValue: any = formValues?.attributes.legal_floorplan;
+    setMarketingFloorplan(marketingFloorplanValue ? {
+      id: marketingFloorplanValue?.data?.id,
+      ...marketingFloorplanValue?.data?.attributes
+    } : null)
+    setLegalFloorplan(legalFloorplanValue ? {
+      id: legalFloorplanValue?.data?.id,
+      ...legalFloorplanValue?.data?.attributes
+    } : null)
+
   }, [isSubmitSuccessful, reset])
 
   const handleClose = () => {
@@ -114,6 +124,16 @@ export default function NewModelModal(props: NewSuiteModalProps) {
   const handleLegalUpload = async (file: any) => {
     const newFile = await uploadMedia(file)
     setLegalFloorplan(newFile)
+  }
+
+  const handleMarketingFloorplanDelete = async () => {
+    deleteMedia(marketingFloorplan?.id)
+    setMarketingFloorplan(null)
+  }
+
+  const handleLegalFloorplanDelete = async () => {
+    deleteMedia(legalFloorplan?.id)
+    setLegalFloorplan(null)
   }
 
   const submitHandler = async (data: any) => {
@@ -132,7 +152,6 @@ export default function NewModelModal(props: NewSuiteModalProps) {
     }
     if (isUpdate) {
       if (!formValues?.id) {
-        console.log('no Id')
         onClose()
         return
       }
@@ -228,11 +247,16 @@ export default function NewModelModal(props: NewSuiteModalProps) {
               </Grid>
               <Grid item xs={6}>
                 {marketingFloorplan ?
-                  <CardMedia
-                    sx={{ objectFit: "cover", height: 200, backgroundSize: 'cover' }}
-                    image={BASE_URL + marketingFloorplan?.url}
-                    title="Marketing Floorplan"
-                  />
+                  <Box sx={{ position: 'relative' }}>
+                    <IconButton sx={{ position: "absolute" }} onClick={() => handleMarketingFloorplanDelete()}>
+                      <DeleteIcon sx={(theme) => ({ color: theme.palette.primary.dark })} />
+                    </IconButton>
+                    <CardMedia
+                      sx={(theme) => ({ objectFit: "cover", height: 200, backgroundSize: 'cover', border: `1px solid ${theme.palette.grey['600']}`, borderRadius: "10px" })}
+                      image={BASE_URL + marketingFloorplan?.url}
+                      title="Marketing Floorplan"
+                    />
+                  </Box>
                   :
                   <FileUploader label="Upload Marketing Floorplan" handleChange={handleMarketingUpload} name="file" types={fileTypes}>
                     <UploadBox>
@@ -243,11 +267,16 @@ export default function NewModelModal(props: NewSuiteModalProps) {
               </Grid>
               <Grid item xs={6}>
                 {legalFloorplan ?
-                  <CardMedia
-                    sx={{ objectFit: "cover", height: 200, backgroundSize: 'cover' }}
-                    image={BASE_URL + legalFloorplan?.url}
-                    title="Marketing Floorplan"
-                  />
+                  <Box sx={{ position: 'relative' }}>
+                    <IconButton sx={{ position: "absolute" }} onClick={() => handleLegalFloorplanDelete()}>
+                      <DeleteIcon sx={(theme) => ({ color: theme.palette.primary.dark })} />
+                    </IconButton>
+                    <CardMedia
+                      sx={{ objectFit: "cover", height: 200, backgroundSize: 'cover' }}
+                      image={BASE_URL + legalFloorplan?.url}
+                      title="Legal Floorplan"
+                    />
+                  </Box>
                   :
                   <FileUploader handleChange={handleLegalUpload} name="file" types={fileTypes}>
                     <UploadBox>
@@ -262,7 +291,7 @@ export default function NewModelModal(props: NewSuiteModalProps) {
             </Box>
           </Box>
         </form>
-      </Box>
+      </Box >
     </Dialog >
   );
 }

@@ -26,7 +26,7 @@ export default function ModelCard({ model, refetch }: ModelCardProps) {
 
   return (
     <Paper elevation={24}>
-      <NewModelModal open={isEditing} title="sdfsd" submitText="sdfsdfsd" formValues={model} onClose={() => setIsEditing(false)} refetch={refetch} />
+      <NewModelModal open={isEditing} title="Edit Product" submitText="Confirm" formValues={model} onClose={() => setIsEditing(false)} refetch={refetch} />
       <Card sx={{ width: 500 }} raised={true}>
         <Paper elevation={10} sx={{ height: 280, m: 3 }}>
           <CardMedia
@@ -42,8 +42,8 @@ export default function ModelCard({ model, refetch }: ModelCardProps) {
                 <Typography variant="h5" component="div">
                   {(floorplan_name as unknown) as string}
                 </Typography>
-                <IconButton>
-                  <ModeEditIcon onClick={() => setIsEditing(true)} />
+                <IconButton onClick={() => setIsEditing(true)}>
+                  <ModeEditIcon sx={(theme) => ({ color: theme.palette.primary.dark })} />
                 </IconButton>
               </Stack>
             </Grid>
