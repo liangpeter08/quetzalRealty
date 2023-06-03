@@ -1,4 +1,4 @@
-import { BASE_URL } from "@/utils/constants";
+import { BASE_URL } from "../../utils/constants";
 import axios from "axios";
 
 export default axios.create({

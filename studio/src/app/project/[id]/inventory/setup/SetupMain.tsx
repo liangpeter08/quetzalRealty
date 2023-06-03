@@ -42,7 +42,7 @@ export default function Project() {
         <Paper elevation={12}>
           <Box sx={{ m: 4, p: 4 }}>
             <Stack spacing={{ xs: 1, sm: 2 }} direction="row" useFlexGap flexWrap="wrap">
-              {(data || []).map((model: ApiModelModel, i: number) => <SuiteCard key={i} model={model} />)}
+              {(data?.data || []).map((model: ApiModelModel, i: number) => <SuiteCard key={i} model={model} />)}
             </Stack>
           </Box>
         </Paper>
