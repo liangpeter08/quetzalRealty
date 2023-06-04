@@ -1,7 +1,7 @@
 import { getInventory } from "@/sharedApi/strapi/getInventory";
 import { Box, Paper, TableContainer, TextField } from "@mui/material";
 import { SortingState, getCoreRowModel, getFilteredRowModel, getSortedRowModel } from "@tanstack/react-table";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import Table from "./Table";
 
@@ -16,11 +16,13 @@ interface FullTableProps {
 // }
 
 const FullTable = ({ columns, queryKey, queryFn }: FullTableProps) => {
+
     const [page, setPage] = useState<number>(1)
-    const [pageSize, setPageSize] = useState<number>(5)
+    const [pageSize, setPageSize] = useState<number>(10)
+    const keys = useMemo(() => [...queryKey, page, pageSize], [queryKey, page, pageSize])
     const { data, isLoading, isFetching, error, refetch } = useQuery({
         queryFn: () => queryFn({ pagination: { page: page, pageSize } }),
-        queryKey: [...queryKey, page, pageSize]
+        queryKey: keys
     });
     const [globalFilter, setGlobalFilter] = useState('')
     const [sorting, setSorting] = useState<SortingState>([])

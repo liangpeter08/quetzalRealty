@@ -9,6 +9,7 @@ import { ApiModelModel } from '../../utils/schemas';
 import { baselightTheme } from '../../theme/DefaultColors';
 
 import '../../app/globals.css'
+import FullTable from '../../components/table/FullTable';
 
 
 
@@ -35,33 +36,15 @@ const columns = [
 
 const queryClient = new QueryClient()
 const AdvanceTableComponent = () => {
-  const [page, setPage] = useState<number>(0)
-  const [pageSize, setPageSize] = useState<number>(5)
-  const { data, isLoading, isFetching, error, refetch } = useQuery({
-    queryKey: ["inventory", page, pageSize],
-    queryFn: () => getInventory({ pagination: { page: page, pageSize } }),
-  });
-  const [globalFilter, setGlobalFilter] = useState('')
-  const [sorting, setSorting] = useState<SortingState>([])
-  const config = {
-    data: data?.data || [],
+  const fullTableProps = {
+    queryKey: ["suites"],
+    queryFn: getInventory,
     columns,
-    getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    onSortingChange: setSorting,
-    state: {
-      globalFilter,
-      sorting,
-    }
   }
-  const pageCount = data?.meta.pagination.pageCount ?? 0
-  const total = data?.meta.pagination.total ?? 0
 
   return (
     <Box sx={{ m: 5, height: 200 }}>
-      <TextField label="Search Table" onChange={(e) => setGlobalFilter(e.target.value)}></TextField>
-      <Table config={config} pagination={{ page: page, pageSize, setPageSize, setPage, pageCount, total }} />
+      <FullTable {...fullTableProps} />
     </Box>
   )
 }

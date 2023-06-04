@@ -4,6 +4,9 @@ import { visuallyHidden } from '@mui/utils';
 import { Dispatch, SetStateAction, useState } from "react";
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import './table.css'
+
 
 interface PaginationOptions {
   page: number,
@@ -32,10 +35,12 @@ const BasicTable = ({ config, maxHeight = 300, pagination }: BasicTableProps) =>
 
   const handleClose = (pageSize: number) => {
     setAnchorEl(null);
-    if (pageSize) {
-      setPageSize?.(pageSize)
-      setPage?.(1)
+    if (isNaN(pageSize)) {
+      return;
     }
+    setPageSize?.(pageSize)
+    setPage?.(1)
+
   };
 
   const handleSorting = (event: React.MouseEvent, header: any) => {
@@ -62,9 +67,9 @@ const BasicTable = ({ config, maxHeight = 300, pagination }: BasicTableProps) =>
   const endIndex = page * pageSize > total ? total : page * pageSize
 
   return (
-    <Box>
-      <TableContainer sx={{ maxHeight }} className="overflow-y-auto" component={Paper}>
-        <Table stickyHeader>
+    <Paper elevation={3} sx={{ marginTop: 2 }} className="paperContainer">
+      <TableContainer sx={{ maxHeight, minHeight: maxHeight }} className="overflow-y-auto tableContainer">
+        <Table>
           <TableHead>
             {table.getHeaderGroups().map(headerGroup => (
               <TableRow key={headerGroup.id}>
@@ -72,13 +77,13 @@ const BasicTable = ({ config, maxHeight = 300, pagination }: BasicTableProps) =>
                   <TableCell
                     key={header.id}
                     sortDirection={orderBy === header.id ? order : false}
+                    className="tableHead"
                     sx={(theme) => ({ backgroundColor: theme.palette.grey['200'], border: `1px solid ${theme.palette.background.default}` })}
                   >
                     <TableSortLabel
                       active={orderBy === header.id && !!order}
                       direction={(orderBy === header.id && order) ? order : undefined}
                       onClick={(event) => handleSorting(event, header)}
-                      hideSortIcon={true}
                     >
                       {header.isPlaceholder
                         ? null
@@ -97,11 +102,11 @@ const BasicTable = ({ config, maxHeight = 300, pagination }: BasicTableProps) =>
               </TableRow>
             ))}
           </TableHead>
-          <TableBody>
+          <TableBody className="tableBody">
             {table.getRowModel().rows.map((row, i) => (
-              <TableRow key={row.id}>
+              <TableRow key={row.id} className="tableRow">
                 {row.getVisibleCells().map(cell => (
-                  <TableCell key={cell.id} sx={(theme) => (i % 2 ? {} : { backgroundColor: theme.palette.grey[100] })}>
+                  <TableCell key={cell.id} className="tableCell">
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}
@@ -110,17 +115,20 @@ const BasicTable = ({ config, maxHeight = 300, pagination }: BasicTableProps) =>
           </TableBody>
         </Table >
       </TableContainer>
-      <Box sx={(theme) => ({ backgroundColor: theme.palette.grey['200'], border: `1px solid ${theme.palette.background.default}` })}>
+      <Box className="pagination">
         <Stack direction='row' alignItems='center' sx={{ m: 1 }} justifyContent='flex-end'>
           <Typography variant="body1">Rows Per Page:</Typography>
           <Box>
             <Button
+              className="lowVisActions"
               id="basic-button"
               size="small"
+              sx={{ margin: '0 6px', minWidth: 40, "& .MuiButton-endIcon": { marginLeft: 0 } }}
               aria-controls={open ? 'basic-menu' : undefined}
               aria-haspopup="true"
               aria-expanded={open ? 'true' : undefined}
               onClick={(event) => setAnchorEl(event.currentTarget)}
+              endIcon={<ArrowDropDownIcon />}
             >
               {pageSize}
             </Button>
@@ -128,7 +136,6 @@ const BasicTable = ({ config, maxHeight = 300, pagination }: BasicTableProps) =>
               id="basic-menu"
               anchorEl={anchorEl}
               open={open}
-              sx={{ marginLeft: 2 }}
               onClose={handleClose}
               MenuListProps={{
                 'aria-labelledby': 'basic-button',
@@ -140,15 +147,15 @@ const BasicTable = ({ config, maxHeight = 300, pagination }: BasicTableProps) =>
             </Menu>
           </Box>
           <Typography variant="body1">{`${startIndex} - ${endIndex} of ${total}`}</Typography>
-          <IconButton sx={(theme) => ({ color: theme.palette.primary.main })} disabled={page === 1} onClick={() => setPage(page - 1)}>
+          <IconButton sx={(theme) => ({ color: theme.palette.primary.main })} disabled={page === 1} onClick={() => setPage(page - 1)} className="lowVisActions">
             <KeyboardArrowLeftIcon />
           </IconButton>
-          <IconButton disabled={page === pageCount} sx={(theme) => ({ color: theme.palette.primary.main })} onClick={() => setPage(page + 1)}>
+          <IconButton disabled={page === pageCount} sx={(theme) => ({ color: theme.palette.primary.main })} onClick={() => setPage(page + 1)} className="lowVisActions">
             <KeyboardArrowRightIcon />
           </IconButton>
         </Stack>
       </Box>
-    </Box >);
+    </Paper >);
 }
 
 export default BasicTable;
