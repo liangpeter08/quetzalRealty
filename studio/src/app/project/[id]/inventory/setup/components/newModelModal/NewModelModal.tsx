@@ -91,9 +91,7 @@ export default function NewModelModal(props: NewSuiteModalProps) {
     isUpdate
   } = props
 
-  const [marketingFloorplan, setMarketingFloorplan] = useState<any>(
-
-  );
+  const [marketingFloorplan, setMarketingFloorplan] = useState<any>();
   const [legalFloorplan, setLegalFloorplan] = useState<any>();
   const { control, handleSubmit, reset, formState: { isSubmitSuccessful } } = useForm({ reValidateMode: "onBlur", defaultValues: formValues?.['attributes'] });
 
@@ -101,16 +99,15 @@ export default function NewModelModal(props: NewSuiteModalProps) {
     reset()
     const marketingFloorplanValue: any = formValues?.attributes.marketing_floorplan;
     const legalFloorplanValue: any = formValues?.attributes.legal_floorplan;
-    setMarketingFloorplan(marketingFloorplanValue ? {
+    setMarketingFloorplan(marketingFloorplanValue?.data ? {
       id: marketingFloorplanValue?.data?.id,
       ...marketingFloorplanValue?.data?.attributes
-    } : null)
-    setLegalFloorplan(legalFloorplanValue ? {
+    } : undefined)
+    setLegalFloorplan(legalFloorplanValue?.data ? {
       id: legalFloorplanValue?.data?.id,
       ...legalFloorplanValue?.data?.attributes
-    } : null)
-
-  }, [isSubmitSuccessful, reset])
+    } : undefined)
+  }, [isSubmitSuccessful, reset, formValues])
 
   const handleClose = () => {
     onClose();

@@ -1,8 +1,8 @@
 @tailwind base;
 
 :root {
-  --primary: #23afdb;
-  --secondary: #4570EA;
+  --primary: #d0d0d0;
+  --secondary: #b1b1b1;
 }
 
 /* Firefox */

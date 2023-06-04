@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { IconButton, Box, Grid, Card, Paper, Stack } from "@mui/material";
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
+import DeleteIcon from '@mui/icons-material/Delete';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
@@ -13,6 +14,7 @@ import { format } from "path";
 import { Label } from "@mui/icons-material";
 import NewModelModal from "./newModelModal/NewModelModal";
 import { ModelType } from "@/sharedApi/strapi/getInventory";
+import { deleteModel } from "@/sharedApi/strapi/deleteModel";
 
 interface ModelCardProps {
   model: ModelType
@@ -26,7 +28,7 @@ export default function ModelCard({ model, refetch }: ModelCardProps) {
 
   return (
     <Paper elevation={24}>
-      <NewModelModal open={isEditing} title="Edit Product" submitText="Confirm" formValues={model} onClose={() => setIsEditing(false)} refetch={refetch} />
+      {isEditing && <NewModelModal isUpdate={isEditing} open={isEditing} title="Edit Product" submitText="Confirm" formValues={model} onClose={() => setIsEditing(false)} refetch={refetch} />}
       <Card sx={{ width: 500 }} raised={true}>
         <Paper elevation={10} sx={{ height: 280, m: 3 }}>
           <CardMedia
@@ -38,14 +40,19 @@ export default function ModelCard({ model, refetch }: ModelCardProps) {
         <Box sx={{ m: 3 }}>
           <Grid container spacing={1}>
             <Grid item xs={12}>
-              <Stack direction="row" alignItems="center" justifyContent="space-between">
-                <Typography variant="h5" component="div">
-                  {(floorplan_name as unknown) as string}
-                </Typography>
+              <Stack direction="row" alignItems={"center"} justifyContent={"space-between"}>
                 <IconButton onClick={() => setIsEditing(true)}>
                   <ModeEditIcon sx={(theme) => ({ color: theme.palette.primary.dark })} />
                 </IconButton>
+                <IconButton onClick={async () => { await deleteModel(model.id); refetch() }}>
+                  <DeleteIcon sx={(theme) => ({ color: theme.palette.primary.dark })} />
+                </IconButton>
               </Stack>
+            </Grid>
+            <Grid item xs={12}>
+              <Typography variant="h5" component="div">
+                {(floorplan_name as unknown) as string}
+              </Typography>
             </Grid>
             <Grid item xs={12}>
               <Typography variant="body2" color="text.secondary">
