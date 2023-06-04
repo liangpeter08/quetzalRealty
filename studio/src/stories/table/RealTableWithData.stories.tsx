@@ -10,12 +10,36 @@ import { baselightTheme } from '../../theme/DefaultColors';
 
 import '../../app/globals.css'
 
+
+
+type Model = {
+  id: number,
+  attributes: ApiModelModel['attributes']
+}
+
+const columnHelper = createColumnHelper<Model>()
+
+const columns = [
+  columnHelper.accessor(row => row.attributes.floorplan_name, {
+    cell: info => info.getValue(),
+    header: 'Floorplan Name',
+    sortingFn: 'text'
+  }),
+  columnHelper.accessor(row => row.attributes.beds, {
+    id: 'beds',
+    cell: info => <i>{info.getValue().toString()}</i>,
+    header: () => <span>Beds</span>,
+    sortingFn: 'text'
+  })
+]
+
 const queryClient = new QueryClient()
 const AdvanceTableComponent = () => {
-
+  const [page, setPage] = useState<number>(0)
+  const [pageSize, setPageSize] = useState<number>(5)
   const { data, isLoading, isFetching, error, refetch } = useQuery({
-    queryKey: ["inventory"],
-    queryFn: () => getInventory(),
+    queryKey: ["inventory", page, pageSize],
+    queryFn: () => getInventory({ pagination: { page: page, pageSize } }),
   });
   const [globalFilter, setGlobalFilter] = useState('')
   const [sorting, setSorting] = useState<SortingState>([])
@@ -31,11 +55,13 @@ const AdvanceTableComponent = () => {
       sorting,
     }
   }
+  const pageCount = data?.meta.pagination.pageCount ?? 0
+  const total = data?.meta.pagination.total ?? 0
 
   return (
     <Box sx={{ m: 5, height: 200 }}>
       <TextField label="Search Table" onChange={(e) => setGlobalFilter(e.target.value)}></TextField>
-      <Table config={config} />
+      <Table config={config} pagination={{ page: page, pageSize, setPageSize, setPage, pageCount, total }} />
     </Box>
   )
 }
@@ -61,26 +87,6 @@ const meta: Meta<typeof Table> = {
 };
 
 
-type Model = {
-  id: number,
-  attributes: ApiModelModel['attributes']
-}
-
-const columnHelper = createColumnHelper<Model>()
-
-const columns = [
-  columnHelper.accessor(row => row.attributes.floorplan_name, {
-    cell: info => info.getValue(),
-    header: 'Floorplan Name',
-    sortingFn: 'text'
-  }),
-  columnHelper.accessor(row => row.attributes.beds, {
-    id: 'beds',
-    cell: info => <i>{info.getValue().toString()}</i>,
-    header: () => <span>Beds</span>,
-    sortingFn: 'text'
-  })
-]
 
 
 
