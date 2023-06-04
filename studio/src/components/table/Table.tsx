@@ -35,7 +35,7 @@ const BasicTable = ({ config, maxHeight = 300 }: BasicTableProps) => {
     sortFn?.(event)
   }
 
-  return <TableContainer style={{ maxHeight }}>
+  return <TableContainer sx={{ maxHeight }} className="overflow-y-auto">
     <Table stickyHeader>
       <TableHead>
         {table.getHeaderGroups().map(headerGroup => (
@@ -44,6 +44,7 @@ const BasicTable = ({ config, maxHeight = 300 }: BasicTableProps) => {
               <TableCell
                 key={header.id}
                 sortDirection={orderBy === header.id ? order : false}
+                sx={(theme) => ({ backgroundColor: theme.palette.grey['200'], border: `1px solid ${theme.palette.background.default}` })}
               >
                 <TableSortLabel
                   active={orderBy === header.id && !!order}
@@ -68,7 +69,7 @@ const BasicTable = ({ config, maxHeight = 300 }: BasicTableProps) => {
           </TableRow>
         ))}
       </TableHead>
-      <TableBody>
+      <TableBody >
         {table.getRowModel().rows.map((row, i) => (
           <TableRow key={row.id}>
             {row.getVisibleCells().map(cell => (

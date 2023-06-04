@@ -90,7 +90,7 @@ const columns = [
 export default meta;
 type Story = StoryObj<typeof Table>;
 
-export const ModelsTable: Story = {
+export const InfiniteScrollModelsTable: Story = {
   args: {},
 };
 

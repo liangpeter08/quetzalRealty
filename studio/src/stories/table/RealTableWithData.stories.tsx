@@ -2,10 +2,13 @@ import type { Meta, StoryObj } from '@storybook/react';
 import Table from '../../components/table/Table';
 import { SortingState, createColumnHelper, getCoreRowModel, getFilteredRowModel, getSortedRowModel } from '@tanstack/react-table';
 import { useState } from 'react';
-import { Box, TextField } from '@mui/material';
+import { Box, CssBaseline, TextField, ThemeProvider } from '@mui/material';
 import { getInventory } from '../../sharedApi/strapi/getInventory';
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
 import { ApiModelModel } from '../../utils/schemas';
+import { baselightTheme } from '../../theme/DefaultColors';
+
+import '../../app/globals.css'
 
 const queryClient = new QueryClient()
 const AdvanceTableComponent = () => {
@@ -49,7 +52,10 @@ const meta: Meta<typeof Table> = {
   },
   decorators: [
     (Story) => (
-      <QueryClientProvider client={queryClient}>{Story()}</QueryClientProvider>
+      <ThemeProvider theme={baselightTheme}>
+        <CssBaseline />
+        <QueryClientProvider client={queryClient}>{Story()}</QueryClientProvider>
+      </ThemeProvider>
     )
   ]
 };

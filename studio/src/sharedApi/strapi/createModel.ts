@@ -1,7 +1,4 @@
-import axios from "axios";
 import strapiClient from "./strapiClient";
-import { ApiModelModel } from "@/utils/schemas";
-
 
 export type AdditionalSpace = 'Study' | 'Flex' | 'Den'
 
