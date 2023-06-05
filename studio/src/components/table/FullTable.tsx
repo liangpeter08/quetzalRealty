@@ -5,12 +5,13 @@ import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import Table from "./Table";
 import { ExportToCsv } from 'export-to-csv';
-import styles from './table.module.scss';
 import DownloadIcon from '@mui/icons-material/Download';
 import GridOnIcon from '@mui/icons-material/GridOn';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import ViewColumnIcon from '@mui/icons-material/ViewColumn';
 import { Checkbox } from '@nextui-org/react';
+import PaginationFooter from "./PaginationFooter";
+import styles from './table.module.scss';
 
 interface FullTableProps {
   columns: any
@@ -34,26 +35,49 @@ const options = {
   useKeysAsHeaders: true,
   // headers: ['Column 1', 'Column 2', etc...] <-- Won't work with useKeysAsHeaders present!
 };
-
+export type SortDirection = 'asc' | 'desc' | false;
 
 const csvExporter = new ExportToCsv(options);
 
 const FullTable = ({ columns, queryKey, queryFn }: FullTableProps) => {
+  const [order, setOrder] = useState<SortDirection>(false);
+  const [orderBy, setOrderBy] = useState<string>();
+
+  const handleSorting = (event: React.MouseEvent, header: any) => {
+    const sortFn = header.column.getToggleSortingHandler();
+    if (header.id === orderBy) {
+      setOrder((prev: SortDirection) => {
+        switch (prev) {
+          case 'asc':
+            return 'desc'
+          case 'desc':
+            return false
+          default:
+            return 'asc'
+        }
+      })
+    } else {
+      setOrder('asc')
+      setOrderBy(header.id)
+    }
+    sortFn?.(event)
+  }
 
   const [page, setPage] = useState<number>(1)
   const [columnAnchorEl, setColumnAnchorEl] = useState<null | HTMLElement>(null);
   const [pageSize, setPageSize] = useState<number>(10)
-  const keys = useMemo(() => [...queryKey, page, pageSize], [queryKey, page, pageSize])
   const { data, isLoading, isFetching, error, refetch } = useQuery({
-    queryFn: () => queryFn({ pagination: { page: page, pageSize } }),
-    queryKey: keys
+    queryFn: () => queryFn({ pagination: { page: page, pageSize }, sorting: { order, orderBy } }),
+    queryKey: [queryKey, page, pageSize]
   });
   const [currColumns, setCurrColumns] = useState<typeof columns>(() => [...columns])
   const [columnVisibility, setColumnVisibility] = useState({})
   const [globalFilter, setGlobalFilter] = useState('')
   const [sorting, setSorting] = useState<SortingState>([])
+
+  const realData = useMemo(() => data?.data || [], [data, page, pageSize, order, orderBy])
   const config = {
-    data: data?.data || [],
+    data: realData,
     columns: currColumns,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
@@ -61,9 +85,8 @@ const FullTable = ({ columns, queryKey, queryFn }: FullTableProps) => {
     onSortingChange: setSorting,
     onColumnVisibilityChange: setColumnVisibility,
     state: {
-      globalFilter,
-      sorting,
       columnVisibility,
+      // sorting,
     }
   }
   const table = useReactTable(config)
@@ -74,13 +97,23 @@ const FullTable = ({ columns, queryKey, queryFn }: FullTableProps) => {
     if (!data?.data) {
       return;
     }
-    csvExporter.generateCsv(data?.data);
+
+    const allRows = table.getRowModel().rows.map((row, i) => {
+      const hashMap: any = {}
+      row.getVisibleCells().forEach((cell) => {
+        const key = cell.column.id
+        hashMap[key] = cell.getValue()
+      });
+      return hashMap;
+    })
+    console.log(allRows);
+    csvExporter.generateCsv(allRows);
   }
 
   return (
     <Box sx={{ m: 5 }}>
-      <TextField label="Search Table" onChange={(e) => setGlobalFilter(e.target.value)}></TextField>
-      <Table table={table} pagination={{ page: page, pageSize, setPageSize, setPage, pageCount, total }} maxHeight={200}>
+      <Paper elevation={3} sx={{ marginTop: 2 }} className={styles.paperContainer}>
+        <TextField label="Search Table" onChange={(e) => setGlobalFilter(e.target.value)}></TextField>
         <Box sx={{ p: 1 }} className={styles.toolbar}>
           <Button variant="text"
             sx={{ marginRight: 1 }} startIcon={<ViewColumnIcon />}
@@ -108,10 +141,21 @@ const FullTable = ({ columns, queryKey, queryFn }: FullTableProps) => {
               },
             }}
           >
-
+            <MenuItem sx={{ paddingLeft: 1, paddingBottom: 1 }} onClick={() => table.toggleAllColumnsVisible(!table.getIsAllColumnsVisible())}>
+              <Checkbox
+                id='selectAll'
+                isIndeterminate={table.getIsSomeColumnsVisible() && !table.getIsAllColumnsVisible()}
+                size="sm"
+                isSelected={table.getIsAllColumnsVisible()}
+                onChange={table.toggleAllColumnsVisible}>
+                <Typography variant="body1">
+                  Toggle All
+                </Typography>
+              </Checkbox>
+            </MenuItem>
             {table.getAllLeafColumns().map(column => (
-              <MenuItem key={column.id} onClick={() => { }}>
-                <Checkbox size="sm" isSelected={column.getIsVisible()} onChange={column.toggleVisibility}>
+              <MenuItem key={column.id} onClick={() => column.toggleVisibility(!column.getIsVisible())}>
+                <Checkbox size="sm" isSelected={column.getIsVisible()} onChange={column.toggleVisibility} >
                   <Typography variant="body1">
                     {
                       column.id
@@ -121,14 +165,6 @@ const FullTable = ({ columns, queryKey, queryFn }: FullTableProps) => {
               </MenuItem>
             )
             )}
-            <Stack direction='row'>
-              <Button onClick={() => table.toggleAllColumnsVisible(false)}>
-                HIDE ALL
-              </Button>
-              <Button onClick={() => table.toggleAllColumnsVisible(true)}>
-                SELECT ALL
-              </Button>
-            </Stack>
           </Menu>
           <Button variant="text" sx={{ marginRight: 1 }} startIcon={<GridOnIcon />} className={styles.lowVisActions}>View</Button>
           <Button variant="text" sx={{ marginRight: 1 }} startIcon={<FilterListIcon />} className={styles.lowVisActions}>Filters</Button>
@@ -136,7 +172,9 @@ const FullTable = ({ columns, queryKey, queryFn }: FullTableProps) => {
             <DownloadIcon />
           </IconButton>
         </Box>
-      </Table >
+        <Table table={table} maxHeight={200} order={order} orderBy={orderBy} handleSorting={handleSorting} />
+        <PaginationFooter {...{ page: page, pageSize, setPageSize, setPage, pageCount, total }} />
+      </Paper>
     </Box >
   )
 }

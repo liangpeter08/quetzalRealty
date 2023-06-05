@@ -1,14 +1,14 @@
-@tailwind base;
+/* @tailwind base; */
 
 :root {
-  --primary: #efefef;
-  --secondary: #c8c8c8;
+  --scrollPrimary: #efefef;
+  --scrollSecondary: #c8c8c8;
 }
 
 /* Firefox */
 * {
   scrollbar-width: thin;
-  scrollbar-color: var(--secondary) var(--primary);
+  scrollbar-color: var(--scrollSecondary) var(--scrollPrimary);
 }
 
 /* Chrome, Edge, and Safari */
@@ -17,18 +17,18 @@
 }
 
 *::-webkit-scrollbar-track {
-  background: var(--primary);
+  background: var(--scrollPrimary);
   border-radius: 14px;
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color: var(--secondary);
+  background-color: var(--scrollSecondary);
   border-radius: 14px;
-  border: 3px solid var(--primary);
+  border: 3px solid var(--scrollPrimary);
 }
 
-@tailwind components;
-@tailwind utilities;
+/* @tailwind components;
+@tailwind utilities; */
 /* :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
