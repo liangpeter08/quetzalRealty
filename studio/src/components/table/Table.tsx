@@ -4,14 +4,12 @@ import styles from './table.module.scss'
 import { Box, Button, IconButton, Menu, MenuItem, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TableRow, TableSortLabel, TextField, Typography, debounce } from "@mui/material";
 import { useReactTable, createColumnHelper, getCoreRowModel, flexRender, getFilteredRowModel } from '@tanstack/react-table'
 import { visuallyHidden } from '@mui/utils';
-import { Dispatch, SetStateAction, useState } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import DownloadIcon from '@mui/icons-material/Download';
-import GridOnIcon from '@mui/icons-material/GridOn';
-import FilterListIcon from '@mui/icons-material/FilterList';
-import ViewColumnIcon from '@mui/icons-material/ViewColumn';
+import { Table as TableDef } from "@tanstack/table-core"
+
 
 
 
@@ -25,17 +23,17 @@ interface PaginationOptions {
 }
 
 interface BasicTableProps {
-  config: any
+  table: TableDef<unknown>
   maxHeight?: number
   pagination?: PaginationOptions
-  exportCsvHandler: () => void
+  children?: React.ReactNode
 }
 
 export type SortDirection = 'asc' | 'desc' | false;
 
-const BasicTable = ({ config, maxHeight = 300, pagination, exportCsvHandler }: BasicTableProps) => {
+const BasicTable = ({ table, maxHeight = 300, pagination, children }: BasicTableProps) => {
   const { page = 1, pageSize = 0, pageCount = 0, total = 0, setPageSize = () => { }, setPage = () => { } } = pagination ?? {}
-  const table = useReactTable(config)
+
   const [order, setOrder] = useState<SortDirection>(false);
   const [orderBy, setOrderBy] = useState<string>();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -77,16 +75,9 @@ const BasicTable = ({ config, maxHeight = 300, pagination, exportCsvHandler }: B
 
   return (
     <Paper elevation={3} sx={{ marginTop: 2 }} className={styles.paperContainer}>
-      <Box sx={{ p: 1 }} className={styles.toolbar}>
-        <Button variant="text" sx={{ marginRight: 1 }} startIcon={<ViewColumnIcon />} className={styles.lowVisActions}>Columns</Button>
-        <Button variant="text" sx={{ marginRight: 1 }} startIcon={<GridOnIcon />} className={styles.lowVisActions}>View</Button>
-        <Button variant="text" sx={{ marginRight: 1 }} startIcon={<FilterListIcon />} className={styles.lowVisActions}>Filters</Button>
-        <IconButton className={styles.lowVisActions} sx={{ marginLeft: 'auto' }} onClick={exportCsvHandler}>
-          <DownloadIcon />
-        </IconButton>
-      </Box>
+      {children}
       <TableContainer sx={{ maxHeight, minHeight: maxHeight }} className={`overflow-y-auto ${styles.tableContainer}`}>
-        <Table stickyHeader>
+        <Table stickyHeader size="small">
           <TableHead>
             {table.getHeaderGroups().map(headerGroup => (
               <TableRow key={headerGroup.id}>
