@@ -26,7 +26,7 @@ export async function getInventory({ sort, pagination }: GetInventoryProps = {})
     .get("/models", {
       params: {
         populate: '*',
-        sort: sort?.map((item) => item.id + (item.desc ? ':' + item.desc : '')),
+        sort: Object.assign({}, sort?.map((item) => item.id + (item.desc ? ':desc' : ':asc'))),
         pagination
       }
     })

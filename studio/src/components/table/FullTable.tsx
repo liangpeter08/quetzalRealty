@@ -67,8 +67,8 @@ const FullTable = ({ columns, queryKey, queryFn }: FullTableProps) => {
   const [columnAnchorEl, setColumnAnchorEl] = useState<null | HTMLElement>(null);
   const [pageSize, setPageSize] = useState<number>(10)
   const { data, isLoading, isFetching, error, refetch } = useQuery({
-    queryFn: () => queryFn({ pagination: { page: page, pageSize }, sorting: { order, orderBy } }),
-    queryKey: [queryKey, page, pageSize]
+    queryFn: () => queryFn({ pagination: { page: page, pageSize }, sort: !order ? undefined : [{ id: orderBy, desc: order === 'desc' }] }),
+    queryKey: [queryKey, page, pageSize, order, orderBy]
   });
   const [currColumns, setCurrColumns] = useState<typeof columns>(() => [...columns])
   const [columnVisibility, setColumnVisibility] = useState({})
