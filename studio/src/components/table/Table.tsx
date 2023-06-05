@@ -1,7 +1,7 @@
 import styles from './table.module.scss'
 
 
-import { Box, Button, IconButton, Menu, MenuItem, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TableRow, TableSortLabel, TextField, Typography, debounce } from "@mui/material";
+import { Box, Button, CircularProgress, IconButton, Menu, MenuItem, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TableRow, TableSortLabel, TextField, Typography, debounce } from "@mui/material";
 import { useReactTable, createColumnHelper, getCoreRowModel, flexRender, getFilteredRowModel } from '@tanstack/react-table'
 import { visuallyHidden } from '@mui/utils';
 import React, { Dispatch, SetStateAction, useState } from "react";
@@ -16,11 +16,21 @@ interface BasicTableProps {
   handleSorting: (event: React.MouseEvent, header: any) => any,
   order: SortDirection
   orderBy?: string
+  isLoading: boolean
 }
 
-const BasicTable = ({ table, maxHeight = 300, order, orderBy, handleSorting }: BasicTableProps) => {
+const BasicTable = ({ table, maxHeight, order, orderBy, handleSorting, isLoading }: BasicTableProps) => {
+  const height = maxHeight
+
+  if (isLoading) {
+    return (
+      <Stack alignItems='center' sx={{ height: height }} justifyContent='center'>
+        <CircularProgress />
+      </Stack>
+    )
+  }
   return (
-    <TableContainer sx={{ maxHeight, minHeight: maxHeight }} className={`overflow-y-auto ${styles.tableContainer}`}>
+    <TableContainer sx={{ height }} className={`overflow-y-auto ${styles.tableContainer}`}>
       <Table stickyHeader size="small">
         <TableHead>
           {table.getHeaderGroups().map(headerGroup => (

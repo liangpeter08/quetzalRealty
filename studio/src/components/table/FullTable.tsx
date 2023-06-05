@@ -113,7 +113,6 @@ const FullTable = ({ columns, queryKey, queryFn }: FullTableProps) => {
   return (
     <Box sx={{ m: 5 }}>
       <Paper elevation={3} sx={{ marginTop: 2 }} className={styles.paperContainer}>
-        <TextField label="Search Table" onChange={(e) => setGlobalFilter(e.target.value)}></TextField>
         <Box sx={{ p: 1 }} className={styles.toolbar}>
           <Button variant="text"
             sx={{ marginRight: 1 }} startIcon={<ViewColumnIcon />}
@@ -168,11 +167,12 @@ const FullTable = ({ columns, queryKey, queryFn }: FullTableProps) => {
           </Menu>
           <Button variant="text" sx={{ marginRight: 1 }} startIcon={<GridOnIcon />} className={styles.lowVisActions}>View</Button>
           <Button variant="text" sx={{ marginRight: 1 }} startIcon={<FilterListIcon />} className={styles.lowVisActions}>Filters</Button>
+          <TextField label="Search Table" onChange={(e) => setGlobalFilter(e.target.value)} size="small"></TextField>
           <IconButton className={styles.lowVisActions} sx={{ marginLeft: 'auto' }} onClick={exportCsvHandler}>
             <DownloadIcon />
           </IconButton>
         </Box>
-        <Table table={table} maxHeight={200} order={order} orderBy={orderBy} handleSorting={handleSorting} />
+        <Table table={table} maxHeight={200} order={order} orderBy={orderBy} handleSorting={handleSorting} isLoading={isLoading} />
         <PaginationFooter {...{ page: page, pageSize, setPageSize, setPage, pageCount, total }} />
       </Paper>
     </Box >
