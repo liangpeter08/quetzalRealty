@@ -1,11 +1,16 @@
 .paperContainer {
+  .toolbar {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+  }
 
   .tableContainer,
   .pagination,
   .tableHead,
   tr,
   table,
-  & {
+  &.paperContainer {
     border-radius: 6px;
   }
 

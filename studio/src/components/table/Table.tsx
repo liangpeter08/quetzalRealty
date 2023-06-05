@@ -8,6 +8,8 @@ import { Dispatch, SetStateAction, useState } from "react";
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import DownloadIcon from '@mui/icons-material/Download';
+
 
 
 interface PaginationOptions {
@@ -23,11 +25,12 @@ interface BasicTableProps {
   config: any
   maxHeight?: number
   pagination?: PaginationOptions
+  exportCsvHandler: () => void
 }
 
 export type SortDirection = 'asc' | 'desc' | false;
 
-const BasicTable = ({ config, maxHeight = 300, pagination }: BasicTableProps) => {
+const BasicTable = ({ config, maxHeight = 300, pagination, exportCsvHandler }: BasicTableProps) => {
   const { page = 1, pageSize = 0, pageCount = 0, total = 0, setPageSize = () => { }, setPage = () => { } } = pagination ?? {}
   const table = useReactTable(config)
   const [order, setOrder] = useState<SortDirection>(false);
@@ -42,8 +45,9 @@ const BasicTable = ({ config, maxHeight = 300, pagination }: BasicTableProps) =>
     }
     setPageSize?.(pageSize)
     setPage?.(1)
-
   };
+
+
 
   const handleSorting = (event: React.MouseEvent, header: any) => {
     const sortFn = header.column.getToggleSortingHandler();
@@ -70,8 +74,13 @@ const BasicTable = ({ config, maxHeight = 300, pagination }: BasicTableProps) =>
 
   return (
     <Paper elevation={3} sx={{ marginTop: 2 }} className={styles.paperContainer}>
+      <Box sx={{ p: 2 }} className={styles.toolbar}>
+        <IconButton className={styles.lowVisActions} sx={{ marginLeft: 'auto' }} onClick={exportCsvHandler}>
+          <DownloadIcon />
+        </IconButton>
+      </Box>
       <TableContainer sx={{ maxHeight, minHeight: maxHeight }} className={`overflow-y-auto ${styles.tableContainer}`}>
-        <Table>
+        <Table stickyHeader>
           <TableHead>
             {table.getHeaderGroups().map(headerGroup => (
               <TableRow key={headerGroup.id}>
@@ -149,10 +158,10 @@ const BasicTable = ({ config, maxHeight = 300, pagination }: BasicTableProps) =>
             </Menu>
           </Box>
           <Typography variant="body1">{`${startIndex} - ${endIndex} of ${total}`}</Typography>
-          <IconButton sx={(theme) => ({ color: theme.palette.primary.main })} disabled={page === 1} onClick={() => setPage(page - 1)} className={styles.lowVisActions}>
+          <IconButton disabled={page === 1} onClick={() => setPage(page - 1)} className={styles.lowVisActions}>
             <KeyboardArrowLeftIcon />
           </IconButton>
-          <IconButton disabled={page === pageCount} sx={(theme) => ({ color: theme.palette.primary.main })} onClick={() => setPage(page + 1)} className={styles.lowVisActions}>
+          <IconButton disabled={page === pageCount} onClick={() => setPage(page + 1)} className={styles.lowVisActions}>
             <KeyboardArrowRightIcon />
           </IconButton>
         </Stack>
