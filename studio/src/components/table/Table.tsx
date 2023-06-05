@@ -9,6 +9,9 @@ import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import DownloadIcon from '@mui/icons-material/Download';
+import GridOnIcon from '@mui/icons-material/GridOn';
+import FilterListIcon from '@mui/icons-material/FilterList';
+import ViewColumnIcon from '@mui/icons-material/ViewColumn';
 
 
 
@@ -74,7 +77,10 @@ const BasicTable = ({ config, maxHeight = 300, pagination, exportCsvHandler }: B
 
   return (
     <Paper elevation={3} sx={{ marginTop: 2 }} className={styles.paperContainer}>
-      <Box sx={{ p: 2 }} className={styles.toolbar}>
+      <Box sx={{ p: 1 }} className={styles.toolbar}>
+        <Button variant="text" sx={{ marginRight: 1 }} startIcon={<ViewColumnIcon />} className={styles.lowVisActions}>Columns</Button>
+        <Button variant="text" sx={{ marginRight: 1 }} startIcon={<GridOnIcon />} className={styles.lowVisActions}>View</Button>
+        <Button variant="text" sx={{ marginRight: 1 }} startIcon={<FilterListIcon />} className={styles.lowVisActions}>Filters</Button>
         <IconButton className={styles.lowVisActions} sx={{ marginLeft: 'auto' }} onClick={exportCsvHandler}>
           <DownloadIcon />
         </IconButton>
