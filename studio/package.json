@@ -38,7 +38,6 @@
     "react-drag-drop-files": "^2.3.10",
     "react-helmet": "^6.1.0",
     "react-hook-form": "^7.44.2",
-    "react-query": "^3.39.3",
     "sqlite": "^4.2.1",
     "sqlite3": "^5.1.6",
     "tailwindcss": "3.3.2",
@@ -60,6 +59,7 @@
     "@types/react-helmet": "^6.1.6",
     "@types/uuid": "^9.0.1",
     "eslint-plugin-storybook": "^0.6.12",
+    "sass": "^1.62.1",
     "storybook": "^7.1.0-alpha.27"
   }
 }

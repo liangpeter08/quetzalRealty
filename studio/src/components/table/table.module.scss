@@ -1,39 +1,42 @@
-.tableContainer,
-.pagination,
-.tableHead,
-tr,
-table,
 .paperContainer {
+
+  .tableContainer,
+  .pagination,
+  .tableHead,
+  tr,
+  table,
+  & {
     border-radius: 6px;
-}
+  }
 
-.tableContainer th,
-.tableContainer thead {
+  .tableContainer th,
+  .tableContainer thead {
     border-radius: 2px;
-}
+  }
 
-.tableHead {
+  .tableHead {
     color: rgb(99, 115, 129);
     font-weight: 700;
     background-color: rgb(244, 246, 248);
     border: 1px solid rgb(244, 246, 248);
-}
+  }
 
-.tableCell {
+  .tableCell {
     border-bottom: 1px dashed rgb(241, 243, 244);
     color: rgb(32, 44, 56);
-}
+  }
 
-.tableRow:last-child .tableCell {
+  .tableRow:last-child .tableCell {
     border-bottom: none;
-}
+  }
 
-.pagination {
+  .pagination {
     border: 1px solid rgb(244, 246, 248);
     background-color: rgb(244, 246, 248);
     color: rgb(99, 115, 129);
-}
+  }
 
-.lowVisActions {
+  .lowVisActions {
     color: rgb(99, 115, 129);
+  }
 }

@@ -1,3 +1,6 @@
+import styles from './table.module.scss'
+
+
 import { Box, Button, IconButton, Menu, MenuItem, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TableRow, TableSortLabel, TextField, Typography, debounce } from "@mui/material";
 import { useReactTable, createColumnHelper, getCoreRowModel, flexRender, getFilteredRowModel } from '@tanstack/react-table'
 import { visuallyHidden } from '@mui/utils';
@@ -5,7 +8,6 @@ import { Dispatch, SetStateAction, useState } from "react";
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import './table.css'
 
 
 interface PaginationOptions {
@@ -67,8 +69,8 @@ const BasicTable = ({ config, maxHeight = 300, pagination }: BasicTableProps) =>
   const endIndex = page * pageSize > total ? total : page * pageSize
 
   return (
-    <Paper elevation={3} sx={{ marginTop: 2 }} className="paperContainer">
-      <TableContainer sx={{ maxHeight, minHeight: maxHeight }} className="overflow-y-auto tableContainer">
+    <Paper elevation={3} sx={{ marginTop: 2 }} className={styles.paperContainer}>
+      <TableContainer sx={{ maxHeight, minHeight: maxHeight }} className={`overflow-y-auto ${styles.tableContainer}`}>
         <Table>
           <TableHead>
             {table.getHeaderGroups().map(headerGroup => (
@@ -77,7 +79,7 @@ const BasicTable = ({ config, maxHeight = 300, pagination }: BasicTableProps) =>
                   <TableCell
                     key={header.id}
                     sortDirection={orderBy === header.id ? order : false}
-                    className="tableHead"
+                    className={styles.tableHead}
                     sx={(theme) => ({ backgroundColor: theme.palette.grey['200'], border: `1px solid ${theme.palette.background.default}` })}
                   >
                     <TableSortLabel
@@ -102,11 +104,11 @@ const BasicTable = ({ config, maxHeight = 300, pagination }: BasicTableProps) =>
               </TableRow>
             ))}
           </TableHead>
-          <TableBody className="tableBody">
+          <TableBody className={styles.tableBody}>
             {table.getRowModel().rows.map((row, i) => (
-              <TableRow key={row.id} className="tableRow">
+              <TableRow key={row.id} className={styles.tableRow}>
                 {row.getVisibleCells().map(cell => (
-                  <TableCell key={cell.id} className="tableCell">
+                  <TableCell key={cell.id} className={styles.tableCell}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}
@@ -115,12 +117,12 @@ const BasicTable = ({ config, maxHeight = 300, pagination }: BasicTableProps) =>
           </TableBody>
         </Table >
       </TableContainer>
-      <Box className="pagination">
+      <Box className={styles.pagination}>
         <Stack direction='row' alignItems='center' sx={{ m: 1 }} justifyContent='flex-end'>
           <Typography variant="body1">Rows Per Page:</Typography>
           <Box>
             <Button
-              className="lowVisActions"
+              className={styles.lowVisActions}
               id="basic-button"
               size="small"
               sx={{ margin: '0 6px', minWidth: 40, "& .MuiButton-endIcon": { marginLeft: 0 } }}
@@ -147,10 +149,10 @@ const BasicTable = ({ config, maxHeight = 300, pagination }: BasicTableProps) =>
             </Menu>
           </Box>
           <Typography variant="body1">{`${startIndex} - ${endIndex} of ${total}`}</Typography>
-          <IconButton sx={(theme) => ({ color: theme.palette.primary.main })} disabled={page === 1} onClick={() => setPage(page - 1)} className="lowVisActions">
+          <IconButton sx={(theme) => ({ color: theme.palette.primary.main })} disabled={page === 1} onClick={() => setPage(page - 1)} className={styles.lowVisActions}>
             <KeyboardArrowLeftIcon />
           </IconButton>
-          <IconButton disabled={page === pageCount} sx={(theme) => ({ color: theme.palette.primary.main })} onClick={() => setPage(page + 1)} className="lowVisActions">
+          <IconButton disabled={page === pageCount} sx={(theme) => ({ color: theme.palette.primary.main })} onClick={() => setPage(page + 1)} className={styles.lowVisActions}>
             <KeyboardArrowRightIcon />
           </IconButton>
         </Stack>

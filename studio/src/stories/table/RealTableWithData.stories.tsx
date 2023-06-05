@@ -4,11 +4,10 @@ import { SortingState, createColumnHelper, getCoreRowModel, getFilteredRowModel,
 import { useState } from 'react';
 import { Box, CssBaseline, TextField, ThemeProvider } from '@mui/material';
 import { getInventory } from '../../sharedApi/strapi/getInventory';
-import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
 import { ApiModelModel } from '../../utils/schemas';
-import { baselightTheme } from '../../theme/DefaultColors';
 
-import '../../app/globals.css'
+
+
 import FullTable from '../../components/table/FullTable';
 
 
@@ -34,7 +33,7 @@ const columns = [
   })
 ]
 
-const queryClient = new QueryClient()
+
 const AdvanceTableComponent = () => {
   const fullTableProps = {
     queryKey: ["suites"],
@@ -59,14 +58,6 @@ const meta: Meta<typeof Table> = {
     // More on how to position stories at: https://storybook.js.org/docs/react/configure/story-layout
     layout: 'fullscreen',
   },
-  decorators: [
-    (Story) => (
-      <ThemeProvider theme={baselightTheme}>
-        <CssBaseline />
-        <QueryClientProvider client={queryClient}>{Story()}</QueryClientProvider>
-      </ThemeProvider>
-    )
-  ]
 };
 
 
