@@ -1,5 +1,5 @@
 import { getInventory } from "@/sharedApi/strapi/getInventory";
-import { Box, Button, IconButton, Menu, MenuItem, Paper, TableContainer, TextField, Typography } from "@mui/material";
+import { Box, Button, IconButton, Menu, MenuItem, Paper, Stack, TableContainer, TextField, Typography } from "@mui/material";
 import { SortingState, flexRender, getCoreRowModel, getFilteredRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table";
 import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
@@ -48,18 +48,22 @@ const FullTable = ({ columns, queryKey, queryFn }: FullTableProps) => {
     queryFn: () => queryFn({ pagination: { page: page, pageSize } }),
     queryKey: keys
   });
+  const [currColumns, setCurrColumns] = useState<typeof columns>(() => [...columns])
+  const [columnVisibility, setColumnVisibility] = useState({})
   const [globalFilter, setGlobalFilter] = useState('')
   const [sorting, setSorting] = useState<SortingState>([])
   const config = {
     data: data?.data || [],
-    columns,
+    columns: currColumns,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
     onSortingChange: setSorting,
+    onColumnVisibilityChange: setColumnVisibility,
     state: {
       globalFilter,
       sorting,
+      columnVisibility,
     }
   }
   const table = useReactTable(config)
@@ -96,29 +100,35 @@ const FullTable = ({ columns, queryKey, queryFn }: FullTableProps) => {
             anchorEl={columnAnchorEl}
             open={!!columnAnchorEl}
             onClose={() => setColumnAnchorEl(null)}
+            elevation={5}
             PaperProps={{
               style: {
+                paddingTop: 10,
                 maxHeight: 48 * 4.5,
               },
             }}
           >
-            {table.getHeaderGroups().map(headerGroup => (
-              headerGroup.headers.map(header => (
-                <MenuItem key={header.id} onClick={() => { }}>
-                  <Checkbox size="sm">
-                    <Typography variant="body1">
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                    </Typography>
-                  </Checkbox>
-                </MenuItem>
-              ))
 
-            ))}
+            {table.getAllLeafColumns().map(column => (
+              <MenuItem key={column.id} onClick={() => { }}>
+                <Checkbox size="sm" isSelected={column.getIsVisible()} onChange={column.toggleVisibility}>
+                  <Typography variant="body1">
+                    {
+                      column.id
+                    }
+                  </Typography>
+                </Checkbox>
+              </MenuItem>
+            )
+            )}
+            <Stack direction='row'>
+              <Button onClick={() => table.toggleAllColumnsVisible(false)}>
+                HIDE ALL
+              </Button>
+              <Button onClick={() => table.toggleAllColumnsVisible(true)}>
+                SELECT ALL
+              </Button>
+            </Stack>
           </Menu>
           <Button variant="text" sx={{ marginRight: 1 }} startIcon={<GridOnIcon />} className={styles.lowVisActions}>View</Button>
           <Button variant="text" sx={{ marginRight: 1 }} startIcon={<FilterListIcon />} className={styles.lowVisActions}>Filters</Button>
