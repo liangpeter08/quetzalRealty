@@ -19,6 +19,7 @@ import {
   SetMinMax,
   MediaAttribute,
   UIDAttribute,
+  FloatAttribute,
 } from '@strapi/strapi';
 
 export interface AdminPermission extends CollectionTypeSchema {
@@ -814,6 +815,7 @@ export interface ApiSuiteSuite extends CollectionTypeSchema {
     singularName: 'suite';
     pluralName: 'suites';
     displayName: 'Suite';
+    description: '';
   };
   options: {
     draftAndPublish: true;
@@ -838,6 +840,25 @@ export interface ApiSuiteSuite extends CollectionTypeSchema {
     >;
     legal_suite_number: StringAttribute;
     marketing_suite_number: StringAttribute;
+    current_price: FloatAttribute;
+    approved_minimum_price: FloatAttribute;
+    unit_status: EnumerationAttribute<
+      [
+        'Unavailable',
+        'Available',
+        'Allocated',
+        'Worksheet Received',
+        'Conditional',
+        'Firm'
+      ]
+    >;
+    allocated_broker: StringAttribute;
+    purchaser_first_name: StringAttribute;
+    purchaser_last_name: StringAttribute;
+    marketing_floor: StringAttribute;
+    legal_floor: StringAttribute;
+    marketing_unit_number: StringAttribute;
+    legal_unit_number: StringAttribute;
     createdAt: DateTimeAttribute;
     updatedAt: DateTimeAttribute;
     publishedAt: DateTimeAttribute;
