@@ -21,6 +21,7 @@ const columnHelper = createColumnHelper<Model>()
 
 const columns = [
   columnHelper.accessor(row => row.attributes.floorplan_name, {
+    id: 'floorplan_name',
     cell: info => info.getValue(),
     header: 'Floorplan Name',
     sortingFn: 'text'

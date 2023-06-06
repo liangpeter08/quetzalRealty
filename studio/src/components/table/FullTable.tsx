@@ -7,6 +7,7 @@ import Table from "./Table";
 import PaginationFooter from "./PaginationFooter";
 import styles from './table.module.scss';
 import Toolbar from "./Toolbar";
+import SQLBuilder from "strapi-query-builder";
 
 interface FullTableProps {
   columns: any
@@ -19,6 +20,7 @@ export type SortDirection = 'asc' | 'desc' | false;
 const FullTable = ({ columns, queryKey, queryFn }: FullTableProps) => {
   const [order, setOrder] = useState<SortDirection>(false);
   const [orderBy, setOrderBy] = useState<string>();
+  const [filters, setFilters] = useState<any>();
 
   const handleSorting = (event: React.MouseEvent, header: any) => {
     const sortFn = header.column.getToggleSortingHandler();
@@ -40,19 +42,38 @@ const FullTable = ({ columns, queryKey, queryFn }: FullTableProps) => {
     sortFn?.(event)
   }
 
+  const handleFilterChange = ({ operation, columnId, value }: { [key: string]: string }) => {
+    if (operation && columnId && value) {
+      let query = new SQLBuilder()
+        .filters(columnId)
+
+      switch (operation) {
+        case 'contains':
+          query = query.contains(value)
+        default:
+          query = query.eq(value)
+      }
+      setFilters(query.build().filters)
+    }
+  }
+
   const [page, setPage] = useState<number>(1)
 
   const [pageSize, setPageSize] = useState<number>(10)
   const { data, isLoading, isFetching, error, refetch } = useQuery({
-    queryFn: () => queryFn({ pagination: { page: page, pageSize }, sort: !order ? undefined : [{ id: orderBy, desc: order === 'desc' }] }),
-    queryKey: [queryKey, page, pageSize, order, orderBy]
+    queryFn: () => queryFn({
+      pagination: { page: page, pageSize },
+      filters,
+      sort: !order ? undefined : [{ id: orderBy, desc: order === 'desc' }]
+    }),
+    queryKey: [queryKey, page, pageSize, order, orderBy, filters]
   });
   const [currColumns, setCurrColumns] = useState<typeof columns>(() => [...columns])
   const [columnVisibility, setColumnVisibility] = useState({})
   const [globalFilter, setGlobalFilter] = useState('')
   const [sorting, setSorting] = useState<SortingState>([])
 
-  const realData = useMemo(() => data?.data || [], [data, page, pageSize, order, orderBy])
+  const realData = useMemo(() => data?.data || [], [data, page, pageSize, order, orderBy, filters])
   const config = {
     data: realData,
     columns: currColumns,
@@ -73,7 +94,7 @@ const FullTable = ({ columns, queryKey, queryFn }: FullTableProps) => {
   return (
     <Box sx={{ m: 5 }}>
       <Paper elevation={3} sx={{ marginTop: 2 }} className={styles.paperContainer}>
-        <Toolbar table={table} setGlobalFilter={setGlobalFilter} />
+        <Toolbar table={table} setGlobalFilter={setGlobalFilter} handleFilterChange={handleFilterChange} />
         <Table table={table} maxHeight={200} order={order} orderBy={orderBy} handleSorting={handleSorting} isLoading={isLoading} />
         <PaginationFooter {...{ page: page, pageSize, setPageSize, setPage, pageCount, total }} />
       </Paper>

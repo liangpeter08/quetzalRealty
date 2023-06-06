@@ -16,18 +16,20 @@ export interface GetInventoryProps {
   pagination?: {
     page: number
     pageSize: number
-  }
+  },
+  filters?: any,
 }
 
 export type ModelType = { id: string, attributes: ApiModelModel['attributes'] }
 
-export async function getInventory({ sort, pagination }: GetInventoryProps = {}): Promise<{ data: ModelType[], meta: StrapiMetadata }> {
+export async function getInventory({ sort, pagination, filters }: GetInventoryProps = {}): Promise<{ data: ModelType[], meta: StrapiMetadata }> {
   const { data } = await strapiClient
     .get("/models", {
       params: {
         populate: '*',
         sort: Object.assign({}, sort?.map((item) => item.id + (item.desc ? ':desc' : ':asc'))),
-        pagination
+        pagination,
+        filters,
       }
     })
   return data;
