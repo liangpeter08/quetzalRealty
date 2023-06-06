@@ -1,10 +1,9 @@
 import styles from './table.module.scss'
 
 
-import { Box, Button, CircularProgress, IconButton, Menu, MenuItem, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TableRow, TableSortLabel, TextField, Typography, debounce } from "@mui/material";
-import { useReactTable, createColumnHelper, getCoreRowModel, flexRender, getFilteredRowModel } from '@tanstack/react-table'
+import { Box, CircularProgress, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableSortLabel } from "@mui/material";
+import { flexRender } from '@tanstack/react-table'
 import { visuallyHidden } from '@mui/utils';
-import React, { Dispatch, SetStateAction, useState } from "react";
 
 import { Table as TableDef } from "@tanstack/table-core"
 import { SortDirection } from './FullTable';
