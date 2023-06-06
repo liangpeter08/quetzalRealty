@@ -1,7 +1,7 @@
 import Button from '@mui/material/Button';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
-import { Autocomplete, Box, FormControl, FormGroup, FormHelperText, IconButton, TextField, InputLabel, Grid, CardMedia, styled, Typography, InputAdornment } from '@mui/material';
+import { Autocomplete, Box, FormControl, FormGroup, FormHelperText, IconButton, TextField, InputLabel, Grid, CardMedia, styled, Typography, InputAdornment, CircularProgress } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { uploadMedia } from '@/sharedApi/strapi/uploadMedia';
 import { deleteMedia } from '@/sharedApi/strapi/deleteMedia';
@@ -92,7 +92,9 @@ export default function NewModelModal(props: NewSuiteModalProps) {
   } = props
 
   const [marketingFloorplan, setMarketingFloorplan] = useState<any>();
+  const [isUploadingMarketing, setIsUploadingMarketing] = useState<boolean>();
   const [legalFloorplan, setLegalFloorplan] = useState<any>();
+  const [isUploadingLegal, setIsUploadingLegal] = useState<boolean>();
   const { control, handleSubmit, reset, formState: { isSubmitSuccessful } } = useForm({ reValidateMode: "onBlur", defaultValues: formValues?.['attributes'] });
 
   useEffect(() => {
@@ -114,13 +116,17 @@ export default function NewModelModal(props: NewSuiteModalProps) {
   };
 
   const handleMarketingUpload = async (file: any) => {
+    setIsUploadingMarketing(true)
     const newFile = await uploadMedia(file)
     setMarketingFloorplan(newFile)
+    setIsUploadingMarketing(false)
   }
 
   const handleLegalUpload = async (file: any) => {
+    setIsUploadingLegal(true)
     const newFile = await uploadMedia(file)
     setLegalFloorplan(newFile)
+    setIsUploadingLegal(false)
   }
 
   const handleMarketingFloorplanDelete = async () => {
@@ -255,11 +261,16 @@ export default function NewModelModal(props: NewSuiteModalProps) {
                     />
                   </Box>
                   :
-                  <FileUploader label="Upload Marketing Floorplan" handleChange={handleMarketingUpload} name="file" types={fileTypes}>
-                    <UploadBox>
-                      <Button sx={{ width: '100%', height: '100%' }} startIcon={<AddPhotoAlternate />} variant="text">Upload Marketing Floorplan</Button>
+                  isUploadingMarketing
+                    ? <UploadBox>
+                      <CircularProgress />
                     </UploadBox>
-                  </FileUploader>
+                    :
+                    <FileUploader label="Upload Marketing Floorplan" handleChange={handleMarketingUpload} name="file" types={fileTypes}>
+                      <UploadBox>
+                        <Button sx={{ width: '100%', height: '100%' }} startIcon={<AddPhotoAlternate />} variant="text">Upload Marketing Floorplan</Button>
+                      </UploadBox>
+                    </FileUploader>
                 }
               </Grid>
               <Grid item xs={6}>
@@ -275,11 +286,16 @@ export default function NewModelModal(props: NewSuiteModalProps) {
                     />
                   </Box>
                   :
-                  <FileUploader handleChange={handleLegalUpload} name="file" types={fileTypes}>
-                    <UploadBox>
-                      <Button sx={{ width: '100%', height: '100%' }} startIcon={<AddPhotoAlternate />} variant="text">Upload Legal Floorplan</Button>
+                  isUploadingLegal
+                    ? <UploadBox>
+                      <CircularProgress />
                     </UploadBox>
-                  </FileUploader>
+                    : <FileUploader handleChange={handleLegalUpload} name="file" types={fileTypes}>
+                      <UploadBox>
+                        <Button sx={{ width: '100%', height: '100%' }} startIcon={<AddPhotoAlternate />} variant="text">Upload Legal Floorplan</Button>
+                      </UploadBox>
+                    </FileUploader>
+
                 }
               </Grid>
             </Grid>
