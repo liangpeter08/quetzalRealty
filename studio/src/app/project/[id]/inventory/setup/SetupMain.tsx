@@ -1,26 +1,44 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
-import React, { useState } from "react";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import React, { useEffect, useState } from "react";
 import PageContainer from '@/components/container/PageContainer'
 import DashboardCard from '@/components/shared/DashboardCard'
 import { FullLayout } from '@/components/fullLayout/FullLayout';
 import { ModelType, getInventory } from "../../../../../sharedApi/strapi/getInventory";
 import Stack from "@mui/material/Stack";
-import SuiteCard from "./components/ModelCard";
+import ModelCard from "./components/ModelCard";
 import { Button, Typography, Grid, Box, Paper } from "@mui/material";
 import NewModelModal from "./components/newModelModal/NewModelModal";
 import { ApiModelModel } from "@/utils/schemas";
+import { useInView } from "react-intersection-observer";
 
 
 
 
 export default function Project() {
   const [newSuite, setNewSuite] = useState<boolean>(false);
-  const { data, isLoading, isFetching, error, refetch } = useQuery({
+  const { ref, inView } = useInView();
+
+  const { data, isLoading, isFetching, error, refetch, fetchNextPage } = useInfiniteQuery({
     queryKey: ["inventory"],
-    queryFn: () => getInventory(),
+    queryFn: ({ pageParam = 1 }) => getInventory({
+      pagination: {
+        page: pageParam,
+        pageSize: 10
+      }
+    }),
+    getNextPageParam: (lastPage, allPages) => {
+      const nextPage = allPages.length + 1
+      return nextPage
+    }
   });
+
+  useEffect(() => {
+    if (inView) {
+      fetchNextPage();
+    }
+  }, [inView]);
 
   return (
     <FullLayout>
@@ -39,9 +57,14 @@ export default function Project() {
         <Paper elevation={12}>
           <Box sx={{ m: 4, p: 4 }}>
             <Stack spacing={{ xs: 1, sm: 2 }} direction="row" useFlexGap flexWrap="wrap">
-              {(data?.data || []).map((model: ModelType, i: number) => <SuiteCard key={i} model={model} refetch={refetch} />)}
+              {(data?.pages || []).map((page, i: number) => (
+                page.data.map((model: ModelType, i2: number) => {
+                  return <ModelCard key={i + '-' + i2} model={model} refetch={refetch} />
+                })))}
             </Stack>
+
           </Box>
+          <div ref={ref}></div>
         </Paper>
       </PageContainer>
     </FullLayout>
