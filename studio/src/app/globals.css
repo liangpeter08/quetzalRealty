@@ -52,3 +52,7 @@ body {
     )
     rgb(var(--background-start-rgb));
 } */
+
+body {
+  overflow-x: hidden;
+}

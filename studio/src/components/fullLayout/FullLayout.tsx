@@ -14,10 +14,10 @@ const MainWrapper = styled('div')(() => ({
 const PageWrapper = styled('div')(() => ({
   display: 'flex',
   flexGrow: 1,
-  paddingBottom: '60px',
   flexDirection: 'column',
   zIndex: 1,
   backgroundColor: 'transparent',
+  overflowX: 'hidden'
 }));
 
 export const FullLayout = ({ children, showSidebar = true }: any) => {
@@ -42,11 +42,12 @@ export const FullLayout = ({ children, showSidebar = true }: any) => {
         <Header showSidebar={showSidebar} toggleSidebar={() => setSidebarOpen(!isSidebarOpen)} toggleMobileSidebar={() => setMobileSidebarOpen(true)} />
         <Container sx={{
           paddingTop: "20px",
-          maxWidth: '2000px'
+          maxWidth: '2000px',
+          boxSizing: 'border-box'
         }}
           maxWidth={false}
         >
-          <Box sx={{ minHeight: 'calc(100vh - 170px)' }}>
+          <Box sx={{ minHeight: 'calc(100vh - 170px)', width: '100%' }}>
             {children}
           </Box>
         </Container>

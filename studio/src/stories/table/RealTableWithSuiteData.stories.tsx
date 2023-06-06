@@ -1,15 +1,20 @@
-"use client";
+import type { Meta, StoryObj } from '@storybook/react';
+import Table from '../../components/table/Table';
+import { SortingState, createColumnHelper, getCoreRowModel, getFilteredRowModel, getSortedRowModel } from '@tanstack/react-table';
+import { useState } from 'react';
+import { Box, CssBaseline, TextField, ThemeProvider } from '@mui/material';
+import { ModelType, getInventory } from '../../sharedApi/strapi/getInventory';
+import { ApiModelModel, ApiSuiteSuite } from '../../utils/schemas';
 
-import PageContainer from "@/components/container/PageContainer";
-import { FullLayout } from "@/components/fullLayout/FullLayout";
-import FullTable from "@/components/table/FullTable";
-import { ModelType } from "@/sharedApi/strapi/getInventory";
+
+
+import FullTable from '../../components/table/FullTable';
 import { getSuites } from "@/sharedApi/strapi/getSuites";
-import { ApiSuiteSuite } from "@/utils/schemas";
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, debounce } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
-import { useReactTable, createColumnHelper, getCoreRowModel, flexRender, getFilteredRowModel } from '@tanstack/react-table'
-import { useState } from "react";
+import PageContainer from '@/components/container/PageContainer';
+import { FullLayout } from '@/components/fullLayout/FullLayout';
+
+
+
 
 type Suite = {
   id: number,
@@ -77,7 +82,7 @@ const columns = [
 ]
 
 
-export default function SuitesMain() {
+const AdvanceTableComponent = () => {
   const fullTableProps = {
     queryKey: ["suites"],
     queryFn: getSuites,
@@ -85,10 +90,32 @@ export default function SuitesMain() {
   }
 
   return (
-    <FullLayout>
-      <Paper elevation={4} sx={{ p: 2 }}>
-        <FullTable {...fullTableProps} />
-      </Paper>
-    </FullLayout>
+    <PageContainer title="Projects" description="projects">
+      <FullTable {...fullTableProps} />
+    </PageContainer>
   );
 }
+
+
+const meta: Meta<typeof Table> = {
+  title: 'Core/Table',
+  component: AdvanceTableComponent,
+  // This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/react/writing-docs/autodocs
+  tags: ['autodocs'],
+  parameters: {
+    // More on how to position stories at: https://storybook.js.org/docs/react/configure/story-layout
+    layout: 'fullscreen',
+  },
+};
+
+
+
+
+
+export default meta;
+type Story = StoryObj<typeof Table>;
+
+export const SuitesTable: Story = {
+  args: {},
+};
+

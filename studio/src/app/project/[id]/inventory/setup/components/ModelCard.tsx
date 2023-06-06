@@ -29,7 +29,7 @@ export default function ModelCard({ model, refetch }: ModelCardProps) {
   return (
     <Paper elevation={24}>
       {isEditing && <NewModelModal isUpdate={isEditing} open={isEditing} title="Edit Product" submitText="Confirm" formValues={model} onClose={() => setIsEditing(false)} refetch={refetch} />}
-      <Card sx={{ width: 500 }} raised={true}>
+      <Card raised={true}>
         <Paper elevation={10} sx={{ height: 280, m: 3 }}>
           <CardMedia
             sx={{ objectFit: "contain", m: 2, height: '100%', backgroundSize: 'contain' }}
