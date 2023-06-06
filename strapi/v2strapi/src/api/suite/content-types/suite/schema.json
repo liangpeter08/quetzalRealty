@@ -4,7 +4,8 @@
   "info": {
     "singularName": "suite",
     "pluralName": "suites",
-    "displayName": "Suite"
+    "displayName": "Suite",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -34,6 +35,44 @@
       "type": "string"
     },
     "marketing_suite_number": {
+      "type": "string"
+    },
+    "current_price": {
+      "type": "float"
+    },
+    "approved_minimum_price": {
+      "type": "float"
+    },
+    "unit_status": {
+      "type": "enumeration",
+      "enum": [
+        "Unavailable",
+        "Available",
+        "Allocated",
+        "Worksheet Received",
+        "Conditional",
+        "Firm"
+      ]
+    },
+    "allocated_broker": {
+      "type": "string"
+    },
+    "purchaser_first_name": {
+      "type": "string"
+    },
+    "purchaser_last_name": {
+      "type": "string"
+    },
+    "marketing_floor": {
+      "type": "string"
+    },
+    "legal_floor": {
+      "type": "string"
+    },
+    "marketing_unit_number": {
+      "type": "string"
+    },
+    "legal_unit_number": {
       "type": "string"
     }
   }
