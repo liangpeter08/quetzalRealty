@@ -1,1 +1,1 @@
-export const BASE_URL = "http://71.187.38.8:1337"
+export const BASE_URL = "http://quetzalrealty.duckdns.org:1337"

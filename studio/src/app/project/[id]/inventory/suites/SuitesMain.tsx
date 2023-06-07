@@ -76,7 +76,6 @@ const columns = [
   }),
 ]
 
-
 export default function SuitesMain() {
   const fullTableProps = {
     queryKey: ["suites"],
