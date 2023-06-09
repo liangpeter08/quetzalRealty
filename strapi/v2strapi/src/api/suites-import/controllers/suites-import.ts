@@ -9,7 +9,7 @@ export default {
       const res = await importService.importService({
         "version": 2,
         "data": {
-          "api::suites:suites": {
+          "api::suites.suites": {
             "1": {
               "id": 1,
               "exposure": "North",
@@ -18,7 +18,7 @@ export default {
               "createdAt": "2023-06-06T01:13:09.839Z",
               "updatedAt": "2023-06-06T01:13:11.094Z",
               "publishedAt": "2023-06-06T01:13:11.091Z",
-              "current_price": 800000,
+              "current_price": 4334,
               "approved_minimum_price": 800000,
               "unit_status": "Available",
               "allocated_broker": "Peter Liang",
