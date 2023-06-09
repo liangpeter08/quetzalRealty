@@ -1,7 +1,7 @@
 export default {
   routes: [
     {
-      method: 'GET',
+      method: 'POST',
       path: '/suites-import',
       handler: 'suites-import.exampleAction',
       config: {
