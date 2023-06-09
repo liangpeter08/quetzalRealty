@@ -31,7 +31,7 @@ export default {
             }
           }
         }
-      }, { slug: "api::suite.suite", format: 'jso', idField: 'id' })
+      }, { slug: "api::suite.suite", format: 'jso', idField: 'marketing_suite_number' })
       console.log(res);
       ctx.body = res
 
