@@ -6,9 +6,8 @@ export default {
   exampleAction: async (ctx, next) => {
     try {
       const importService = strapi.plugin("import-export-entries").service("import");
-      const res = await importService.importData({
-        version: 2,
-        data: {
+      const res = await importService.importData(
+        [{
           id: 1,
           "exposure": "North",
           "legal_suite_number": "101",
@@ -26,8 +25,8 @@ export default {
           "legal_floor": null,
           "marketing_unit_number": null,
           "legal_unit_number": null
-        }
-      }, { slug: "api::suite.suite", format: 'jso', idField: 'marketing_suite_number' })
+        }]
+        , { slug: "api::suite.suite", format: 'jso', idField: 'marketing_suite_number', user: 123 })
       console.log(res);
       ctx.body = res
 
