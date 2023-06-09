@@ -2,10 +2,10 @@
  * A set of functions called "actions" for `suites-import`
  */
 
-const importService = strapi.plugin("import-export-entries").service("import");
 export default {
   exampleAction: async (ctx, next) => {
     try {
+      const importService = strapi.plugin("import-export-entries").service("import");
       const res = await importService.importService({
         "version": 2,
         "data": {
