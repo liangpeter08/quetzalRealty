@@ -6,7 +6,7 @@ const importService = strapi.plugin("import-export-entries").service("import");
 export default {
   exampleAction: async (ctx, next) => {
     try {
-      ctx.body = await importService.importService({
+      const res = await importService.importService({
         "version": 2,
         "data": {
           "api::suites:suites": {
@@ -32,6 +32,9 @@ export default {
           }
         }
       }, { slug: "api::suite.suite", format: 'jso', idField: 'id' })
+      console.log(res);
+      ctx.body = res
+
     } catch (err) {
       ctx.body = err;
     }
