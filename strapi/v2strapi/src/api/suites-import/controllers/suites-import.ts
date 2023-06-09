@@ -10,7 +10,7 @@ export default {
         [{
           id: 1,
           "exposure": "North",
-          "legal_suite_number": "101",
+          "legal_suite_number": "103",
           "marketing_suite_number": "101",
           "createdAt": "2023-06-06T01:13:09.839Z",
           "updatedAt": "2023-06-06T01:13:11.094Z",
