@@ -7,7 +7,7 @@ ENV NODE_ENV=${NODE_ENV}
 
 WORKDIR /opt/
 COPY package.json yarn.lock package-lock.json ./
-RUN yarn config set network-timeout 600000 -g && yarn install
+RUN yarn config set network-timeout 600000 -g && yarn install --platform=linuxmusl
 ENV PATH /opt/node_modules/.bin:$PATH
 WORKDIR /opt/app
 RUN chown -R node:node /opt/app
