@@ -10,7 +10,11 @@
   "options": {
     "draftAndPublish": true
   },
-  "pluginOptions": {},
+  "pluginOptions": {
+    "import-export-entries": {
+      "idField": "marketing_suite_number"
+    }
+  },
   "attributes": {
     "exposure": {
       "type": "enumeration",
@@ -35,7 +39,8 @@
       "type": "string"
     },
     "marketing_suite_number": {
-      "type": "string"
+      "type": "string",
+      "unique": true
     },
     "current_price": {
       "type": "float"
