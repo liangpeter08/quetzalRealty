@@ -3,18 +3,37 @@
  */
 const fs = require('fs');
 
+const schema = ['marketing_suite_number', 'legal_suite_number', 'current_price']
 export default {
   exampleAction: async (ctx, next) => {
     try {
       const csvData = fs.readFileSync(ctx.request.files.file.path, 'utf8')
-      console.log('csv', csvData);
 
-      const body = ctx.request.body
-      const { data, slug, format, idField } = body;
+      const result = [];
+      const data = csvData.split('\n');
+      data.splice(0, 1);
+      // TODO: error checking
+      console.log('after splice', data)
+
+      for (const line of data) {
+        console.log('abc', line);
+        const row = line.split(',')
+        let newEntry = {}
+        for (let i = 0; i < schema.length; i++) {
+          newEntry[schema[i]] = row[i]
+        }
+        console.log(row);
+        console.log(newEntry);
+        newEntry['state'] = 'published'
+        newEntry['publishedAt'] = Date.now();
+        result.push(newEntry)
+        console.log('result', newEntry);
+      }
+
       const importService = strapi.plugin("import-export-entries").service("import");
+      console.log('result', result);
       const res = await importService.importData(
-        data, { slug, format, idField })
-
+        result, { slug: "api::suite.suite", format: "jso", idField: "marketing_suite_number", user: 123 })
       ctx.body = res
 
     } catch (err) {
