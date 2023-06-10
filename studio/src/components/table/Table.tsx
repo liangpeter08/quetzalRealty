@@ -1,12 +1,15 @@
 import styles from './table.module.scss'
 
 
-import { Box, CircularProgress, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableSortLabel } from "@mui/material";
+import { Box, CircularProgress, FormControlLabel, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableSortLabel } from "@mui/material";
 import { flexRender } from '@tanstack/react-table'
 import { visuallyHidden } from '@mui/utils';
 
 import { Table as TableDef } from "@tanstack/table-core"
 import { SortDirection } from './FullTable';
+import { useState } from 'react';
+import { Checkbox } from '@nextui-org/react';
+import { useSuiteSelect } from '@/context/SuiteSelectionContext';
 
 
 interface BasicTableProps {
@@ -16,10 +19,13 @@ interface BasicTableProps {
   order: SortDirection
   orderBy?: string
   isLoading: boolean
+  hasSelection: boolean
 }
 
-const BasicTable = ({ table, maxHeight, order, orderBy, handleSorting, isLoading }: BasicTableProps) => {
+const BasicTable = ({ table, maxHeight, order, orderBy, handleSorting, isLoading, hasSelection }: BasicTableProps) => {
   const height = maxHeight
+  const { selectSuites, setSelectedSuites } = useSuiteSelect()
+  console.log(useSuiteSelect())
 
   if (isLoading) {
     return (
@@ -28,12 +34,16 @@ const BasicTable = ({ table, maxHeight, order, orderBy, handleSorting, isLoading
       </Stack>
     )
   }
+  const rows = table.getRowModel().rows;
+
   return (
     <TableContainer sx={{ height }} className={`overflow-y-auto ${styles.tableContainer}`}>
       <Table stickyHeader size="small">
         <TableHead>
           {table.getHeaderGroups().map(headerGroup => (
             <TableRow key={headerGroup.id}>
+              {hasSelection && <TableCell key='selection' className={styles.tableHead}
+                sx={(theme) => ({ backgroundColor: theme.palette.grey['200'], border: `1px solid ${theme.palette.background.default}` })} />}
               {headerGroup.headers.map(header => (
                 <TableCell
                   key={header.id}
@@ -64,8 +74,21 @@ const BasicTable = ({ table, maxHeight, order, orderBy, handleSorting, isLoading
           ))}
         </TableHead>
         <TableBody className={styles.tableBody}>
-          {table.getRowModel().rows.map((row, i) => (
-            <TableRow key={row.id} className={styles.tableRow}>
+          {hasSelection && rows.map((row, i) => (
+            <TableRow key={row.id} className={styles.tableRow} hover>
+              {<TableCell key={'selection' + row.id}>
+                <FormControlLabel
+                  label=""
+                  control={
+                    <Checkbox defaultSelected isSelected={!!selectSuites?.[row.id]}
+                      onChange={(checked) => {
+                        console.log(checked)
+                        setSelectedSuites((prev: any) => {
+                          return { ...prev, [row.id]: checked ? row : false }
+                        });
+                      }} />}
+                />
+              </TableCell>}
               {row.getVisibleCells().map(cell => (
                 <TableCell key={cell.id} className={styles.tableCell}>
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}

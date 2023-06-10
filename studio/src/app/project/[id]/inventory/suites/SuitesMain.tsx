@@ -11,6 +11,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useReactTable, createColumnHelper, getCoreRowModel, flexRender, getFilteredRowModel } from '@tanstack/react-table'
 import { useState } from "react";
 import UploadIcon from '@mui/icons-material/Upload';
+import SuiteSelectProvider from "@/context/SuiteSelectionContext";
 
 type Suite = {
   id: number,
@@ -85,13 +86,15 @@ export default function SuitesMain() {
   }
 
   return (
-    <FullLayout>
-      <Paper elevation={4} sx={{ p: 2 }}>
-        <IconButton>
-          <UploadIcon></UploadIcon>
-        </IconButton>
-        <FullTable {...fullTableProps} />
-      </Paper>
-    </FullLayout>
+    <SuiteSelectProvider initialVal={{}}>
+      <FullLayout>
+        <Paper elevation={4} sx={{ p: 2 }}>
+          <IconButton>
+            <UploadIcon></UploadIcon>
+          </IconButton>
+          <FullTable {...fullTableProps} />
+        </Paper>
+      </FullLayout>
+    </SuiteSelectProvider>
   );
 }

@@ -1,10 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import Table from '../../components/table/Table';
 import { SortingState, createColumnHelper, getCoreRowModel, getFilteredRowModel, getSortedRowModel } from '@tanstack/react-table';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Box, CssBaseline, TextField, ThemeProvider } from '@mui/material';
 import { ModelType, getInventory } from '../../sharedApi/strapi/getInventory';
 import { ApiModelModel, ApiSuiteSuite } from '../../utils/schemas';
+import SuiteSelectProvider from '../../context/SuiteSelectionContext';
 
 
 
@@ -87,12 +88,15 @@ const AdvanceTableComponent = () => {
     queryKey: ["suites"],
     queryFn: getSuites,
     columns,
+    hasSelection: true
   }
 
   return (
-    <PageContainer title="Projects" description="projects">
-      <FullTable {...fullTableProps} />
-    </PageContainer>
+    <SuiteSelectProvider>
+      <PageContainer title="Projects" description="projects">
+        <FullTable {...fullTableProps} />
+      </PageContainer>
+    </SuiteSelectProvider>
   );
 }
 
@@ -115,7 +119,7 @@ const meta: Meta<typeof Table> = {
 export default meta;
 type Story = StoryObj<typeof Table>;
 
-export const SuitesTable: Story = {
+export const SuitesSelectionTable: Story = {
   args: {},
 };
 

@@ -13,11 +13,12 @@ interface FullTableProps {
   columns: any
   queryKey: any
   queryFn: (props: any) => Promise<any>
+  hasSelection?: boolean
 }
 
 export type SortDirection = 'asc' | 'desc' | false;
 
-const FullTable = ({ columns, queryKey, queryFn }: FullTableProps) => {
+const FullTable = ({ columns, queryKey, queryFn, hasSelection }: FullTableProps) => {
   const [order, setOrder] = useState<SortDirection>(false);
   const [orderBy, setOrderBy] = useState<string>();
   const [filters, setFilters] = useState<any>();
@@ -95,7 +96,7 @@ const FullTable = ({ columns, queryKey, queryFn }: FullTableProps) => {
     <Box sx={{ m: 5 }}>
       <Paper elevation={3} sx={{ marginTop: 2 }} className={styles.paperContainer}>
         <Toolbar table={table} setGlobalFilter={setGlobalFilter} handleFilterChange={handleFilterChange} />
-        <Table table={table} maxHeight={200} order={order} orderBy={orderBy} handleSorting={handleSorting} isLoading={isLoading} />
+        <Table table={table} maxHeight={200} order={order} orderBy={orderBy} handleSorting={handleSorting} isLoading={isLoading} hasSelection={hasSelection} />
         <PaginationFooter {...{ page: page, pageSize, setPageSize, setPage, pageCount, total }} />
       </Paper>
     </Box >
