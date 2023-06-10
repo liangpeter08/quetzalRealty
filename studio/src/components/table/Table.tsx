@@ -19,7 +19,7 @@ interface BasicTableProps {
   order: SortDirection
   orderBy?: string
   isLoading: boolean
-  hasSelection: boolean
+  hasSelection?: boolean
 }
 
 const BasicTable = ({ table, maxHeight, order, orderBy, handleSorting, isLoading, hasSelection }: BasicTableProps) => {
@@ -74,9 +74,9 @@ const BasicTable = ({ table, maxHeight, order, orderBy, handleSorting, isLoading
           ))}
         </TableHead>
         <TableBody className={styles.tableBody}>
-          {hasSelection && rows.map((row, i) => (
+          {rows.map((row, i) => (
             <TableRow key={row.id} className={styles.tableRow} hover>
-              {<TableCell key={'selection' + row.id}>
+              {hasSelection && <TableCell key={'selection' + row.id}>
                 <FormControlLabel
                   label=""
                   control={

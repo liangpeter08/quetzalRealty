@@ -1,18 +1,19 @@
 "use client";
 
-import PageContainer from "@/components/container/PageContainer";
 import { FullLayout } from "@/components/fullLayout/FullLayout";
 import FullTable from "@/components/table/FullTable";
 import { ModelType } from "@/sharedApi/strapi/getInventory";
 import { getSuites } from "@/sharedApi/strapi/getSuites";
 import { ApiSuiteSuite } from "@/utils/schemas";
-import { Button, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, debounce } from "@mui/material";
+import { Button, Drawer, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, debounce, useTheme, styled } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { useReactTable, createColumnHelper, getCoreRowModel, flexRender, getFilteredRowModel } from '@tanstack/react-table'
-import { useState } from "react";
 import UploadIcon from '@mui/icons-material/Upload';
-import SuiteSelectProvider from "@/context/SuiteSelectionContext";
 import SuiteUploadModal from "./UploadModal";
+import SuiteSelectProvider, { useSuiteSelect } from "@/context/SuiteSelectionContext";
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import React, { useEffect, useState } from 'react';
 
 type Suite = {
   id: number,
@@ -79,16 +80,36 @@ const columns = [
   }),
 ]
 
+
+
+const DrawerHeader = styled('div')(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  padding: theme.spacing(0, 1),
+  // necessary for content to be below app bar
+  ...theme.mixins.toolbar,
+  justifyContent: 'flex-end',
+}));
+
 export default function SuitesMain() {
 
   const [newSuite, setNewSuite] = useState<boolean>(false);
   const [refreshTable, setRefreshTable] = useState<number>(0);
+  const { selectSuites, setSelectedSuites } = useSuiteSelect();
+  const hasSuites = selectSuites && Object.values(selectSuites).find((val) => !!val);
+  console.log(selectSuites);
+  const [open, setOpen] = useState(true);
+
+  const theme = useTheme();
+
+
 
   const fullTableProps = {
     queryKey: ["suites"],
     queryFn: getSuites,
     columns,
     version: refreshTable
+    hasSelection: true
   }
 
 
@@ -97,6 +118,7 @@ export default function SuitesMain() {
       {newSuite && <SuiteUploadModal open={newSuite} onClose={() => setNewSuite(false)} refetch={() => {
         setRefreshTable((previous: number) => previous++)
       }} />}
+
       <FullLayout>
         <Paper elevation={4} sx={{ p: 2 }}>
           <IconButton>
@@ -104,6 +126,26 @@ export default function SuitesMain() {
           </IconButton>
           <FullTable {...fullTableProps} />
         </Paper>
+        <Drawer
+          sx={{
+            width: 400,
+            flexShrink: 0,
+            '& .MuiDrawer-paper': {
+              width: 800,
+              boxSizing: 'border-box',
+            },
+          }}
+          variant="persistent"
+          anchor="right"
+          open={false}
+        >
+          <DrawerHeader>
+            <IconButton onClick={() => setOpen(false)}>
+              {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+            </IconButton>
+          </DrawerHeader>
+          asdfasdfs
+        </Drawer>
       </FullLayout>
     </SuiteSelectProvider>
   );
