@@ -1,0 +1,27 @@
+{
+  "kind": "collectionType",
+  "collectionName": "allocations",
+  "info": {
+    "singularName": "allocation",
+    "pluralName": "allocations",
+    "displayName": "allocation"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "broker": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::broker.broker",
+      "inversedBy": "allocation"
+    },
+    "suite": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::suite.suite",
+      "inversedBy": "allocation"
+    }
+  }
+}
