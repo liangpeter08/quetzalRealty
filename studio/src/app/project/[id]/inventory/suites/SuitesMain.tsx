@@ -108,7 +108,7 @@ export default function SuitesMain() {
     queryKey: ["suites"],
     queryFn: getSuites,
     columns,
-    version: refreshTable
+    version: refreshTable,
     hasSelection: true
   }
 
@@ -122,7 +122,7 @@ export default function SuitesMain() {
       <FullLayout>
         <Paper elevation={4} sx={{ p: 2 }}>
           <IconButton>
-            <UploadIcon></UploadIcon>
+            <UploadIcon onClick={() => setNewSuite(true)}></UploadIcon>
           </IconButton>
           <FullTable {...fullTableProps} />
         </Paper>

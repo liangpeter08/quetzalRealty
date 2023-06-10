@@ -76,19 +76,16 @@ const BasicTable = ({ table, maxHeight, order, orderBy, handleSorting, isLoading
         <TableBody className={styles.tableBody}>
           {rows.map((row, i) => (
             <TableRow key={row.id} className={styles.tableRow} hover>
-              {hasSelection && <TableCell key={'selection' + row.id}>
-                <FormControlLabel
-                  label=""
-                  control={
-                    <Checkbox defaultSelected isSelected={!!selectSuites?.[row.id]}
-                      onChange={(checked) => {
-                        console.log(checked)
-                        setSelectedSuites((prev: any) => {
-                          return { ...prev, [row.id]: checked ? row : false }
-                        });
-                      }} />}
-                />
-              </TableCell>}
+              {hasSelection &&
+                <TableCell key={'selection' + row.id}>
+                  <Checkbox defaultSelected isSelected={!!selectSuites?.[row.id]}
+                    onChange={(checked) => {
+                      console.log(checked)
+                      setSelectedSuites((prev: any) => {
+                        return { ...prev, [row.id]: checked ? row : false }
+                      });
+                    }} />
+                </TableCell>}
               {row.getVisibleCells().map(cell => (
                 <TableCell key={cell.id} className={styles.tableCell}>
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
