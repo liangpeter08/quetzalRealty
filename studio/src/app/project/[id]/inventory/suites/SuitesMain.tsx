@@ -12,6 +12,7 @@ import { useReactTable, createColumnHelper, getCoreRowModel, flexRender, getFilt
 import { useState } from "react";
 import UploadIcon from '@mui/icons-material/Upload';
 import SuiteSelectProvider from "@/context/SuiteSelectionContext";
+import SuiteUploadModal from "./UploadModal";
 
 type Suite = {
   id: number,
@@ -79,14 +80,23 @@ const columns = [
 ]
 
 export default function SuitesMain() {
+
+  const [newSuite, setNewSuite] = useState<boolean>(false);
+  const [refreshTable, setRefreshTable] = useState<number>(0);
+
   const fullTableProps = {
     queryKey: ["suites"],
     queryFn: getSuites,
     columns,
+    version: refreshTable
   }
+
 
   return (
     <SuiteSelectProvider initialVal={{}}>
+      {newSuite && <SuiteUploadModal open={newSuite} onClose={() => setNewSuite(false)} refetch={() => {
+        setRefreshTable((previous: number) => previous++)
+      }} />}
       <FullLayout>
         <Paper elevation={4} sx={{ p: 2 }}>
           <IconButton>

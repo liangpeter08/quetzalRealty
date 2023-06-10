@@ -1,7 +1,7 @@
 import { getInventory } from "@/sharedApi/strapi/getInventory";
 import { Box, Button, IconButton, Menu, MenuItem, Paper, Stack, TableContainer, TextField, Typography } from "@mui/material";
 import { SortingState, flexRender, getCoreRowModel, getFilteredRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import Table from "./Table";
 import PaginationFooter from "./PaginationFooter";
@@ -14,14 +14,32 @@ interface FullTableProps {
   queryKey: any
   queryFn: (props: any) => Promise<any>
   hasSelection?: boolean
+  version: number
 }
 
 export type SortDirection = 'asc' | 'desc' | false;
 
-const FullTable = ({ columns, queryKey, queryFn, hasSelection }: FullTableProps) => {
+const FullTable = ({ columns, queryKey, queryFn, version, hasSelection }: FullTableProps) => {
   const [order, setOrder] = useState<SortDirection>(false);
   const [orderBy, setOrderBy] = useState<string>();
   const [filters, setFilters] = useState<any>();
+  const [page, setPage] = useState<number>(1)
+
+  const [pageSize, setPageSize] = useState<number>(10)
+  const { data, isLoading, isFetching, error, refetch } = useQuery({
+    queryFn: () => queryFn({
+      pagination: { page: page, pageSize },
+      filters,
+      sort: !order ? undefined : [{ id: orderBy, desc: order === 'desc' }]
+    }),
+    queryKey: [queryKey, page, pageSize, order, orderBy, filters]
+  });
+  const [currColumns, setCurrColumns] = useState<typeof columns>(() => [...columns])
+  const [columnVisibility, setColumnVisibility] = useState({})
+  const [globalFilter, setGlobalFilter] = useState('')
+  const [sorting, setSorting] = useState<SortingState>([])
+
+  const realData = useMemo(() => data?.data || [], [data, page, pageSize, order, orderBy, filters])
 
   const handleSorting = (event: React.MouseEvent, header: any) => {
     const sortFn = header.column.getToggleSortingHandler();
@@ -58,23 +76,7 @@ const FullTable = ({ columns, queryKey, queryFn, hasSelection }: FullTableProps)
     }
   }
 
-  const [page, setPage] = useState<number>(1)
 
-  const [pageSize, setPageSize] = useState<number>(10)
-  const { data, isLoading, isFetching, error, refetch } = useQuery({
-    queryFn: () => queryFn({
-      pagination: { page: page, pageSize },
-      filters,
-      sort: !order ? undefined : [{ id: orderBy, desc: order === 'desc' }]
-    }),
-    queryKey: [queryKey, page, pageSize, order, orderBy, filters]
-  });
-  const [currColumns, setCurrColumns] = useState<typeof columns>(() => [...columns])
-  const [columnVisibility, setColumnVisibility] = useState({})
-  const [globalFilter, setGlobalFilter] = useState('')
-  const [sorting, setSorting] = useState<SortingState>([])
-
-  const realData = useMemo(() => data?.data || [], [data, page, pageSize, order, orderBy, filters])
   const config = {
     data: realData,
     columns: currColumns,
