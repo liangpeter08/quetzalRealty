@@ -1,9 +1,10 @@
 import { useSuiteSelect } from "@/context/SuiteSelectionContext";
 import { Drawer, IconButton, styled, useTheme } from "@mui/material";
 import { theme } from "@nextui-org/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import RightPanelContent from "./RightPanelContent";
 
 const DrawerHeader = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -11,7 +12,6 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   padding: theme.spacing(0, 1),
   // necessary for content to be below app bar
   ...theme.mixins.toolbar,
-  justifyContent: 'flex-end',
 }));
 
 const RightPanel = () => {
@@ -19,29 +19,31 @@ const RightPanel = () => {
   const hasSuites = selectSuites && Object.values(selectSuites).find((val) => !!val);
   console.log(selectSuites);
   const [open, setOpen] = useState(true);
-  const theme = useTheme();
 
-
+  useEffect(() => {
+    if (hasSuites) {
+      setOpen(true);
+    }
+  }, [setOpen, selectSuites])
 
   return (<Drawer
     sx={{
-      width: 600,
-      flexShrink: 0,
+      width: 500,
       '& .MuiDrawer-paper': {
-        width: 800,
+        width: 500,
         boxSizing: 'border-box',
       },
     }}
     variant="persistent"
     anchor="right"
-    open={hasSuites}
+    open={hasSuites && open}
   >
     <DrawerHeader>
-      <IconButton onClick={() => setOpen(false)}>
-        {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+      <IconButton sx={(theme) => ({ color: theme.palette.primary.dark })} onClick={() => setOpen(false)}>
+        <ChevronRightIcon />
       </IconButton>
     </DrawerHeader>
-    asdfasdfs
+    <RightPanelContent />
   </Drawer>)
 };
 
