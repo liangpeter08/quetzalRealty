@@ -5,7 +5,7 @@ import { Url } from 'next/dist/shared/lib/router/router';
 import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import ApartmentIcon from '@mui/icons-material/Apartment';
-
+import StoreIcon from '@mui/icons-material/Store';
 
 type MenuType = 'item' | 'subMenu';
 
@@ -21,10 +21,10 @@ interface MenuItem {
 const Menuitems: MenuItem[] = [
   {
     type: 'item',
-    id: 'main-page',
-    title: 'Dashboard',
-    icon: IconLayoutDashboard,
-    href: '/dashboard',
+    id: uuidv4(),
+    title: 'Allocations',
+    icon: StoreIcon,
+    href: '/project/test-proj/allocations',
   },
   {
     type: 'subMenu',
