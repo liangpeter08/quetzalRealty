@@ -3,7 +3,7 @@ import { Delete } from '@mui/icons-material'
 
 const RightPanelContent = () => {
   return <Box sx={{ p: 2 }}>
-    <Typography variant='h3'>Suites to Allocate</Typography>
+    <Typography variant='h3'>Current Suite Allocation</Typography>
     <Divider sx={{ m: 2, marginLeft: -1, marginRight: -1 }} />
     <Autocomplete
       id="broker-search"

@@ -1,6 +1,15 @@
 import { BASE_URL } from "../../utils/constants";
 import axios from "axios";
 
+export interface StrapiMetadata {
+  pagination: {
+    page: number,
+    pageSize: number,
+    pageCount: number,
+    total: number,
+  }
+}
+
 export default axios.create({
   baseURL: BASE_URL + '/api',
   headers: {

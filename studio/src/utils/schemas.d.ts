@@ -492,6 +492,49 @@ export interface PluginUploadFolder extends CollectionTypeSchema {
   };
 }
 
+export interface PluginI18NLocale extends CollectionTypeSchema {
+  info: {
+    singularName: 'locale';
+    pluralName: 'locales';
+    collectionName: 'locales';
+    displayName: 'Locale';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  pluginOptions: {
+    'content-manager': {
+      visible: false;
+    };
+    'content-type-builder': {
+      visible: false;
+    };
+  };
+  attributes: {
+    name: StringAttribute &
+      SetMinMax<{
+        min: 1;
+        max: 50;
+      }>;
+    code: StringAttribute & UniqueAttribute;
+    createdAt: DateTimeAttribute;
+    updatedAt: DateTimeAttribute;
+    createdBy: RelationAttribute<
+      'plugin::i18n.locale',
+      'oneToOne',
+      'admin::user'
+    > &
+      PrivateAttribute;
+    updatedBy: RelationAttribute<
+      'plugin::i18n.locale',
+      'oneToOne',
+      'admin::user'
+    > &
+      PrivateAttribute;
+  };
+}
+
 export interface PluginUsersPermissionsPermission extends CollectionTypeSchema {
   info: {
     name: 'permission';
@@ -639,42 +682,75 @@ export interface PluginUsersPermissionsUser extends CollectionTypeSchema {
   };
 }
 
-export interface PluginI18NLocale extends CollectionTypeSchema {
+export interface ApiAllocationAllocation extends CollectionTypeSchema {
   info: {
-    singularName: 'locale';
-    pluralName: 'locales';
-    collectionName: 'locales';
-    displayName: 'Locale';
+    singularName: 'allocation';
+    pluralName: 'allocations';
+    displayName: 'allocation';
     description: '';
   };
   options: {
-    draftAndPublish: false;
-  };
-  pluginOptions: {
-    'content-manager': {
-      visible: false;
-    };
-    'content-type-builder': {
-      visible: false;
-    };
+    draftAndPublish: true;
   };
   attributes: {
-    name: StringAttribute &
-      SetMinMax<{
-        min: 1;
-        max: 50;
-      }>;
-    code: StringAttribute & UniqueAttribute;
+    suite: RelationAttribute<
+      'api::allocation.allocation',
+      'oneToOne',
+      'api::suite.suite'
+    >;
+    broker: RelationAttribute<
+      'api::allocation.allocation',
+      'manyToOne',
+      'api::broker.broker'
+    >;
     createdAt: DateTimeAttribute;
     updatedAt: DateTimeAttribute;
+    publishedAt: DateTimeAttribute;
     createdBy: RelationAttribute<
-      'plugin::i18n.locale',
+      'api::allocation.allocation',
       'oneToOne',
       'admin::user'
     > &
       PrivateAttribute;
     updatedBy: RelationAttribute<
-      'plugin::i18n.locale',
+      'api::allocation.allocation',
+      'oneToOne',
+      'admin::user'
+    > &
+      PrivateAttribute;
+  };
+}
+
+export interface ApiBrokerBroker extends CollectionTypeSchema {
+  info: {
+    singularName: 'broker';
+    pluralName: 'brokers';
+    displayName: 'broker';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    first_name: StringAttribute;
+    allocations: RelationAttribute<
+      'api::broker.broker',
+      'oneToMany',
+      'api::allocation.allocation'
+    >;
+    last_name: StringAttribute;
+    email: StringAttribute;
+    createdAt: DateTimeAttribute;
+    updatedAt: DateTimeAttribute;
+    publishedAt: DateTimeAttribute;
+    createdBy: RelationAttribute<
+      'api::broker.broker',
+      'oneToOne',
+      'admin::user'
+    > &
+      PrivateAttribute;
+    updatedBy: RelationAttribute<
+      'api::broker.broker',
       'oneToOne',
       'admin::user'
     > &
@@ -820,6 +896,11 @@ export interface ApiSuiteSuite extends CollectionTypeSchema {
   options: {
     draftAndPublish: true;
   };
+  pluginOptions: {
+    'import-export-entries': {
+      idField: 'marketing_suite_number';
+    };
+  };
   attributes: {
     exposure: EnumerationAttribute<
       [
@@ -839,7 +920,7 @@ export interface ApiSuiteSuite extends CollectionTypeSchema {
       'api::model.model'
     >;
     legal_suite_number: StringAttribute;
-    marketing_suite_number: StringAttribute;
+    marketing_suite_number: StringAttribute & UniqueAttribute;
     current_price: FloatAttribute;
     approved_minimum_price: FloatAttribute;
     unit_status: EnumerationAttribute<
@@ -852,13 +933,17 @@ export interface ApiSuiteSuite extends CollectionTypeSchema {
         'Firm'
       ]
     >;
-    allocated_broker: StringAttribute;
     purchaser_first_name: StringAttribute;
     purchaser_last_name: StringAttribute;
     marketing_floor: StringAttribute;
     legal_floor: StringAttribute;
     marketing_unit_number: StringAttribute;
     legal_unit_number: StringAttribute;
+    allocation: RelationAttribute<
+      'api::suite.suite',
+      'oneToOne',
+      'api::allocation.allocation'
+    >;
     createdAt: DateTimeAttribute;
     updatedAt: DateTimeAttribute;
     publishedAt: DateTimeAttribute;
@@ -889,10 +974,12 @@ declare global {
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'plugin::upload.file': PluginUploadFile;
       'plugin::upload.folder': PluginUploadFolder;
+      'plugin::i18n.locale': PluginI18NLocale;
       'plugin::users-permissions.permission': PluginUsersPermissionsPermission;
       'plugin::users-permissions.role': PluginUsersPermissionsRole;
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
-      'plugin::i18n.locale': PluginI18NLocale;
+      'api::allocation.allocation': ApiAllocationAllocation;
+      'api::broker.broker': ApiBrokerBroker;
       'api::member.member': ApiMemberMember;
       'api::model.model': ApiModelModel;
       'api::project.project': ApiProjectProject;

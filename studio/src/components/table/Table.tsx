@@ -14,7 +14,7 @@ import { useSuiteSelect } from '@/context/SuiteSelectionContext';
 
 interface BasicTableProps {
   table: TableDef<unknown>
-  maxHeight?: number
+  maxHeight?: string
   handleSorting: (event: React.MouseEvent, header: any) => any,
   order: SortDirection
   orderBy?: string

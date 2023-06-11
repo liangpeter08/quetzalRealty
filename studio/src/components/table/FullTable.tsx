@@ -76,8 +76,7 @@ const FullTable = ({ columns, queryKey, queryFn, hasSelection, version, maxHeigh
       setFilters(query.build().filters)
     }
   }
-
-
+  console.log(data, realData);
   const config = {
     data: realData,
     columns: currColumns,
@@ -92,8 +91,8 @@ const FullTable = ({ columns, queryKey, queryFn, hasSelection, version, maxHeigh
     }
   }
   const table = useReactTable(config)
-  const pageCount = data?.meta.pagination.pageCount ?? 0
-  const total = data?.meta.pagination.total ?? 0
+  const pageCount = data?.meta?.pagination?.pageCount ?? 0
+  const total = data?.meta?.pagination?.total ?? 0
 
   return (
     <Box sx={{ m: 5 }}>
