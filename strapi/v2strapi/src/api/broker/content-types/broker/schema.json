@@ -4,7 +4,8 @@
   "info": {
     "singularName": "broker",
     "pluralName": "brokers",
-    "displayName": "broker"
+    "displayName": "broker",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -19,6 +20,12 @@
       "relation": "oneToOne",
       "target": "api::allocation.allocation",
       "mappedBy": "broker"
+    },
+    "last_name": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
     }
   }
 }

@@ -59,9 +59,6 @@
         "Firm"
       ]
     },
-    "allocated_broker": {
-      "type": "string"
-    },
     "purchaser_first_name": {
       "type": "string"
     },
