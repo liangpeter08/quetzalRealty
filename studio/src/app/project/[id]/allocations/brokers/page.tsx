@@ -1,6 +1,6 @@
 import React from "react";
 
-import { getInventory } from "../../../../sharedApi/strapi/getInventory";
+import { getInventory } from "../../../../../sharedApi/strapi/getInventory";
 import Hydrate from "@/utils/hydrate.client";
 import { dehydrate } from "@tanstack/query-core";
 import getQueryClient from "@/utils/getQueryClient";

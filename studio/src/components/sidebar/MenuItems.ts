@@ -6,6 +6,8 @@ import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import ApartmentIcon from '@mui/icons-material/Apartment';
 import StoreIcon from '@mui/icons-material/Store';
+import PersonIcon from '@mui/icons-material/Person';
+import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 
 type MenuType = 'item' | 'subMenu';
 
@@ -20,11 +22,26 @@ interface MenuItem {
 
 const Menuitems: MenuItem[] = [
   {
-    type: 'item',
+    type: 'subMenu',
     id: uuidv4(),
     title: 'Allocations',
     icon: StoreIcon,
-    href: '/project/test-proj/allocations',
+    children: [
+      {
+        type: 'item',
+        id: uuidv4(),
+        title: 'Allocation By Suites',
+        icon: AccountBalanceIcon,
+        href: '/project/test-proj/allocations/suites',
+      },
+      {
+        type: 'item',
+        id: uuidv4(),
+        title: 'Allocation By Brokers',
+        icon: PersonIcon,
+        href: '/project/test-proj/allocations/brokers',
+      },
+    ]
   },
   {
     type: 'subMenu',
