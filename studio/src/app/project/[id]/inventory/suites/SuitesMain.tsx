@@ -91,7 +91,6 @@ export default function SuitesMain() {
     queryFn: getSuites,
     columns,
     version: refreshTable,
-    hasSelection: true
   }
 
 
