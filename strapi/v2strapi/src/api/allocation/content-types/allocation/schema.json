@@ -12,17 +12,17 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "broker": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::broker.broker",
-      "inversedBy": "allocation"
-    },
     "suite": {
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::suite.suite",
       "inversedBy": "allocation"
+    },
+    "broker": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::broker.broker",
+      "inversedBy": "allocations"
     }
   }
 }
