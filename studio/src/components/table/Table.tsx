@@ -24,7 +24,7 @@ interface BasicTableProps {
 
 const BasicTable = ({ table, maxHeight, order, orderBy, handleSorting, isLoading, hasSelection }: BasicTableProps) => {
   const height = maxHeight
-  const { selectSuites, setSelectedSuites } = useSuiteSelect()
+  const { selectedSuites, setSelectedSuites } = useSuiteSelect()
 
   if (isLoading) {
     return (
@@ -79,7 +79,7 @@ const BasicTable = ({ table, maxHeight, order, orderBy, handleSorting, isLoading
             <TableRow key={row.id} className={styles.tableRow} hover>
               {hasSelection &&
                 <TableCell key={'selection' + row.id}>
-                  <Checkbox defaultSelected isSelected={!!selectSuites?.[row.id]}
+                  <Checkbox defaultSelected isSelected={!!selectedSuites?.[row.id]}
                     onChange={(checked) => {
                       setSelectedSuites((prev: any) => {
                         return { ...prev, [row.id]: checked ? row : false }

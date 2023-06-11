@@ -15,16 +15,15 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 
 const RightPanel = () => {
-  const { selectSuites } = useSuiteSelect();
-  const hasSuites = selectSuites && Object.values(selectSuites).find((val) => !!val);
-  console.log(selectSuites);
+  const { selectedSuites } = useSuiteSelect();
+  const hasSuites = selectedSuites && Object.values(selectedSuites).find((val) => !!val);
   const [open, setOpen] = useState(true);
 
   useEffect(() => {
     if (hasSuites) {
       setOpen(true);
     }
-  }, [setOpen, selectSuites])
+  }, [setOpen, selectedSuites])
 
   return (<Drawer
     sx={{

@@ -12,7 +12,6 @@ import SuiteUploadModal from "./UploadModal";
 import SuiteSelectProvider from "@/context/SuiteSelectionContext";
 
 import React, { useEffect, useState } from 'react';
-import RightPanel from "./RightPanel";
 
 type Suite = {
   id: number,
@@ -107,7 +106,6 @@ export default function SuitesMain() {
           </IconButton>
           <FullTable {...fullTableProps} />
         </Paper>
-        <RightPanel />
 
       </FullLayout>
     </SuiteSelectProvider>
