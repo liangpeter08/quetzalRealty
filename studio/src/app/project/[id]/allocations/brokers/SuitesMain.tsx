@@ -91,7 +91,8 @@ export default function SuitesMain() {
     queryFn: getSuites,
     columns,
     version: refreshTable,
-    hasSelection: true
+    hasSelection: true,
+    maxHeight: 'auto'
   }
 
 
@@ -103,9 +104,6 @@ export default function SuitesMain() {
 
       <FullLayout>
         <Paper elevation={4} sx={{ p: 2 }}>
-          <IconButton onClick={() => setNewSuite(true)} >
-            <UploadIcon></UploadIcon>
-          </IconButton>
           <FullTable {...fullTableProps} />
         </Paper>
         <RightPanel />

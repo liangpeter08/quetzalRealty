@@ -102,8 +102,8 @@ export default function SuitesMain() {
 
       <FullLayout>
         <Paper elevation={4} sx={{ p: 2 }}>
-          <IconButton>
-            <UploadIcon onClick={() => setNewSuite(true)}></UploadIcon>
+          <IconButton onClick={() => setNewSuite(true)}>
+            <UploadIcon></UploadIcon>
           </IconButton>
           <FullTable {...fullTableProps} />
         </Paper>

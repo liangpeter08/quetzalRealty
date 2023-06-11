@@ -15,11 +15,12 @@ interface FullTableProps {
   queryFn: (props: any) => Promise<any>
   hasSelection?: boolean
   version: number
+  maxHeight?: string
 }
 
 export type SortDirection = 'asc' | 'desc' | false;
 
-const FullTable = ({ columns, queryKey, queryFn, version, hasSelection }: FullTableProps) => {
+const FullTable = ({ columns, queryKey, queryFn, hasSelection, version, maxHeight = '200' }: FullTableProps) => {
   const [order, setOrder] = useState<SortDirection>(false);
   const [orderBy, setOrderBy] = useState<string>();
   const [filters, setFilters] = useState<any>();
@@ -32,7 +33,7 @@ const FullTable = ({ columns, queryKey, queryFn, version, hasSelection }: FullTa
       filters,
       sort: !order ? undefined : [{ id: orderBy, desc: order === 'desc' }]
     }),
-    queryKey: [queryKey, page, pageSize, order, orderBy, filters]
+    queryKey: [queryKey, page, pageSize, order, orderBy, filters, version]
   });
   const [currColumns, setCurrColumns] = useState<typeof columns>(() => [...columns])
   const [columnVisibility, setColumnVisibility] = useState({})
@@ -98,7 +99,7 @@ const FullTable = ({ columns, queryKey, queryFn, version, hasSelection }: FullTa
     <Box sx={{ m: 5 }}>
       <Paper elevation={3} sx={{ marginTop: 2 }} className={styles.paperContainer}>
         <Toolbar table={table} setGlobalFilter={setGlobalFilter} handleFilterChange={handleFilterChange} />
-        <Table table={table} maxHeight={200} order={order} orderBy={orderBy} handleSorting={handleSorting} isLoading={isLoading} hasSelection={hasSelection} />
+        <Table table={table} maxHeight={maxHeight} order={order} orderBy={orderBy} handleSorting={handleSorting} isLoading={isLoading} hasSelection={hasSelection} />
         <PaginationFooter {...{ page: page, pageSize, setPageSize, setPage, pageCount, total }} />
       </Paper>
     </Box >
