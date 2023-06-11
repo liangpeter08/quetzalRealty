@@ -25,7 +25,6 @@ interface BasicTableProps {
 const BasicTable = ({ table, maxHeight, order, orderBy, handleSorting, isLoading, hasSelection }: BasicTableProps) => {
   const height = maxHeight
   const { selectSuites, setSelectedSuites } = useSuiteSelect()
-  console.log(useSuiteSelect())
 
   if (isLoading) {
     return (
@@ -42,8 +41,10 @@ const BasicTable = ({ table, maxHeight, order, orderBy, handleSorting, isLoading
         <TableHead>
           {table.getHeaderGroups().map(headerGroup => (
             <TableRow key={headerGroup.id}>
-              {hasSelection && <TableCell key='selection' className={styles.tableHead}
-                sx={(theme) => ({ backgroundColor: theme.palette.grey['200'], border: `1px solid ${theme.palette.background.default}` })} />}
+              {hasSelection &&
+                <TableCell key='selection' className={styles.tableHead}
+                  sx={(theme) => ({ backgroundColor: theme.palette.grey['200'], border: `1px solid ${theme.palette.background.default}`, zIndex: 200 })}>
+                </TableCell>}
               {headerGroup.headers.map(header => (
                 <TableCell
                   key={header.id}
