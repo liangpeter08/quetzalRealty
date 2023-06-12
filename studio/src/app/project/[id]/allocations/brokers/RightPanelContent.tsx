@@ -8,7 +8,6 @@ const RightPanelContent = () => {
   const { selectedSuites, setSelectedSuites } = useSuiteSelect();
   const [selected, setSelected] = useState<any>();
 
-
   const handleDelete = (id: string) => {
     setSelectedSuites((prev: any) => ({ ...prev, [id]: null }))
   }

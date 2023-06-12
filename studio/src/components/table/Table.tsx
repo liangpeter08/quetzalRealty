@@ -83,7 +83,7 @@ const BasicTable = ({ table, maxHeight, order, orderBy, handleSorting, isLoading
                   <Checkbox defaultSelected isSelected={!!selectedSuites?.[row.id]}
                     onChange={(checked) => {
                       if (singleSelection) {
-                        setSelectedSuites({ [row.id]: row })
+                        setSelectedSuites({ [row.id]: checked ? row : null })
                         return;
                       }
 
