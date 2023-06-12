@@ -2,7 +2,7 @@ import { SortingState } from "@tanstack/react-table";
 import { ApiBrokerBroker } from "../../utils/schemas";
 import strapiClient, { StrapiMetadata } from "./strapiClient";
 
-export interface GetBrokersAllocation {
+export interface GetBrokers {
   sort?: SortingState
   pagination?: {
     page: number
@@ -11,13 +11,13 @@ export interface GetBrokersAllocation {
   filters?: any,
 }
 
-export type BrokerType = { id: string } & ApiBrokerBroker['attributes'];
+export type BrokerType = { id: string, attributes: ApiBrokerBroker['attributes'] };
 
-export const BROKER_ALLOCATION_KEY = 'brokerAllocation';
+export const BROKERS_KEY = 'brokers';
 
-export async function getBrokersAllocation({ sort, pagination, filters }: GetBrokersAllocation = {}): Promise<{ data: BrokerType[], meta: StrapiMetadata }> {
+export async function getBrokers({ sort, pagination, filters }: GetBrokers = {}): Promise<{ data: BrokerType[], meta: StrapiMetadata }> {
   const { data } = await strapiClient
-    .get("/broker-allocation", {
+    .get("/brokers", {
       params: {
         populate: '*',
         sort: Object.assign({}, sort?.map((item) => item.id + (item.desc ? ':desc' : ':asc'))),
@@ -25,5 +25,5 @@ export async function getBrokersAllocation({ sort, pagination, filters }: GetBro
         filters,
       }
     })
-  return { data: data?.results, meta: { pagination: data.pagination } };
+  return data;
 }
