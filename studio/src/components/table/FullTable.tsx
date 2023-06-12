@@ -16,11 +16,12 @@ interface FullTableProps {
   hasSelection?: boolean
   version: number
   maxHeight?: string
+  singleSelection?: boolean
 }
 
 export type SortDirection = 'asc' | 'desc' | false;
 
-const FullTable = ({ columns, queryKey, queryFn, hasSelection, version, maxHeight = '200' }: FullTableProps) => {
+const FullTable = ({ columns, queryKey, queryFn, hasSelection, version, maxHeight = '200', singleSelection }: FullTableProps) => {
   const [order, setOrder] = useState<SortDirection>(false);
   const [orderBy, setOrderBy] = useState<string>();
   const [filters, setFilters] = useState<any>();
@@ -98,7 +99,7 @@ const FullTable = ({ columns, queryKey, queryFn, hasSelection, version, maxHeigh
     <Box sx={{ m: 5 }}>
       <Paper elevation={3} sx={{ marginTop: 2 }} className={styles.paperContainer}>
         <Toolbar table={table} setGlobalFilter={setGlobalFilter} handleFilterChange={handleFilterChange} />
-        <Table table={table} maxHeight={maxHeight} order={order} orderBy={orderBy} handleSorting={handleSorting} isLoading={isLoading} hasSelection={hasSelection} />
+        <Table table={table} maxHeight={maxHeight} order={order} orderBy={orderBy} handleSorting={handleSorting} isLoading={isLoading} hasSelection={hasSelection} singleSelection={singleSelection} />
         <PaginationFooter {...{ page: page, pageSize, setPageSize, setPage, pageCount, total }} />
       </Paper>
     </Box >

@@ -30,25 +30,23 @@ const columns = [
   columnHelper.accessor(row => (row?.allocations as any).count, {
     id: 'allocation_count',
     cell: info => info.getValue(),
-    header: 'Allocation',
+    header: 'Allocations',
   }),
 ]
 
 export default function SuitesMain() {
-
   const fullTableProps = {
     queryKey: ["brokers"],
     queryFn: getBrokersAllocation,
     columns,
     version: 0,
     hasSelection: true,
-    maxHeight: 'auto'
+    maxHeight: 'auto',
+    singleSelection: true,
   }
-
 
   return (
     <SuiteSelectProvider initialVal={{}}>
-
       <FullLayout>
         <Paper elevation={4} sx={{ p: 2 }}>
           <FullTable {...fullTableProps} />
