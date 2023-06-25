@@ -1,0 +1,30 @@
+{
+  "collectionName": "components_deposit_deposits",
+  "info": {
+    "displayName": "Deposit"
+  },
+  "options": {},
+  "attributes": {
+    "depositNumber": {
+      "type": "integer"
+    },
+    "depositAmount": {
+      "type": "float"
+    },
+    "date": {
+      "type": "date"
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "Outstanding",
+        "Received",
+        "Cleared",
+        "NSF"
+      ]
+    },
+    "amountReceived": {
+      "type": "float"
+    }
+  }
+}

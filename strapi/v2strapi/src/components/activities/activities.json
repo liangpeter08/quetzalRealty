@@ -1,0 +1,26 @@
+{
+  "collectionName": "components_activities_activities",
+  "info": {
+    "displayName": "Activities"
+  },
+  "options": {},
+  "attributes": {
+    "time": {
+      "type": "datetime"
+    },
+    "activityId": {
+      "type": "string"
+    },
+    "data": {
+      "type": "json"
+    },
+    "description": {
+      "type": "string"
+    },
+    "member": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::member.member"
+    }
+  }
+}

@@ -15,14 +15,36 @@
     "suite": {
       "type": "relation",
       "relation": "oneToOne",
-      "target": "api::suite.suite",
-      "inversedBy": "allocation"
+      "target": "api::suite.suite"
     },
     "broker": {
       "type": "relation",
       "relation": "manyToOne",
       "target": "api::broker.broker",
       "inversedBy": "allocations"
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "Active",
+        "Revoked"
+      ]
+    },
+    "transactions": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::transaction.transaction",
+      "mappedBy": "allocation"
+    },
+    "transaction_status": {
+      "type": "enumeration",
+      "enum": [
+        "Pending",
+        "APS With Purchaser",
+        "APS With Vendor",
+        "Conditional",
+        "Firm"
+      ]
     }
   }
 }

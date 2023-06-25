@@ -1,0 +1,53 @@
+{
+  "kind": "collectionType",
+  "collectionName": "transactions",
+  "info": {
+    "singularName": "transaction",
+    "pluralName": "transactions",
+    "displayName": "Transaction",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "allocation": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::allocation.allocation",
+      "inversedBy": "transactions"
+    },
+    "purchase_price": {
+      "type": "float"
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "Pending",
+        "APS With Purchaser",
+        "APS With Vendor",
+        "Conditional",
+        "Firm"
+      ]
+    },
+    "purchaser": {
+      "type": "component",
+      "repeatable": true,
+      "component": "user.purchaser"
+    },
+    "activities": {
+      "type": "component",
+      "repeatable": true,
+      "component": "activities.activities"
+    },
+    "notes": {
+      "type": "text"
+    },
+    "deposit": {
+      "type": "component",
+      "repeatable": true,
+      "component": "deposit.deposit"
+    }
+  }
+}

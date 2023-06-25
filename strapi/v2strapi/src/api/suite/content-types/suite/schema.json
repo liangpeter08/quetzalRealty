@@ -59,12 +59,6 @@
         "Firm"
       ]
     },
-    "purchaser_first_name": {
-      "type": "string"
-    },
-    "purchaser_last_name": {
-      "type": "string"
-    },
     "marketing_floor": {
       "type": "string"
     },
@@ -76,12 +70,6 @@
     },
     "legal_unit_number": {
       "type": "string"
-    },
-    "allocation": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::allocation.allocation",
-      "mappedBy": "suite"
     }
   }
 }
