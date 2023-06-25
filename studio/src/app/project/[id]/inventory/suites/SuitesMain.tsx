@@ -31,6 +31,11 @@ const columns = [
     cell: info => info.getValue(),
     header: () => <span>Legal Suite Number</span>,
   }),
+  columnHelper.accessor(row => row.attributes?.unit_status, {
+    id: 'unit_status',
+    cell: info => info.getValue(),
+    header: () => <span>Unit Status</span>
+  }),
   columnHelper.accessor(row => row.attributes?.marketing_floor, {
     id: 'marketing_floor',
     cell: info => info.getValue(),
