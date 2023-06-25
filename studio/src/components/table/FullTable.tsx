@@ -17,11 +17,12 @@ interface FullTableProps {
   version: number
   maxHeight?: string
   singleSelection?: boolean
+  selectionEvalfn?: (row: any) => boolean
 }
 
 export type SortDirection = 'asc' | 'desc' | false;
 
-const FullTable = ({ columns, queryKey, queryFn, hasSelection, version, maxHeight = '200', singleSelection }: FullTableProps) => {
+const FullTable = ({ columns, queryKey, queryFn, hasSelection, version, maxHeight = '200', singleSelection, selectionEvalfn }: FullTableProps) => {
   const [order, setOrder] = useState<SortDirection>(false);
   const [orderBy, setOrderBy] = useState<string>();
   const [filters, setFilters] = useState<any>();
@@ -99,7 +100,7 @@ const FullTable = ({ columns, queryKey, queryFn, hasSelection, version, maxHeigh
     <Box sx={{ m: 5 }}>
       <Paper elevation={3} sx={{ marginTop: 2 }} className={styles.paperContainer}>
         <Toolbar table={table} setGlobalFilter={setGlobalFilter} handleFilterChange={handleFilterChange} />
-        <Table table={table} maxHeight={maxHeight} order={order} orderBy={orderBy} handleSorting={handleSorting} isLoading={isLoading} hasSelection={hasSelection} singleSelection={singleSelection} />
+        <Table table={table} maxHeight={maxHeight} order={order} orderBy={orderBy} handleSorting={handleSorting} isLoading={isLoading} hasSelection={hasSelection} singleSelection={singleSelection} selectionEvalfn={selectionEvalfn} />
         <PaginationFooter {...{ page: page, pageSize, setPageSize, setPage, pageCount, total }} />
       </Paper>
     </Box >

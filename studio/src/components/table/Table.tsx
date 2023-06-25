@@ -21,9 +21,10 @@ interface BasicTableProps {
   isLoading: boolean
   hasSelection?: boolean
   singleSelection?: boolean
+  selectionEvalfn: (row: any) => any
 }
 
-const BasicTable = ({ table, maxHeight, order, orderBy, handleSorting, isLoading, hasSelection, singleSelection }: BasicTableProps) => {
+const BasicTable = ({ table, maxHeight, order, orderBy, handleSorting, isLoading, hasSelection, singleSelection, selectionEvalfn }: BasicTableProps) => {
   const height = maxHeight
   const { selectedSuites, setSelectedSuites } = useSuiteSelect()
 
@@ -80,7 +81,7 @@ const BasicTable = ({ table, maxHeight, order, orderBy, handleSorting, isLoading
             <TableRow key={row.id} className={styles.tableRow} hover>
               {hasSelection &&
                 <TableCell key={'selection' + row.id}>
-                  <Checkbox defaultSelected isSelected={!!selectedSuites?.[row.id]}
+                  <Checkbox defaultSelected isSelected={!!selectedSuites?.[row.id]} isDisabled={selectionEvalfn(row)}
                     onChange={(checked) => {
                       if (singleSelection) {
                         setSelectedSuites({ [row.id]: checked ? row : null })

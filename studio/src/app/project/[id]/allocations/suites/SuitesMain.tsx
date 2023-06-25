@@ -97,7 +97,10 @@ export default function SuitesMain() {
     columns,
     version: refreshTable,
     hasSelection: true,
-    maxHeight: 'auto'
+    maxHeight: 'auto',
+    selectionEvalfn: (row: any) => {
+      return row.original.attributes?.unit_status !== 'Available'
+    }
   }
 
 

@@ -11,7 +11,7 @@ export const useSuiteSelect = () => {
 }
 
 interface SideBarProps {
-  initialVal?: { [key: string]: boolean }
+  initialVal?: { [key: string]: any }
 }
 
 const SuiteSelectProvider = ({ children, initialVal }: React.PropsWithChildren<SideBarProps>) => {
