@@ -13,10 +13,8 @@ export default {
       const data = csvData.split('\n');
       data.splice(0, 1);
       // TODO: error checking
-      console.log('after splice', data)
 
       for (const line of data) {
-        console.log('abc', line);
         const row = line.split(',')
         let newEntry = {}
         for (let i = 0; i < schema.length; i++) {
@@ -27,7 +25,6 @@ export default {
         newEntry['state'] = 'published'
         newEntry['publishedAt'] = Date.now();
         result.push(newEntry)
-        console.log('result', newEntry);
       }
 
       const importService = strapi.plugin("import-export-entries").service("import");
