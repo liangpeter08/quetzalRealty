@@ -1,20 +1,32 @@
-import { Autocomplete, Box, Chip, Divider, Grid, Stack, TextField, Typography } from "@mui/material";
+import { Autocomplete, Box, Button, Chip, Divider, Grid, Stack, TextField, Typography, Container, Alert } from "@mui/material";
 import { Delete } from '@mui/icons-material'
 import { useSuiteSelect } from '@/context/SuiteSelectionContext'
 import { any } from "zod";
 import { useQuery } from "@tanstack/react-query";
 import { getBrokers, BROKERS_KEY } from "@/sharedApi/strapi/getBrokers";
 import { useState } from "react";
+import { createAllocation } from "@/sharedApi/strapi/allocations/createAllocation";
+import LinearProgress from '@mui/material/LinearProgress';
+
+
+enum ErrorState {
+  NO_BROKER,
+  API_FAIL,
+  NO_ERROR,
+}
 
 const RightPanelContent = () => {
   const { selectedSuites, setSelectedSuites } = useSuiteSelect();
   const [q, setQ] = useState('');
+  const [selectedBroker, setSelectedBroker] = useState<any>()
+  const [isLoading, setIsLoading] = useState<boolean>()
+  const [isError, setIsError] = useState<ErrorState>()
 
   const handleDelete = (id: string) => {
     setSelectedSuites((prev: any) => ({ ...prev, [id]: null }))
   }
 
-  const { data, isLoading, isFetching, error, refetch } = useQuery({
+  const { data: brokerData, isLoading: brokerLoading } = useQuery({
     queryFn: () => getBrokers(q ? {
       filters: {
         "first_name": {
@@ -25,16 +37,63 @@ const RightPanelContent = () => {
     queryKey: [BROKERS_KEY, q]
   });
 
-  console.log(data);
+  const createAllocationsHandler = async () => {
+    console.log('broker', selectedBroker)
+    setIsError(ErrorState.NO_ERROR)
+    if (!selectedBroker) {
+      setIsError(ErrorState.NO_BROKER)
+      return;
+    }
+    setIsLoading(true)
+    for (const suiteId in selectedSuites) {
+      const req = {
+        brokerId: selectedBroker.id,
+        suiteId: parseInt(suiteId, 10),
+      }
+      try {
+        await createAllocation(req)
+      } catch (err) {
+        console.error(err)
+        setIsError(ErrorState.API_FAIL)
+        return;
+      }
+    }
+    setIsLoading(false)
+  }
+  console.log('brokerData', brokerData, q);
 
-  return <Box sx={{ p: 2 }}>
+  const errorElement = () => {
+    switch (isError) {
+      case ErrorState.API_FAIL:
+        return <Alert variant="filled" severity="error">
+          <Typography color={"white"}>
+            Allocations did not succeed, Please try again!
+          </Typography>
+        </Alert>
+      case ErrorState.NO_BROKER:
+        return <Alert variant="filled" severity="error">
+          <Typography color={"white"}>
+            Please Select a broker
+          </Typography>
+        </Alert>
+    }
+    return;
+  }
+
+  return <Box sx={{ p: 2 }} height='100vh'>
+    {(isLoading || brokerLoading) && <LinearProgress />}
+    {errorElement()}
     <Typography variant='h3'>Suites to Allocate</Typography>
     <Divider sx={{ m: 2, marginLeft: -1, marginRight: -1 }} />
     <Autocomplete
       id="broker-search"
-      options={data?.data ?? []}
+      options={brokerData?.data ?? []}
       getOptionLabel={(option) => (option.attributes.first_name as unknown) as string}
       inputValue={q}
+      onChange={(evt, value) => {
+        console.log('onchange', value)
+        setSelectedBroker(value)
+      }}
       onInputChange={(event, newInputValue) => {
         setQ(newInputValue)
       }}
@@ -43,8 +102,10 @@ const RightPanelContent = () => {
     <Typography variant='h3' sx={{ m: 2, textAlign: 'center' }}>Suites</Typography>
     <Grid container>
       <Grid item xs>
-        <Stack alignItems='center'>
-          <Typography variant='body1'>New Allocations</Typography>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <Typography variant='body1' textAlign='center'>New Allocations</Typography>
+          </Grid>
           {
             Object.values(selectedSuites).map((item: any) => {
               if (!item) {
@@ -52,26 +113,41 @@ const RightPanelContent = () => {
               }
               const suiteNumber = item.getValue('marketing_suite_number')
               console.log(item.id)
-              return < Chip
+              return <Grid item><Chip
                 id={item.id}
                 label={suiteNumber}
                 onClick={() => handleDelete(item.id)}
                 onDelete={() => handleDelete(item.id)}
-                deleteIcon={<Delete />} />
+                deleteIcon={<Delete />} /></Grid>
             })
           }
 
-        </Stack>
+        </Grid>
       </Grid>
       <Divider orientation="vertical" flexItem>
       </Divider>
       <Grid item xs>
-        <Stack alignItems='center'>
-          <Typography variant='body1'>Existing Allocations</Typography>
-          <Chip label="Unit 101" />
-        </Stack>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <Typography variant='body1' textAlign='center'>Existing Allocations</Typography>
+          </Grid>
+          <Grid item>
+            <Chip label="1001" />
+          </Grid>
+        </Grid>
       </Grid>
     </Grid>
+    <Container sx={{
+      position: 'absolute',
+      bottom: '10%',
+      display: 'flex',
+      'justifyContent': 'center'
+    }}>
+      <Button
+        variant="contained" onClick={createAllocationsHandler} >
+        Allocate Suites
+      </Button>
+    </Container>
   </Box >
 };
 
