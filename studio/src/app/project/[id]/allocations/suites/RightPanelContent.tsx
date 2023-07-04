@@ -112,7 +112,6 @@ const RightPanelContent = () => {
                 return;
               }
               const suiteNumber = item.getValue('marketing_suite_number')
-              console.log(item.id)
               return <Grid item><Chip
                 id={item.id}
                 label={suiteNumber}
