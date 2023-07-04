@@ -32,6 +32,16 @@ const columns = [
     cell: info => info.getValue(),
     header: () => <span>Legal Suite Number</span>,
   }),
+  columnHelper.accessor(row => row.attributes?.broker?.data?.attributes, {
+    id: 'broker',
+    cell: info => {
+      if (!info.getValue()) {
+        return
+      }
+      return `${info.getValue().first_name} ${info.getValue().last_name}`
+    },
+    header: () => <span>Broker</span>
+  }),
   columnHelper.accessor(row => row.attributes?.unit_status, {
     id: 'unit_status',
     cell: info => info.getValue(),
@@ -82,6 +92,7 @@ const columns = [
     cell: info => info.getValue(),
     header: () => <span>Exterior Area</span>,
   }),
+
 ]
 
 export default function SuitesMain() {
