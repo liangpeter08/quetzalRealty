@@ -84,12 +84,18 @@ const BasicTable = ({ table, maxHeight, order, orderBy, handleSorting, isLoading
                   <Checkbox defaultSelected isSelected={!!selectedSuites?.[row.id]} isDisabled={selectionEvalfn?.(row)}
                     onChange={(checked) => {
                       if (singleSelection) {
-                        setSelectedSuites({ [row.id]: checked ? row : null })
+                        setSelectedSuites(checked ? { [row.id]: row } : {})
                         return;
                       }
 
                       setSelectedSuites((prev: any) => {
-                        return { ...prev, [row.id]: checked ? row : false }
+                        const newVal = { ...prev }
+                        if (checked) {
+                          newVal[row.id] = row
+                        } else {
+                          delete newVal[row.id]
+                        }
+                        return newVal
                       });
                     }} />
                 </TableCell>}

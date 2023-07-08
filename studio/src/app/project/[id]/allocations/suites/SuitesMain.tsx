@@ -99,7 +99,7 @@ export default function SuitesMain() {
 
   const [newSuite, setNewSuite] = useState<boolean>(false);
   const [refreshTable, setRefreshTable] = useState<number>(0);
-
+  const [open, setOpen] = useState(true);
 
 
   const fullTableProps = {
@@ -114,6 +114,9 @@ export default function SuitesMain() {
     }
   }
 
+  const refetchTable = () => {
+    setRefreshTable((prev) => ++prev)
+  }
 
   return (
     <SuiteSelectProvider initialVal={{}}>
@@ -125,7 +128,7 @@ export default function SuitesMain() {
         <Paper elevation={4} sx={{ p: 2 }}>
           <FullTable {...fullTableProps} />
         </Paper>
-        <RightPanel />
+        <RightPanel refetchTable={refetchTable} open={open} onClose={() => { setOpen(false) }} />
 
       </FullLayout >
     </SuiteSelectProvider >

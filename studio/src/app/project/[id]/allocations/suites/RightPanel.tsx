@@ -14,16 +14,16 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   ...theme.mixins.toolbar,
 }));
 
-const RightPanel = () => {
+interface RightPanelProps {
+  refetchTable: () => void
+  open: boolean
+  onClose: () => void
+}
+
+const RightPanel = ({ refetchTable, open, onClose }: RightPanelProps) => {
   const { selectedSuites } = useSuiteSelect();
   const hasSuites = selectedSuites && Object.values(selectedSuites).find((val) => !!val);
-  const [open, setOpen] = useState(true);
 
-  useEffect(() => {
-    if (hasSuites) {
-      setOpen(true);
-    }
-  }, [setOpen, selectedSuites])
 
   return (<Drawer
     sx={{
@@ -38,11 +38,11 @@ const RightPanel = () => {
     open={hasSuites && open}
   >
     <DrawerHeader>
-      <IconButton sx={(theme) => ({ color: theme.palette.primary.dark })} onClick={() => setOpen(false)}>
+      <IconButton sx={(theme) => ({ color: theme.palette.primary.dark })} onClick={onClose}>
         <ChevronRightIcon />
       </IconButton>
     </DrawerHeader>
-    <RightPanelContent />
+    <RightPanelContent refetchTable={refetchTable} />
   </Drawer>)
 };
 

@@ -13,17 +13,23 @@ enum ErrorState {
   NO_BROKER,
   API_FAIL,
   NO_ERROR,
+  NO_SUITE,
 }
 
-const RightPanelContent = () => {
+const RightPanelContent = ({ refetchTable }: { refetchTable: () => void }) => {
   const { selectedSuites, setSelectedSuites } = useSuiteSelect();
   const [q, setQ] = useState('');
   const [selectedBroker, setSelectedBroker] = useState<any>()
   const [isLoading, setIsLoading] = useState<boolean>()
   const [isError, setIsError] = useState<ErrorState>()
+  const [isSuccessful, setIsSuccessful] = useState<boolean>()
 
   const handleDelete = (id: string) => {
-    setSelectedSuites((prev: any) => ({ ...prev, [id]: null }))
+    setSelectedSuites((prev: any) => {
+      const newVal = { ...prev }
+      delete newVal[id]
+      return newVal
+    })
   }
 
   const { data: brokerData, isLoading: brokerLoading } = useQuery({
@@ -44,11 +50,19 @@ const RightPanelContent = () => {
       setIsError(ErrorState.NO_BROKER)
       return;
     }
+    if (!Object.keys(selectedSuites)) {
+      setIsError(ErrorState.NO_SUITE)
+      return;
+    }
     setIsLoading(true)
     for (const suiteId in selectedSuites) {
+      console.log(selectedSuites[suiteId])
+      if (!selectedSuites[suiteId]) {
+        continue;
+      }
       const req = {
         brokerId: selectedBroker.id,
-        suiteId: parseInt(suiteId, 10),
+        suiteId: selectedSuites[suiteId].original.id,
       }
       try {
         await createAllocation(req)
@@ -58,7 +72,11 @@ const RightPanelContent = () => {
         return;
       }
     }
+    setIsSuccessful(true)
+    setSelectedSuites({})
+    setSelectedBroker(null)
     setIsLoading(false)
+    refetchTable()
   }
   console.log('brokerData', brokerData, q);
 
@@ -83,6 +101,9 @@ const RightPanelContent = () => {
   return <Box sx={{ p: 2 }} height='100vh'>
     {(isLoading || brokerLoading) && <LinearProgress />}
     {errorElement()}
+    {isSuccessful && <Alert variant="filled" severity="success">
+      <Typography color="white"> Allocation succeeded! </Typography>
+    </Alert>}
     <Typography variant='h3'>Suites to Allocate</Typography>
     <Divider sx={{ m: 2, marginLeft: -1, marginRight: -1 }} />
     <Autocomplete
