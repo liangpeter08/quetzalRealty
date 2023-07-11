@@ -950,8 +950,6 @@ export interface ApiSuiteSuite extends Schema.CollectionType {
     >;
     marketing_floor: Attribute.String;
     legal_floor: Attribute.String;
-    marketing_unit_number: Attribute.String;
-    legal_unit_number: Attribute.String;
     broker: Attribute.Relation<
       'api::suite.suite',
       'oneToOne',
