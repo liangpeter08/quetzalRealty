@@ -7,6 +7,9 @@ import { getBrokers, BROKERS_KEY } from "@/sharedApi/strapi/getBrokers";
 import { useState } from "react";
 import { createAllocation } from "@/sharedApi/strapi/allocations/createAllocation";
 import LinearProgress from '@mui/material/LinearProgress';
+import { BROKER_SUITES_KEY, getBrokerSuites } from "@/sharedApi/strapi/brokers/getBrokerSuites";
+import { ApiSuiteSuite } from "@/utils/schemas";
+import { ApiAllocationAllocation } from "@/utils/contentTypes";
 
 
 enum ErrorState {
@@ -42,6 +45,13 @@ const RightPanelContent = ({ refetchTable }: { refetchTable: () => void }) => {
     } : {}),
     queryKey: [BROKERS_KEY, q]
   });
+
+  const { data: brokerSuiteData } = useQuery({
+    queryFn: () => getBrokerSuites({ brokerId: selectedBroker?.id }),
+    queryKey: [BROKER_SUITES_KEY, selectedBroker?.id]
+  });
+
+
 
   const createAllocationsHandler = async () => {
     console.log('broker', selectedBroker)
@@ -147,13 +157,16 @@ const RightPanelContent = ({ refetchTable }: { refetchTable: () => void }) => {
       <Divider orientation="vertical" flexItem>
       </Divider>
       <Grid item xs>
-        <Grid container spacing={2}>
+        <Grid container spacing={2} sx={{ paddingLeft: '16px' }}>
           <Grid item xs={12}>
             <Typography variant='body1' textAlign='center'>Existing Allocations</Typography>
           </Grid>
-          <Grid item>
-            <Chip label="1001" />
-          </Grid>
+          {(brokerSuiteData?.data?.allocations || []).map((item: ApiAllocationAllocation['attributes']) => {
+            const { suite } = item
+            return (<Grid item>
+              <Chip label={suite?.marketing_suite_number ?? 'unknown'} />
+            </Grid>);
+          })}
         </Grid>
       </Grid>
     </Grid>

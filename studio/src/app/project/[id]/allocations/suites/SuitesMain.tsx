@@ -9,7 +9,7 @@ import { IconButton, Paper } from "@mui/material";
 import { createColumnHelper } from '@tanstack/react-table'
 import UploadIcon from '@mui/icons-material/Upload';
 import SuiteUploadModal from "./UploadModal";
-import SuiteSelectProvider from "@/context/SuiteSelectionContext";
+import SuiteSelectProvider, { useSuiteSelect } from "@/context/SuiteSelectionContext";
 
 import React, { useEffect, useState } from 'react';
 import RightPanel from "./RightPanel";
@@ -99,7 +99,7 @@ export default function SuitesMain() {
 
   const [newSuite, setNewSuite] = useState<boolean>(false);
   const [refreshTable, setRefreshTable] = useState<number>(0);
-  const [open, setOpen] = useState(true);
+
 
 
   const fullTableProps = {
@@ -128,7 +128,7 @@ export default function SuitesMain() {
         <Paper elevation={4} sx={{ p: 2 }}>
           <FullTable {...fullTableProps} />
         </Paper>
-        <RightPanel refetchTable={refetchTable} open={open} onClose={() => { setOpen(false) }} />
+        <RightPanel refetchTable={refetchTable} />
 
       </FullLayout >
     </SuiteSelectProvider >

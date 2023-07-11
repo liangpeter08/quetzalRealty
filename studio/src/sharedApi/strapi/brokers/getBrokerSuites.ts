@@ -1,5 +1,5 @@
 import { SortingState } from "@tanstack/react-table";
-import { ApiBrokerBroker, ApiSuiteSuite } from "../../../utils/schemas";
+import { ApiBrokerBroker, ApiSuiteSuite } from "@/utils/contentTypes";
 import strapiClient, { StrapiMetadata } from "../strapiClient";
 
 export interface GetBrokersSuites {
@@ -11,12 +11,15 @@ export type BrokerType = { id: string, allocations: Suite[] } & ApiBrokerBroker[
 
 export const BROKER_SUITES_KEY = 'brokerSuites';
 
-export async function getBrokerSuites({ brokerId }: GetBrokersSuites): Promise<BrokerType> {
+export async function getBrokerSuites({ brokerId }: GetBrokersSuites): Promise<{ data?: BrokerType }> {
+  if (!brokerId) {
+    return { data: undefined };
+  }
   const { data } = await strapiClient
     .get("/broker-suites", {
       params: {
         brokerId
       }
     })
-  return { data: data?.results, meta: { pagination: data.pagination } };
+  return { data };
 }

@@ -1,7 +1,7 @@
 import { useSuiteSelect } from "@/context/SuiteSelectionContext";
 import { Drawer, IconButton, styled, useTheme } from "@mui/material";
 import { theme } from "@nextui-org/react";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import RightPanelContent from "./RightPanelContent";
@@ -16,14 +16,18 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 
 interface RightPanelProps {
   refetchTable: () => void
-  open: boolean
-  onClose: () => void
 }
 
-const RightPanel = ({ refetchTable, open, onClose }: RightPanelProps) => {
+const RightPanel = ({ refetchTable }: RightPanelProps) => {
   const { selectedSuites } = useSuiteSelect();
+  const [open, setOpen] = useState(true);
   const hasSuites = selectedSuites && Object.values(selectedSuites).find((val) => !!val);
 
+  useEffect(() => {
+    if (hasSuites) {
+      setOpen(true)
+    }
+  }, [setOpen, selectedSuites])
 
   return (<Drawer
     sx={{
@@ -38,7 +42,7 @@ const RightPanel = ({ refetchTable, open, onClose }: RightPanelProps) => {
     open={hasSuites && open}
   >
     <DrawerHeader>
-      <IconButton sx={(theme) => ({ color: theme.palette.primary.dark })} onClick={onClose}>
+      <IconButton sx={(theme) => ({ color: theme.palette.primary.dark })} onClick={() => setOpen(false)}>
         <ChevronRightIcon />
       </IconButton>
     </DrawerHeader>
