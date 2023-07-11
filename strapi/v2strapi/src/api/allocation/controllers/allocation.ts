@@ -30,9 +30,6 @@ export default factories.createCoreController('api::allocation.allocation', ({ s
       return ctx.badRequest('cannot find broker', { broker })
     }
 
-
-
-
     await strapi.db.transaction(async ({ onCommit, onRollback }) => {
 
       const result = await strapi.entityService.create('api::allocation.allocation', {

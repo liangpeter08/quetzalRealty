@@ -17,5 +17,29 @@ export default factories.createCoreController('api::broker.broker', ({ strapi })
     } catch (e) {
       ctx.body = 'error'
     }
+  },
+  async brokerSuites(ctx) {
+    const { brokerId } = ctx.query
+    console.log(brokerId)
+    try {
+      const broker = await strapi.service('api::broker.broker').findOne(brokerId, {
+        ...ctx,
+        populate: {
+          allocations: {
+            filters: {
+              $and: [
+                { status: 'Active' }
+              ]
+            },
+            populate: {
+              suite: true
+            }
+          }
+        }
+      });
+      ctx.body = broker
+    } catch (e) {
+      ctx.body = 'error'
+    }
   }
 }));
