@@ -6,7 +6,7 @@ export interface GetBrokersSuites {
   brokerId: string
 }
 
-type Suite = ApiSuiteSuite['attributes'] & { id: string }
+export type Suite = ApiSuiteSuite['attributes'] & { id: string }
 export type BrokerType = { id: string, allocations: Suite[] } & ApiBrokerBroker['attributes'];
 
 export const BROKER_SUITES_KEY = 'brokerSuites';

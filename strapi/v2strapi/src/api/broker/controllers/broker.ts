@@ -20,7 +20,6 @@ export default factories.createCoreController('api::broker.broker', ({ strapi })
   },
   async brokerSuites(ctx) {
     const { brokerId } = ctx.query
-    console.log(brokerId)
     try {
       const broker = await strapi.service('api::broker.broker').findOne(brokerId, {
         ...ctx,

@@ -2,14 +2,15 @@ import { Autocomplete, Box, Button, Chip, Divider, Grid, Stack, TextField, Typog
 import { Delete } from '@mui/icons-material'
 import { useSuiteSelect } from '@/context/SuiteSelectionContext'
 import { any } from "zod";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { getBrokers, BROKERS_KEY } from "@/sharedApi/strapi/getBrokers";
 import { useState } from "react";
 import { createAllocation } from "@/sharedApi/strapi/allocations/createAllocation";
 import LinearProgress from '@mui/material/LinearProgress';
-import { BROKER_SUITES_KEY, getBrokerSuites } from "@/sharedApi/strapi/brokers/getBrokerSuites";
+import { BROKER_SUITES_KEY, Suite, getBrokerSuites } from "@/sharedApi/strapi/brokers/getBrokerSuites";
 import { ApiSuiteSuite } from "@/utils/schemas";
 import { ApiAllocationAllocation } from "@/utils/contentTypes";
+import { deAllocation } from "@/sharedApi/strapi/allocations/deAllocation";
 
 
 enum ErrorState {
@@ -35,6 +36,13 @@ const RightPanelContent = ({ refetchTable }: { refetchTable: () => void }) => {
     })
   }
 
+  const deleteAllocationMutation = useMutation({
+    mutationFn: deAllocation,
+  })
+
+  console.log(deleteAllocationMutation.isSuccess)
+  console.log(deleteAllocationMutation.isError)
+
   const { data: brokerData, isLoading: brokerLoading } = useQuery({
     queryFn: () => getBrokers(q ? {
       filters: {
@@ -46,7 +54,7 @@ const RightPanelContent = ({ refetchTable }: { refetchTable: () => void }) => {
     queryKey: [BROKERS_KEY, q]
   });
 
-  const { data: brokerSuiteData } = useQuery({
+  const { data: brokerSuiteData, refetch: brokerSuiteRefetch } = useQuery({
     queryFn: () => getBrokerSuites({ brokerId: selectedBroker?.id }),
     queryKey: [BROKER_SUITES_KEY, selectedBroker?.id]
   });
@@ -161,11 +169,14 @@ const RightPanelContent = ({ refetchTable }: { refetchTable: () => void }) => {
           <Grid item xs={12}>
             <Typography variant='body1' textAlign='center'>Existing Allocations</Typography>
           </Grid>
-          {(brokerSuiteData?.data?.allocations || []).map((item: ApiAllocationAllocation['attributes']) => {
-            const { suite } = item
+          {(brokerSuiteData?.data?.allocations || []).map((item: ApiAllocationAllocation['attributes'] & { id: number }) => {
+            const { suite, id } = item
             return (<Grid item>
               <Chip label={suite?.marketing_suite_number ?? 'unknown'}
-                onDelete={() => handleAllocationDelete()}
+                onDelete={async () => {
+                  await deleteAllocationMutation.mutate({ suiteId: suite.id, allocationId: id })
+                  // TODO: refetch
+                }}
                 deleteIcon={<Delete />} />
             </Grid>);
           })}
