@@ -146,7 +146,7 @@ const RightPanelContent = ({ refetchTable }: { refetchTable: () => void }) => {
               return <Grid item><Chip
                 id={item.id}
                 label={suiteNumber}
-                onClick={() => handleDelete(item.id)}
+                // onClick={() => handleDelete(item.id)}
                 onDelete={() => handleDelete(item.id)}
                 deleteIcon={<Delete />} /></Grid>
             })
@@ -164,7 +164,9 @@ const RightPanelContent = ({ refetchTable }: { refetchTable: () => void }) => {
           {(brokerSuiteData?.data?.allocations || []).map((item: ApiAllocationAllocation['attributes']) => {
             const { suite } = item
             return (<Grid item>
-              <Chip label={suite?.marketing_suite_number ?? 'unknown'} />
+              <Chip label={suite?.marketing_suite_number ?? 'unknown'}
+                onDelete={() => handleAllocationDelete()}
+                deleteIcon={<Delete />} />
             </Grid>);
           })}
         </Grid>

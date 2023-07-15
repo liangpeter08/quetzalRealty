@@ -36,9 +36,14 @@ const columns = [
     cell: info => info.getValue(),
     header: () => <span>Unit Status</span>
   }),
-  columnHelper.accessor(row => row.attributes?.broker?.attributes, {
+  columnHelper.accessor(row => row.attributes?.broker?.data?.attributes, {
     id: 'broker',
-    cell: info => `${info.getValue().first_name} ${info.getValue().last_name}`,
+    cell: info => {
+      if (!info.getValue()) {
+        return
+      }
+      return `${info.getValue().first_name} ${info.getValue().last_name}`
+    },
     header: () => <span>Broker</span>
   }),
   columnHelper.accessor(row => row.attributes?.marketing_floor, {
